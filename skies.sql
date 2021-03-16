@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 16, 2021 at 02:38 PM
+-- Generation Time: Mar 16, 2021 at 02:55 PM
 -- Server version: 10.4.17-MariaDB
 -- PHP Version: 7.2.34
 
@@ -221,7 +221,9 @@ CREATE TABLE `ski_model` (
 CREATE TABLE `ski_production_quantity` (
   `plan_id` int(50) NOT NULL,
   `working_day` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
-  `ski_model` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL
+  `ski_model` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
+  `ski_size` int(50) NOT NULL,
+  `ski_weight_class` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
 -- --------------------------------------------------------
@@ -245,6 +247,7 @@ CREATE TABLE `ski_type_quantity` (
   `ski_type` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
   `weight_class` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
   `model` varchar(40) COLLATE utf8mb4_danish_ci NOT NULL,
+  `size` int(50) NOT NULL,
   `quantity` int(40) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
@@ -416,7 +419,7 @@ ALTER TABLE `ski_model`
 -- Indexes for table `ski_production_quantity`
 --
 ALTER TABLE `ski_production_quantity`
-  ADD PRIMARY KEY (`plan_id`,`working_day`,`ski_model`);
+  ADD PRIMARY KEY (`plan_id`,`working_day`,`ski_model`,`ski_size`,`ski_weight_class`);
 
 --
 -- Indexes for table `ski_type`
@@ -428,7 +431,7 @@ ALTER TABLE `ski_type`
 -- Indexes for table `ski_type_quantity`
 --
 ALTER TABLE `ski_type_quantity`
-  ADD PRIMARY KEY (`order_number`,`ski_type`,`weight_class`,`model`);
+  ADD PRIMARY KEY (`order_number`,`ski_type`,`weight_class`,`model`,`size`);
 
 --
 -- Indexes for table `storekeeper`
