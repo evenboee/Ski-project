@@ -1,12 +1,7 @@
-//Logical Model:
-
-Manufacturer(name)
-PK name
-
+// Logical Model Iteration 3
 //Ski:
-Ski(manufacturer, id, size, MSRPP, model, weight_class, ski_type)
-PK manufacturer, id)
-FK manufacturer REFERENCES Manufacturer(name) 
+Ski(id, size, MSRPP, model, weight_class, ski_type)
+PK id
 FK model REFERENCES Ski_model(model)
 FK weight_class REFERENCES Weight_class(name)
 FK ski_type REFERENCES Ski_type(name)
@@ -16,8 +11,9 @@ Weight_class(name)
 PK name
 Ski_type(name)
 PK name
-Ski_Model(model, description, grip_system, historical, url, temperature)
+Ski_Model(model, description, grip_system, historical, url, temperature, plan_id, working_day)
 PK model
+FK plan_id REFERENCES Production_plan(id)
 
 
 Public_ski_models(account_id, model_id)
@@ -31,20 +27,25 @@ PK account_id
 //Customers:
 Individual_store(customer_id, start_date, end_date, name, shipping_address, buying_price)
 PK customer_id
+
 Franchise(customer_id, store_info)
 PK customer_id
+
 Team_skier(customer_id, start_date, end_date, name, dob, club, num_skies)
 PK customer_id
 
 //Employees:
 Production_planner(number, name, department)
 PK number
+
 Storekeeper(number, name, department)
 PK number
+
 Customer_representative(number, name, department)
 PK number
 
 //Production Plans:
+
 Planner_production_plans(planner_id, plan_id)
 PK planner_id, plan_id
 FK planner_id REFERENCES Production_planner(number)
@@ -52,13 +53,10 @@ FK plan_id REFERENCES Production_plan(id)
 
 
 
-Production_plan(id, start_date, end_date, manufacturer)
+Production_plan(id, start_date, end_date)
 PK id
-FK manufaturer REFERENCES Manufacturer(name)
+// I assume that in the relation between ski_model and production plan, that the plan can have multiple ski_models even of the same model, indicating the “quantity” of that model.
 
-Ski_production_quantity(plan_id, working_day, ski_model, ski_size, ski_weight_class)
-PK plan_id, working_day, ski_model, ski_size, ski_weight_class
-FK plan_id REFERENCES Production_plan(id)
 
 
 //Transport:
@@ -72,12 +70,13 @@ PK company_name
 
 
 //Other:
-Representative_review_order(rep_id, order_number)
+//changes_flag are used to indicate wether or not this employee changed anything on his/her visit to the order
+Representative_review_order(rep_id, order_number, changes_flag) 
 PK rep_id, order_number
 FK rep_id REFERENCES Customer_representative(number)
 FK order_number REFERENCES Order(order_number)
 
-Storekeeper_update_order(keeper_id, order_id)
+Storekeeper_update_order(keeper_id, order_id, changes_flag)
 PK keeper_id, order_id
 FK keeper_id REFERENCES Storekeeper(number)
 FK order_id REFERENCES Order(order_number)
@@ -87,12 +86,13 @@ PK transporter_id, order_id
 FK transporter_id REFERENCES Transporter(company_name)
 FK order_id REFERENCES Order(order_number)
 
-Order(order_number, total_price, state, customer_id)
+Order(order_number, total_price, state, customer_id, shipment_number)
 PK order_number
 FK customer_id REFERENCES Customer(id)
+FK shipment_number REFERENCES Shipment(number)
 
-Ski_type_quantity(order_number, ski_type, weight_class, model, size, quantity)
-PK order_number, ski_type, weight_class, model, size
+Ski_type_quantity(order_number, ski_type, weight_class, model, quantity)
+PK order_number, ski_type, weight_class, model
 FK order_number REFERENCES Order(order_number)
 
 Quantity_of_skies(order_number, ski_type, weight_class, model, ski_id)
@@ -102,3 +102,13 @@ FK ski_type REFERENCES ski_type_quantity(ski_type)
 FK weight_class REFERENCES ski_type_quantity(weigth_class)
 FK model REFERENCES ski_type_quantity(model)
 FK ski_id REFERENCES Ski(id)
+
+
+
+
+
+
+
+
+
+
