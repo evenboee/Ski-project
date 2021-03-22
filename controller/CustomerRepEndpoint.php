@@ -2,6 +2,7 @@
 
 require_once 'RequestHandler.php';
 require_once 'db/OrderModel.php';
+require_once 'APIException.php';
 
 class CustomerRepEndpoint extends RequestHandler {
 
@@ -23,7 +24,7 @@ class CustomerRepEndpoint extends RequestHandler {
     public function handleRequest(array $uri, string $endpointPath, string $requestMethod, array $queries, array $payload): array {
 
         if (count($uri) == 0) {
-            return array(); // Send error - bad request
+            throw new APIException(RESTConstants::HTTP_NOT_FOUND, $endpointPath);
         }
 
         // Expecting uri = ['orders', '{state}']
@@ -32,11 +33,11 @@ class CustomerRepEndpoint extends RequestHandler {
                 $state = $uri[1];
                 return $this->doGetOrdersWithState($state);
             } else {
-                return array(); // Send error
+                throw new APIException(RESTConstants::HTTP_NOT_FOUND, $endpointPath . '/' . $uri[0]);
             }
         }
 
-        return $uri; // array();
+        throw new APIException(RESTConstants::HTTP_NOT_FOUND, $endpointPath);
     }
 
     protected function doGetOrdersWithState(string $state): array {
