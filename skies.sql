@@ -150,7 +150,7 @@ INSERT INTO `keeper_log` (`keeperNo`, `logNo`) VALUES
 --
 
 CREATE TABLE `logs` (
-  `logNo` int(50) NOT NULL,
+  `logNo` int(50) NOT NULL AUTO_INCREMENT,
   `comment` text COLLATE utf8mb4_danish_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
@@ -173,7 +173,7 @@ INSERT INTO `logs` (`logNo`, `comment`) VALUES
 --
 
 CREATE TABLE `production_plan` (
-  `id` int(50) NOT NULL,
+  `id` int(50) NOT NULL AUTO_INCREMENT,
   `start_date` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
   `end_date` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
   `plannerNo` int(50) NOT NULL
@@ -296,7 +296,7 @@ CREATE TABLE `rep_review_order` (
 --
 
 CREATE TABLE `shipment` (
-  `number` int(50) NOT NULL,
+  `number` int(50) NOT NULL AUTO_INCREMENT,
   `store_name` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
   `shipping_address` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
   `pickup_date` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
@@ -312,7 +312,7 @@ CREATE TABLE `shipment` (
 --
 
 CREATE TABLE `ski` (
-  `product_number` int(50) NOT NULL,
+  `product_number` int(50) NOT NULL AUTO_INCREMENT,
   `size` int(50) NOT NULL,
   `weight` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
@@ -365,7 +365,7 @@ INSERT INTO `ski_model` (`model`, `skiing_type`, `description`, `grip_system`, `
 --
 
 CREATE TABLE `ski_order` (
-  `order_number` int(50) NOT NULL,
+  `order_number` int(50) NOT NULL AUTO_INCREMENT,
   `total_price` int(50) NOT NULL,
   `state` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
   `ref_larger_order` int(50) NOT NULL,
