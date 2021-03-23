@@ -3,6 +3,7 @@
 require_once 'RequestHandler.php';
 require_once 'CustomerRepEndpoint.php';
 require_once 'APIException.php';
+require_once 'RESTConstants.php';
 
 class APIController extends RequestHandler {
 
