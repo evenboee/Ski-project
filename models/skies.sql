@@ -28,19 +28,20 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `customer_representative` (
-  `number` int(50) NOT NULL,
+  `number` int(50) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
-  `department` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL
+  `department` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
+  PRIMARY KEY (`number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
 --
 -- Dumping data for table `customer_representative`
 --
 
-INSERT INTO `customer_representative` (`number`, `name`, `department`) VALUES
-(1, 'Jane Smith', 'Customer Service'),
-(2, 'Matt Karensson', 'Customer Service'),
-(3, 'Hannibal Barcka', 'Department of Information');
+INSERT INTO `customer_representative` (`name`, `department`) VALUES
+('Jane Smith', 'Customer Service'),
+('Matt Karensson', 'Customer Service'),
+('Hannibal Barcka', 'Department of Information');
 
 -- --------------------------------------------------------
 
@@ -49,23 +50,24 @@ INSERT INTO `customer_representative` (`number`, `name`, `department`) VALUES
 --
 
 CREATE TABLE `franchise` (
-  `id` int(50) NOT NULL,
+  `id` int(50) NOT NULL AUTO_INCREMENT,
   `start_date` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
   `end_date` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
   `name` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
   `shipping_address` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
   `buing_price` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
-  `store_info` text COLLATE utf8mb4_danish_ci NOT NULL
+  `store_info` text COLLATE utf8mb4_danish_ci NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
 --
 -- Dumping data for table `franchise`
 --
 
-INSERT INTO `franchise` (`id`, `start_date`, `end_date`, `name`, `shipping_address`, `buing_price`, `store_info`) VALUES
-(111, '2020-01-02', '2026-01-01', 'XXL Sport', 'Jernbanegata 5, Gjøvik 2821', '50% of MSRPP', 'XXL Sport og Villmark er Nordens største sportskjede. Vi tilbyr et bredt sortiment av kjente merkevarer på nett og i våre mange varehus.'),
-(123, '2021-01-01', '2026-01-01', 'Amundsen Sport', 'Sentrumsvegen 7, Oslo 3187', '75% of MSRPP', 'Amundsen Sport ble startet allerede i 1918 av Albert Amundsen – bestefaren til dagens driver.'),
-(321, '2018-01-01', '2025-01-01', 'Sportsgutta', 'Tordenskjoldsgate 16, Oslo 3187', '75% of MSRPP', 'Sportsgutta er en av Norges beste sportsbutikker og tilbyr alt innenfor extremsport.');
+INSERT INTO `franchise` (`start_date`, `end_date`, `name`, `shipping_address`, `buing_price`, `store_info`) VALUES
+('2020-01-02', '2026-01-01', 'XXL Sport', 'Jernbanegata 5, Gjøvik 2821', '50% of MSRPP', 'XXL Sport og Villmark er Nordens største sportskjede. Vi tilbyr et bredt sortiment av kjente merkevarer på nett og i våre mange varehus.'),
+('2021-01-01', '2026-01-01', 'Amundsen Sport', 'Sentrumsvegen 7, Oslo 3187', '75% of MSRPP', 'Amundsen Sport ble startet allerede i 1918 av Albert Amundsen – bestefaren til dagens driver.'),
+('2018-01-01', '2025-01-01', 'Sportsgutta', 'Tordenskjoldsgate 16, Oslo 3187', '75% of MSRPP', 'Sportsgutta er en av Norges beste sportsbutikker og tilbyr alt innenfor extremsport.');
 
 -- --------------------------------------------------------
 
@@ -96,22 +98,23 @@ INSERT INTO `general_public` (`account_id`) VALUES
 --
 
 CREATE TABLE `individual_store` (
-  `id` int(50) NOT NULL,
+  `id` int(50) NOT NULL AUTO_INCREMENT,
   `start_date` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
   `end_date` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
   `name` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
   `shipping_address` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
-  `buying_price` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL
+  `buying_price` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
 --
 -- Dumping data for table `individual_store`
 --
 
-INSERT INTO `individual_store` (`id`, `start_date`, `end_date`, `name`, `shipping_address`, `buying_price`) VALUES
-(665, '2020-01-02', '2026-01-01', 'Oslo Sportslager', 'Karl Johansgate 10, Oslo 3176', '76% of MSRPP'),
-(676, '2018-01-01', '2025-01-01', 'Telemarks Helter', 'Mo-Byrtevegen 201b, Dalen 3880', '20% of MSRPP'),
-(998, '2021-01-01', '2024-01-01', 'Trondheim Sport', 'Tordenskjoldgate 87, Trondheim 7634', '55% of MSRPP');
+INSERT INTO `individual_store` (`start_date`, `end_date`, `name`, `shipping_address`, `buying_price`) VALUES
+('2020-01-02', '2026-01-01', 'Oslo Sportslager', 'Karl Johansgate 10, Oslo 3176', '76% of MSRPP'),
+('2018-01-01', '2025-01-01', 'Telemarks Helter', 'Mo-Byrtevegen 201b, Dalen 3880', '20% of MSRPP'),
+('2021-01-01', '2024-01-01', 'Trondheim Sport', 'Tordenskjoldgate 87, Trondheim 7634', '55% of MSRPP');
 
 -- --------------------------------------------------------
 
@@ -151,20 +154,21 @@ INSERT INTO `keeper_log` (`keeperNo`, `logNo`) VALUES
 
 CREATE TABLE `logs` (
   `logNo` int(50) NOT NULL AUTO_INCREMENT,
-  `comment` text COLLATE utf8mb4_danish_ci NOT NULL
+  `comment` text COLLATE utf8mb4_danish_ci NOT NULL,
+  PRIMARY KEY (`logNo`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
 --
 -- Dumping data for table `logs`
 --
 
-INSERT INTO `logs` (`logNo`, `comment`) VALUES
-(1, 'dummy'),
-(2, 'dummy'),
-(4, 'dummy'),
-(5, 'dummy'),
-(6, 'dummy'),
-(7, 'dummy');
+INSERT INTO `logs` (`comment`) VALUES
+('dummy'),
+('dummy'),
+('dummy'),
+('dummy'),
+('dummy'),
+('dummy');
 
 -- --------------------------------------------------------
 
@@ -176,17 +180,18 @@ CREATE TABLE `production_plan` (
   `id` int(50) NOT NULL AUTO_INCREMENT,
   `start_date` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
   `end_date` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
-  `plannerNo` int(50) NOT NULL
+  `plannerNo` int(50) NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
 --
 -- Dumping data for table `production_plan`
 --
 
-INSERT INTO `production_plan` (`id`, `start_date`, `end_date`, `plannerNo`) VALUES
-(777, '2021-01-01', '2021-01-28', 444),
-(778, '2021-01-29', '2021-02-26', 444),
-(779, '2021-03-26', '2021-04-23', 445);
+INSERT INTO `production_plan` (`start_date`, `end_date`, `plannerNo`) VALUES
+('2021-01-01', '2021-01-28', 444),
+('2021-01-29', '2021-02-26', 444),
+('2021-03-26', '2021-04-23', 445);
 
 -- --------------------------------------------------------
 
@@ -195,18 +200,19 @@ INSERT INTO `production_plan` (`id`, `start_date`, `end_date`, `plannerNo`) VALU
 --
 
 CREATE TABLE `production_planner` (
-  `number` int(50) NOT NULL,
+  `number` int(50) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
-  `department` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL
+  `department` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
+  PRIMARY KEY (`number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
 --
 -- Dumping data for table `production_planner`
 --
 
-INSERT INTO `production_planner` (`number`, `name`, `department`) VALUES
-(444, 'Amund Amundsson', 'Department of Leaders'),
-(445, 'Even Bryns Boe ', 'Department of Information');
+INSERT INTO `production_planner` (`name`, `department`) VALUES
+('Amund Amundsson', 'Department of Leaders'),
+('Even Bryns Boe ', 'Department of Information');
 
 -- --------------------------------------------------------
 
@@ -215,22 +221,23 @@ INSERT INTO `production_planner` (`number`, `name`, `department`) VALUES
 --
 
 CREATE TABLE `production_plan_reference` (
-  `plan_id` int(50) NOT NULL,
+  `plan_id` int(50) NOT NULL AUTO_INCREMENT,
   `size` int(50) NOT NULL,
   `weight` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
-  `quantity` int(50) NOT NULL
+  `quantity` int(50) NOT NULL,
+  PRIMARY KEY (`plan_id`, `size`,`weight`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
 --
 -- Dumping data for table `production_plan_reference`
 --
 
-INSERT INTO `production_plan_reference` (`plan_id`, `size`, `weight`, `quantity`) VALUES
-(777, 145, '20-30', 2000),
-(777, 165, '40-50', 2600),
-(778, 150, '30-40', 3400),
-(778, 150, '30-50', 1100),
-(779, 165, '40-50', 5400);
+INSERT INTO `production_plan_reference` (`size`, `weight`, `quantity`) VALUES
+(145, '20-30', 2000),
+(165, '40-50', 2600),
+(150, '30-40', 3400),
+(150, '30-50', 1100),
+(165, '40-50', 5400);
 
 -- --------------------------------------------------------
 
@@ -239,23 +246,24 @@ INSERT INTO `production_plan_reference` (`plan_id`, `size`, `weight`, `quantity`
 --
 
 CREATE TABLE `public_view_ski` (
-  `account_id` int(50) NOT NULL,
+  `account_id` int(50) NOT NULL AUTO_INCREMENT,
   `size` int(50) NOT NULL,
-  `weight` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL
+  `weight` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
+  PRIMARY KEY (`account_id`,`size`,`weight`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
 --
 -- Dumping data for table `public_view_ski`
 --
 
-INSERT INTO `public_view_ski` (`account_id`, `size`, `weight`) VALUES
-(1, 140, '20-30'),
-(2, 150, '40-50'),
-(5, 140, '40-50'),
-(8, 165, '40-50'),
-(65, 150, '30-40'),
-(69, 145, '20-30'),
-(69, 150, '30-40');
+INSERT INTO `public_view_ski` (`size`, `weight`) VALUES
+(140, '20-30'),
+(150, '40-50'),
+(140, '40-50'),
+(165, '40-50'),
+(150, '30-40'),
+(145, '20-30'),
+(150, '30-40');
 
 -- --------------------------------------------------------
 
@@ -302,7 +310,8 @@ CREATE TABLE `shipment` (
   `pickup_date` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
   `state` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
   `driver_id` int(50) NOT NULL,
-  `repNo` int(50) NOT NULL
+  `repNo` int(50) NOT NULL,
+  PRIMARY KEY (`number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
 -- --------------------------------------------------------
@@ -314,24 +323,25 @@ CREATE TABLE `shipment` (
 CREATE TABLE `ski` (
   `product_number` int(50) NOT NULL AUTO_INCREMENT,
   `size` int(50) NOT NULL,
-  `weight` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL
+  `weight` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
+  PRIMARY KEY (`product_number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
 --
 -- Dumping data for table `ski`
 --
 
-INSERT INTO `ski` (`product_number`, `size`, `weight`) VALUES
-(111, 140, '20-30'),
-(222, 140, '20-30'),
-(333, 140, '20-30'),
-(444, 165, '40-50'),
-(555, 165, '40-50'),
-(667, 150, '40-50'),
-(777, 150, '40-50'),
-(888, 150, '40-50'),
-(889, 150, '40-50'),
-(999, 150, '40-50');
+INSERT INTO `ski` (`size`, `weight`) VALUES
+(140, '20-30'),
+(140, '20-30'),
+(140, '20-30'),
+(165, '40-50'),
+(165, '40-50'),
+(150, '40-50'),
+(150, '40-50'),
+(150, '40-50'),
+(150, '40-50'),
+(150, '40-50');
 
 -- --------------------------------------------------------
 
@@ -367,20 +377,21 @@ INSERT INTO `ski_model` (`model`, `skiing_type`, `description`, `grip_system`, `
 CREATE TABLE `ski_order` (
   `order_number` int(50) NOT NULL AUTO_INCREMENT,
   `total_price` int(50) NOT NULL,
-  `state` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
-  `ref_larger_order` int(50) NOT NULL,
+  `state` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL DEFAULT 'new',
+  `ref_larger_order` int(50) DEFAULT NULL,
   `customer_id` int(50) NOT NULL,
-  `shipment_number` int(50) NOT NULL
+  `shipment_number` int(50) NOT NULL,
+  PRIMARY KEY (`order_number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
 --
 -- Dumping data for table `ski_order`
 --
 
-INSERT INTO `ski_order` (`order_number`, `total_price`, `state`, `ref_larger_order`, `customer_id`, `shipment_number`) VALUES
-(1, 8000, 'new', 1, 665, 1),
-(2, 8600, 'new', 2, 7799, 2),
-(3, 4000, 'new', 2, 7799, 2);
+INSERT INTO `ski_order` (`total_price`, `customer_id`, `shipment_number`) VALUES
+(8000, 665, 1),
+(8600, 7799, 2),
+(4000, 7799, 2);
 
 -- --------------------------------------------------------
 
@@ -414,20 +425,21 @@ INSERT INTO `ski_type` (`size`, `weight_class`, `MSRPP`, `model`) VALUES
 --
 
 CREATE TABLE `ski_type_order` (
-  `order_number` int(50) NOT NULL,
+  `order_number` int(50) NOT NULL AUTO_INCREMENT,
   `size` int(50) NOT NULL,
   `weight` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
-  `quantity` int(50) NOT NULL
+  `quantity` int(50) NOT NULL,
+  PRIMARY KEY (`order_number`,`size`,`weight`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
 --
 -- Dumping data for table `ski_type_order`
 --
 
-INSERT INTO `ski_type_order` (`order_number`, `size`, `weight`, `quantity`) VALUES
-(1, 140, '20-30', 2),
-(2, 140, '40-50', 1),
-(3, 140, '20-30', 1);
+INSERT INTO `ski_type_order` (`size`, `weight`, `quantity`) VALUES
+(140, '20-30', 2),
+(140, '40-50', 1),
+(140, '20-30', 1);
 
 -- --------------------------------------------------------
 
@@ -436,18 +448,19 @@ INSERT INTO `ski_type_order` (`order_number`, `size`, `weight`, `quantity`) VALU
 --
 
 CREATE TABLE `storekeeper` (
-  `number` int(50) NOT NULL,
+  `number` int(50) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
-  `department` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL
+  `department` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
+  PRIMARY KEY (`number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
 --
 -- Dumping data for table `storekeeper`
 --
 
-INSERT INTO `storekeeper` (`number`, `name`, `department`) VALUES
-(1098764, 'Kryz Dresden', 'Store and stuff'),
-(76324141, 'Ulf Utireir', 'Store and stuff');
+INSERT INTO `storekeeper` (`name`, `department`) VALUES
+('Kryz Dresden', 'Store and stuff'),
+('Ulf Utireir', 'Store and stuff');
 
 -- --------------------------------------------------------
 
@@ -456,23 +469,24 @@ INSERT INTO `storekeeper` (`number`, `name`, `department`) VALUES
 --
 
 CREATE TABLE `team_skier` (
-  `id` int(50) NOT NULL,
+  `id` int(50) NOT NULL AUTO_INCREMENT,
   `start_date` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
   `end_date` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
   `name` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
   `dob` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
   `club` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
-  `num_skies` int(50) NOT NULL
+  `num_skies` int(50) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
 --
 -- Dumping data for table `team_skier`
 --
 
-INSERT INTO `team_skier` (`id`, `start_date`, `end_date`, `name`, `dob`, `club`, `num_skies`) VALUES
-(7799, '2021-01-01', '2024-01-01', 'Even Jegermann', '1996-02-11', 'Club Penguin', 2),
-(9911, '2020-01-02', '2021-01-28', 'Carol Xavier', '1991-02-12', 'Club Penguin', 4),
-(887766, '2021-03-26', '2025-01-01', 'Olav Krokmyr', '1967-04-04', 'The heroes of the skies', 6);
+INSERT INTO `team_skier` (`start_date`, `end_date`, `name`, `dob`, `club`, `num_skies`) VALUES
+('2021-01-01', '2024-01-01', 'Even Jegermann', '1996-02-11', 'Club Penguin', 2),
+('2020-01-02', '2021-01-28', 'Carol Xavier', '1991-02-12', 'Club Penguin', 4),
+('2021-03-26', '2025-01-01', 'Olav Krokmyr', '1967-04-04', 'The heroes of the skies', 6);
 
 -- --------------------------------------------------------
 
@@ -507,29 +521,12 @@ CREATE TABLE `transporter_view_order` (
 -- Indexes for dumped tables
 --
 
---
--- Indexes for table `customer_representative`
---
-ALTER TABLE `customer_representative`
-  ADD PRIMARY KEY (`number`);
-
---
--- Indexes for table `franchise`
---
-ALTER TABLE `franchise`
-  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `general_public`
 --
 ALTER TABLE `general_public`
   ADD PRIMARY KEY (`account_id`);
-
---
--- Indexes for table `individual_store`
---
-ALTER TABLE `individual_store`
-  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `keeper_check_order`
@@ -543,35 +540,6 @@ ALTER TABLE `keeper_check_order`
 ALTER TABLE `keeper_log`
   ADD PRIMARY KEY (`keeperNo`,`logNo`);
 
---
--- Indexes for table `logs`
---
-ALTER TABLE `logs`
-  ADD PRIMARY KEY (`logNo`);
-
---
--- Indexes for table `production_plan`
---
-ALTER TABLE `production_plan`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `production_planner`
---
-ALTER TABLE `production_planner`
-  ADD PRIMARY KEY (`number`);
-
---
--- Indexes for table `production_plan_reference`
---
-ALTER TABLE `production_plan_reference`
-  ADD PRIMARY KEY (`plan_id`,`size`,`weight`);
-
---
--- Indexes for table `public_view_ski`
---
-ALTER TABLE `public_view_ski`
-  ADD PRIMARY KEY (`account_id`,`size`,`weight`);
 
 --
 -- Indexes for table `rep_review_order`
@@ -580,52 +548,17 @@ ALTER TABLE `rep_review_order`
   ADD PRIMARY KEY (`repNo`,`orderNo`);
 
 --
--- Indexes for table `shipment`
---
-ALTER TABLE `shipment`
-  ADD PRIMARY KEY (`number`);
-
---
--- Indexes for table `ski`
---
-ALTER TABLE `ski`
-  ADD PRIMARY KEY (`product_number`);
-
---
 -- Indexes for table `ski_model`
 --
 ALTER TABLE `ski_model`
   ADD PRIMARY KEY (`model`);
 
 --
--- Indexes for table `ski_order`
---
-ALTER TABLE `ski_order`
-  ADD PRIMARY KEY (`order_number`);
-
---
 -- Indexes for table `ski_type`
 --
 ALTER TABLE `ski_type`
-  ADD PRIMARY KEY (`size`,`weight_class`);
+  ADD PRIMARY KEY (`model`, `size`, `weight_class`);
 
---
--- Indexes for table `ski_type_order`
---
-ALTER TABLE `ski_type_order`
-  ADD PRIMARY KEY (`order_number`,`size`,`weight`);
-
---
--- Indexes for table `storekeeper`
---
-ALTER TABLE `storekeeper`
-  ADD PRIMARY KEY (`number`);
-
---
--- Indexes for table `team_skier`
---
-ALTER TABLE `team_skier`
-  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `transporter`
