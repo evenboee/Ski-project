@@ -33,11 +33,11 @@ class CustomerRepEndpoint extends RequestHandler {
                 $state = $uri[1];
                 return $this->doGetOrdersWithState($state);
             } else {
-                throw new APIException(RESTConstants::HTTP_NOT_FOUND, $endpointPath . '/' . $uri[0]);
+                throw new APIException(RESTConstants::HTTP_BAD_REQUEST, $endpointPath . '/' . $uri[0], 'Wrong number of parts');
             }
         }
 
-        throw new APIException(RESTConstants::HTTP_NOT_FOUND, $endpointPath);
+        throw new APIException(RESTConstants::HTTP_NOT_FOUND, $endpointPath, 'Endpoint of customer rep not found');
     }
 
     protected function doGetOrdersWithState(string $state): array {

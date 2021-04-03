@@ -1,4 +1,7 @@
 <?php
+
+use JetBrains\PhpStorm\Pure;
+
 require_once 'controller/APIController.php';
 require_once 'controller/APIException.php';
 require_once 'RESTConstants.php';
@@ -40,9 +43,17 @@ try {
 // Handle application exceptions
 } catch (APIException $e){
     http_response_code($e->getCode());
-    echo '{error: "error"}';// json_encode(generateErrorResponseContent($e->getCode(), $e->getInstance(), $e->getDetailCode(), $e));
+    echo json_encode(generateErrorResponseContent($e));
 } catch (Throwable $e) {
     http_response_code(RESTConstants::HTTP_INTERNAL_SERVER_ERROR);
     // echo json_encode(RESTConstants::HTTP_INTERNAL_SERVER_ERROR, '/', -1);
-    echo '{error: "error"}';
+    echo '{"error": "error"}';
+}
+
+function generateErrorResponseContent(APIException $e): array {
+    $res = array();
+    $res['Status'] = $e->getCode();
+    $res['Message'] = $e->getMessage();
+    $res['Instance'] = $e->getInstance();
+    return $res;
 }

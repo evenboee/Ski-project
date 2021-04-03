@@ -16,7 +16,7 @@ class APIException extends Exception
      */
     protected $detailCode;
 
-    public function __construct($code, $instance, $detailCode = -1, $message = "", Throwable $previous = null)
+    public function __construct($code, $instance, $message = "", $detailCode = -1, Throwable $previous = null)
     {
         parent::__construct($message, $code, $previous);
         $this->instance = $instance;

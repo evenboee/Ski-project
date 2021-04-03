@@ -21,7 +21,7 @@ class APIController extends RequestHandler {
                 $endpoint = new CustomerRepEndpoint();
                 break;
             default:
-                throw new APIException(RESTConstants::HTTP_NOT_FOUND, $endpointPath);
+                throw new APIException(RESTConstants::HTTP_NOT_FOUND, $endpointPath, 'Endpoint not found');
         }
 
         return $endpoint->handleRequest(array_slice($uri, 1), $endpointPath, $requestMethod, $queries, $payload);
