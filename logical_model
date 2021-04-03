@@ -1,0 +1,94 @@
+// Logical Model Iteration 6 (made employee {Mandatory, Or})
+// Ski:
+Ski_model(model, skiing_type, description, grip_system, historical, temperature, url)
+PK model
+
+Ski_type(size, weight_class, MSRPP, model)
+PK size, weight_class
+FK model REFERENCES Ski_model(model)
+
+Ski(product_number, size, weight)
+PK produkt_number
+FK size REFERENCES Ski_type(size)
+FK weight REFERENCES Ski_type(weight_class)
+
+//Users and customers:
+General_public(account_id)
+PK account_id
+Public_view_ski(account_id, size, weight)
+PK account_id, size, weight
+FK account_id REFERENCES General_public(account_id)
+FK size REFERENCES Ski_type(size)
+FK weight REFERENCES Ski_type(weight_class)
+
+Team_skier(id, start_date, end_date, name, dob, club, num_skies)
+PK id
+Individual_store(id, start_date, end_date, name, shipping_address, buying_price)
+PK id
+Franchise(id, start_date, end_date, name, shipping_address, buying_price, store_info)
+PK id
+
+//Order:
+Order(order_number, total_price, state, ref_larger_order, customer_id, shipment_number)
+PK order_number
+FK customer_id REFERENCES Customer(id) 
+FK shipment_number REFERENCES Shipment(number)
+
+SkiType_order(order_number, size, weight, quantity)
+PK order_number, size, weight
+FK order_number REFERENCES Order(order_number)
+FK size REFERENCES Ski_type(size)
+FK weight REFERENCES Ski_type(weight_class)
+
+// Transport
+Transporter(company_name)
+PK company_name
+
+Transporter_view_order(order_number, company_name)
+PK order_number, company_name
+FK order_number REFERENCES Order(order_number)
+FK company_name REFERENCES Transporter(company_name)
+
+Shipment(number, store_name, shipping_address, pickup_date, state, driver_id, repNo)
+PK number
+FK repNo REFERENCES Customer_representative(number)
+
+// Employees:
+Production_planner(number, name, department)
+PK number
+Storekeeper(number, name, department)
+PK number
+Customer_representative(number, name, department)
+PK number
+
+Rep_review_order(repNo, orderNo)
+PK repNo, orderNo
+FK repNo REFERENCES Customer_representative(number)
+FK orderNo REFERENCES Order(order_number)
+
+Rep_log(repNo, logNo)
+PK repNo, logNo
+FK repNo REFERENCES Customer_representative(number)
+
+Keeper_check_order(keeperNo, orderNo)
+PK keeperNo, orderNo
+FK keeperNo REFERENCES Storekeeper(number)
+FK orderNo REFERENCES Order(order_number)
+
+Keeper_log(keeperNo, logNo)
+PK keeperNo, logNo
+FK keeperNo REFERENCES Storekeeper(number)
+
+
+//Production:
+Production_plan(id, start_date, end_date, plannerNo)
+PK id
+FK plannerNo REFERENCES Production_planner(number)
+
+Production_plan_reference(plan_id, size, weight, quantity)
+PK plan_id, size, weight
+FK size REFERENCES Ski_type(size)
+FK weight REFERENCES Ski_type(weight_class)
+
+
+
