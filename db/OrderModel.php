@@ -23,4 +23,13 @@ class OrderModel extends DB {
 
         return $res;
     }
+
+    public function setStateOfOrder($id, string $state): void { // TODO: Return if something was changed
+        $query = 'UPDATE ski_order SET state = :state WHERE order_number = :id';
+
+        $stmt = $this->db->prepare($query);
+        $stmt->bindValue(':state', $state);
+        $stmt->bindValue(':id', $id);
+        $stmt->execute();
+    }
 }

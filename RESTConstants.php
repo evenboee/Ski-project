@@ -13,8 +13,8 @@ class RESTConstants
     const METHOD_GET = 'GET';
     const METHOD_POST = 'POST';
     const METHOD_PUT = 'PUT';
+    const METHOD_PATCH = 'PATCH';
     const METHOD_DELETE = 'DELETE';
-
     // HTTP status codes
     const HTTP_OK = 200;
     const HTTP_CREATED = 201;
@@ -26,8 +26,10 @@ class RESTConstants
     const HTTP_INTERNAL_SERVER_ERROR = 500;
     const HTTP_NOT_IMPLEMENTED = 501;
 
-    const ENDPOINT_ORDER = 'order';
-    const ENDPOINT_ORDERS = 'orders';
+    const ORDER_STATES = ['new', 'open', 'skis-available'];
 
+    const ENDPOINT_ORDER = 'order';
+
+    const ENDPOINT_ORDERS = 'orders';
     const ENDPOINT_CUSTOMER_REP = 'rep';
 }

@@ -1,7 +1,5 @@
 <?php
 
-use JetBrains\PhpStorm\Pure;
-
 require_once 'controller/APIController.php';
 require_once 'controller/APIException.php';
 require_once 'RESTConstants.php';
