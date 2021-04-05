@@ -4,21 +4,34 @@ require_once 'RESTConstants.php';
 require_once 'db/SkiTypeModel.php';
 class PublicEndpoint extends RequestHandler {
 
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->validMethods[''][RESTConstants::METHOD_GET] = RESTConstants::HTTP_OK;
+    }
     public function handleRequest(array $uri, string $endpointPath, string $requestMethod, array $queries, array $payload): array
     {
         //echo '"message": "test"';
-       // return array("dei","hei");
-        
-        if (!isset($queries['model'])) {
-            return $this->doGetAllSkiTypes();
-        } else
+        // return array("dei","hei");
+
+        if ($this->isValidMethod('', $requestMethod) == RESTConstants::HTTP_METHOD_NOT_ALLOWED) {
+            throw new APIException(RESTConstants::HTTP_METHOD_NOT_ALLOWED, $endpointPath,
+                'Method '.$requestMethod.' not allowed');
+        }
+
         // TODO: Add check for method
         // if $this->validMethods[$uri[0]][$requestMethod] isset?
         if (count($uri) == 0) {
-            $ski_model = $queries['model'];
-            return $this->doGetSkiTypeByModel($ski_model);
+            if (!isset($queries['model'])) {
+                return $this->doGetAllSkiTypes();
+            } else {
+                $ski_model = $queries['model'];
+                return $this->doGetSkiTypeByModel($ski_model);
+            }
         } else {
-            throw new APIException(RESTConstants::HTTP_BAD_REQUEST, $endpointPath . '/' . $uri[0], 'Wrong number of parts');
+            throw new APIException(RESTConstants::HTTP_BAD_REQUEST, $endpointPath, 'Wrong number of parts');
         }
 
     }

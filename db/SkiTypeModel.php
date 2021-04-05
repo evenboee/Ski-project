@@ -6,6 +6,8 @@ require_once 'DB.php';
 class SkiTypeModel extends DB
 {
 
+
+
     public function __construct()
     {
         parent::__construct();
