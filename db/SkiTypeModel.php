@@ -27,4 +27,21 @@ class SkiTypeModel extends DB
 
         return $res;
     }
+
+
+
+
+    public function getAllSkiTypes(): array {
+        $res = array();
+        $query = 'SELECT size, weight_class FROM `ski_type`';
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
+
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $res[] = $row;
+        }
+
+        return $res;
+
+    }
 }
