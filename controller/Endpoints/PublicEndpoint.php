@@ -8,8 +8,7 @@ class PublicEndpoint extends RequestHandler {
     {
         //echo '"message": "test"';
        // return array("dei","hei");
-
-
+        
         if (!isset($queries['model'])) {
             return $this->doGetAllSkiTypes();
         } else
