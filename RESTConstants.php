@@ -32,4 +32,5 @@ class RESTConstants
 
     const ENDPOINT_ORDERS = 'orders';
     const ENDPOINT_CUSTOMER_REP = 'rep';
+    const ENDPOINT_PUBLIC = "public";
 }

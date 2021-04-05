@@ -1,9 +1,10 @@
 <?php
 
 require_once 'RequestHandler.php';
-require_once 'CustomerRepEndpoint.php';
+require_once 'Endpoints/CustomerRepEndpoint.php';
 require_once 'APIException.php';
 require_once 'RESTConstants.php';
+require_once 'Endpoints/PublicEndpoint.php';
 
 class APIController extends RequestHandler {
 
@@ -19,6 +20,9 @@ class APIController extends RequestHandler {
         switch ($endpointUri) {
             case RESTConstants::ENDPOINT_CUSTOMER_REP:
                 $endpoint = new CustomerRepEndpoint();
+                break;
+            case RESTConstants::ENDPOINT_PUBLIC:
+                $endpoint = new PublicEndpoint();
                 break;
             default:
                 throw new APIException(RESTConstants::HTTP_NOT_FOUND, $endpointPath, 'Endpoint not found');
