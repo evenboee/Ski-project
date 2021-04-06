@@ -28,9 +28,13 @@ class RESTConstants
 
     const ORDER_STATES = ['new', 'open', 'skis-available'];
 
+    //ENDPOINTS:
+    // Sub
     const ENDPOINT_ORDER = 'order';
-
+    const ENDPOINT_SKI = 'ski';
+    // Base
     const ENDPOINT_ORDERS = 'orders';
     const ENDPOINT_CUSTOMER_REP = 'rep';
-    const ENDPOINT_PUBLIC = "public";
+    const ENDPOINT_PUBLIC = 'public';
+    const ENDPOINT_STOREKEEPER = 'storekeeper';
 }

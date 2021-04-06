@@ -1,6 +1,6 @@
 <?php
 
-require_once 'DB.php';
+require_once 'db/DB.php';
 
 class OrderModel extends DB {
 
