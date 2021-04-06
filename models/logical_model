@@ -2,36 +2,32 @@
 Ski_model(model, skiing_type, description, grip_system, historical, temperature, url)
 PK model
 
-Ski_type(size, weight_class, MSRPP, model)
+Ski_type(size, weight_class, MSRP, model)
 PK size, weight_class
 FK model REFERENCES Ski_model(model)
 
-Ski(product_number, model, size, weight)
-PK produkt_number
+Ski(product_number, production_date, model, size, weight)
+PK product_number
 FK model REFERENCES Ski_model(model)
-FK size REFERENCES Ski_type(size)
-FK weight REFERENCES Ski_type(weight_class)
+FK size, weight REFERENCES Ski_type(size, weight)
 
-//Users and customers:
-General_public(account_id)
-PK account_id
-Public_view_ski(account_id, size, weight)
-PK account_id, size, weight
-FK account_id REFERENCES General_public(account_id)
-FK size REFERENCES Ski_type(size)
-FK weight REFERENCES Ski_type(weight_class)
-
+// Customer
 Team_skier(id, start_date, end_date, name, dob, club, num_skies)
 PK id
-Individual_store(id, start_date, end_date, name, shipping_address, buying_price)
+
+Corporation(id, start_date, end_date, name, shipping_address, buying_price)
 PK id
-Franchise(id, start_date, end_date, name, shipping_address, buying_price, store_info)
-PK id
+AK name (alternate key)
+
+Franchise(franchise_id, store_id)
+PK franchise_id, store_id
+FK franchise_id REFERENCES Corporation(id)
+FK store_id REFERENCES Corporation(id)
 
 //Order:
 Order(order_number, total_price, state, ref_larger_order, customer_id, shipment_number)
 PK order_number
-FK customer_id REFERENCES Customer(id) 
+FK customer_id REFERENCES Corporation(id)
 FK shipment_number REFERENCES Shipment(number)
 
 SkiType_order(order_number, size, weight, quantity)
@@ -61,7 +57,7 @@ FK order_number REFERENCES Order(order_number)
 //Production:
 Production_plan(id, start_date, end_date, plannerNo)
 PK id
-FK plannerNo REFERENCES Production_planner(number)
+FK plannerNo REFERENCES Employee(number)
 
 Production_plan_reference(plan_id, size, weight, quantity)
 PK plan_id, size, weight

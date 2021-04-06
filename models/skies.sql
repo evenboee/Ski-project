@@ -511,18 +511,8 @@ INSERT INTO `transporter` (`company_name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `transporter_view_order`
---
-
-CREATE TABLE `transporter_view_order` (
-  `order_number` int(50) NOT NULL,
-  `company_name` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
-
---
 -- Indexes for dumped tables
 --
-
 
 --
 -- Indexes for table `general_public`
@@ -568,11 +558,6 @@ ALTER TABLE `ski_type`
 ALTER TABLE `transporter`
   ADD PRIMARY KEY (`company_name`);
 
---
--- Indexes for table `transporter_view_order`
---
-ALTER TABLE `transporter_view_order`
-  ADD PRIMARY KEY (`order_number`,`company_name`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
