@@ -5,6 +5,7 @@ require_once 'Endpoints/CustomerRepEndpoint.php';
 require_once 'APIException.php';
 require_once 'RESTConstants.php';
 require_once 'Endpoints/PublicEndpoint.php';
+require_once 'Endpoints/StorekeeperEndpoint.php';
 
 class APIController extends RequestHandler {
 
@@ -23,6 +24,9 @@ class APIController extends RequestHandler {
                 break;
             case RESTConstants::ENDPOINT_PUBLIC:
                 $endpoint = new PublicEndpoint();
+                break;
+            case RESTConstants::ENDPOINT_STOREKEEPER:
+                $endpoint = new StorekeeperEndpoint();
                 break;
             default:
                 throw new APIException(RESTConstants::HTTP_NOT_FOUND, $endpointPath, 'Endpoint not found');

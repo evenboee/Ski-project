@@ -1,7 +1,7 @@
 <?php
 
 require_once 'RESTConstants.php';
-require_once 'db/SkiTypeModel.php';
+require_once 'db/db_models/SkiTypeModel.php';
 class PublicEndpoint extends RequestHandler {
 
 

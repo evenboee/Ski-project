@@ -1,7 +1,7 @@
 <?php
 
 require_once 'controller/RequestHandler.php';
-require_once 'db/OrderModel.php';
+require_once 'db/db_models/OrderModel.php';
 require_once 'controller/APIException.php';
 
 class CustomerRepEndpoint extends RequestHandler {
