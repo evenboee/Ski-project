@@ -322,26 +322,28 @@ CREATE TABLE `shipment` (
 
 CREATE TABLE `ski` (
   `product_number` int(50) NOT NULL AUTO_INCREMENT,
+  `model` VARCHAR(50) NOT NULL,
   `size` int(50) NOT NULL,
   `weight` varchar(50) NOT NULL,
   PRIMARY KEY (`product_number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
+
 --
 -- Dumping data for table `ski`
 --
 
-INSERT INTO `ski` (`size`, `weight`) VALUES
-(140, '20-30'),
-(140, '20-30'),
-(140, '20-30'),
-(165, '40-50'),
-(165, '40-50'),
-(150, '40-50'),
-(150, '40-50'),
-(150, '40-50'),
-(150, '40-50'),
-(150, '40-50');
+INSERT INTO `ski` (`model`, `size`, `weight`) VALUES
+('Redline', 140, '20-30'),
+('Frogger', 140, '20-30'),
+('Redline', 140, '20-30'),
+('Redline', 165, '40-50'),
+('Redline', 165, '40-50'),
+('Frogger', 150, '40-50'),
+('Frogger', 150, '40-50'),
+('Frogger', 150, '40-50'),
+('Frogger', 150, '40-50'),
+('Redline', 150, '40-50');
 
 -- --------------------------------------------------------
 
