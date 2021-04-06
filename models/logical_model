@@ -19,7 +19,7 @@ Corporation(id, start_date, end_date, name, shipping_address, buying_price)
 PK id
 AK name (alternate key)
 
-Franchise(franchise_id, store_id)
+Franchise_stores(franchise_id, store_id)
 PK franchise_id, store_id
 FK franchise_id REFERENCES Corporation(id)
 FK store_id REFERENCES Corporation(id)
@@ -49,8 +49,8 @@ FK repNo REFERENCES Customer_representative(number)
 Employee(number, name, department)
 PK number
 
-Order_log(employee_number, order_number old_state, new_state, time)
-PK employee_number, order_number
+Order_log(log_number, employee_number, order_number, old_state, new_state, time)
+PK log_number
 FK employee_number REFERENCES Employee(number)
 FK order_number REFERENCES Order(order_number)
 
