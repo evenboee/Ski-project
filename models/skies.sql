@@ -327,6 +327,7 @@ CREATE TABLE `ski` (
   PRIMARY KEY (`product_number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
+
 --
 -- Dumping data for table `ski`
 --
