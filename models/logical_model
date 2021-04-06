@@ -1,4 +1,3 @@
-// Logical Model Iteration 6 (made employee {Mandatory, Or})
 // Ski:
 Ski_model(model, skiing_type, description, grip_system, historical, temperature, url)
 PK model
@@ -7,8 +6,9 @@ Ski_type(size, weight_class, MSRPP, model)
 PK size, weight_class
 FK model REFERENCES Ski_model(model)
 
-Ski(product_number, size, weight)
+Ski(product_number, model, size, weight)
 PK produkt_number
+FK model REFERENCES Ski_model(model)
 FK size REFERENCES Ski_type(size)
 FK weight REFERENCES Ski_type(weight_class)
 
