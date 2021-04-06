@@ -327,6 +327,10 @@ CREATE TABLE `ski` (
   PRIMARY KEY (`product_number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
+-- Adds an additional attribute meant to be used by storekeeper when he/she quality checks newly produced skies.
+-- New skies will have this value as "NULL" until storekeeper makes a review/check/record of its current condition.
+ALTER TABLE `ski` ADD `record` VARCHAR(40) NULL DEFAULT NULL AFTER `weight`; 
+
 --
 -- Dumping data for table `ski`
 --
