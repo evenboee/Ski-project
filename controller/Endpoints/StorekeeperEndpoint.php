@@ -29,8 +29,8 @@ class StorekeeperEndpoint extends RequestHandler {
                 $data = json_decode($json);
 
                 // TODO: Check if $data actually has variables called size and weight before trying to get their values
-                if (is_int($data->size) && is_string($data->weight)){
-                    return $this->doAddSkiToDB($data->size, $data->weight);
+                if (is_int($data->size) && is_string($data->weight) && is_string($data->model)){
+                    return $this->doAddSkiToDB($data->size, $data->weight, $data->model);
                 } else {
                     throw new APIException(RESTConstants::HTTP_BAD_REQUEST, $endpointPath,'Malformed request body. One or more of produktnummer (int), size (int) and weight (string) is not their required type or does not exist!');
                 }
@@ -47,10 +47,10 @@ class StorekeeperEndpoint extends RequestHandler {
     }
 
 
-    protected function doAddSkiToDB(int $size, string $weight): array{
+    protected function doAddSkiToDB(int $size, string $weight, string $ski_model): array{
 
         $model = new SkiModel();
-        $model->addSkiToDB($size, $weight);
+        $model->addSkiToDB($size, $weight, $ski_model);
         return array("Added ski to database");
     }
 
