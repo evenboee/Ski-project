@@ -11,13 +11,14 @@ class SkiModel extends DB
     }
 
     //TODO: ADD model parameter
-    public function addSkiToDB(int $size, string $weight){
+    public function addSkiToDB(int $size, string $weight, string $model){
 
-        $query = 'INSERT INTO ski (size, weight) VALUES (:size, :weight)';
+        $query = 'INSERT INTO ski (size, weight, model) VALUES (:size, :weight, :model)';
 
         $stmt = $this->db->prepare($query);
         $stmt->bindValue(':size', $size);
         $stmt->bindValue(':weight', $weight);
+        $stmt->bindValue(':model', $model);
         $stmt->execute();
 
 
