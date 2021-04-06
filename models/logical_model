@@ -44,41 +44,19 @@ FK weight REFERENCES Ski_type(weight_class)
 Transporter(company_name)
 PK company_name
 
-Transporter_view_order(order_number, company_name)
-PK order_number, company_name
-FK order_number REFERENCES Order(order_number)
-FK company_name REFERENCES Transporter(company_name)
-
 Shipment(number, store_name, shipping_address, pickup_date, state, driver_id, repNo)
 PK number
 FK repNo REFERENCES Customer_representative(number)
 
 // Employees:
-Production_planner(number, name, department)
-PK number
-Storekeeper(number, name, department)
-PK number
-Customer_representative(number, name, department)
+// Department being 'customer rep', 'storekeeper' or 'production planner'
+Employee(number, name, department)
 PK number
 
-Rep_review_order(repNo, orderNo)
-PK repNo, orderNo
-FK repNo REFERENCES Customer_representative(number)
-FK orderNo REFERENCES Order(order_number)
-
-Rep_log(repNo, logNo)
-PK repNo, logNo
-FK repNo REFERENCES Customer_representative(number)
-
-Keeper_check_order(keeperNo, orderNo)
-PK keeperNo, orderNo
-FK keeperNo REFERENCES Storekeeper(number)
-FK orderNo REFERENCES Order(order_number)
-
-Keeper_log(keeperNo, logNo)
-PK keeperNo, logNo
-FK keeperNo REFERENCES Storekeeper(number)
-
+Order_log(employee_number, order_number old_state, new_state, time)
+PK employee_number, order_number
+FK employee_number REFERENCES Employee(number)
+FK order_number REFERENCES Order(order_number)
 
 //Production:
 Production_plan(id, start_date, end_date, plannerNo)
@@ -89,6 +67,3 @@ Production_plan_reference(plan_id, size, weight, quantity)
 PK plan_id, size, weight
 FK size REFERENCES Ski_type(size)
 FK weight REFERENCES Ski_type(weight_class)
-
-
-
