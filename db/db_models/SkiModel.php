@@ -63,7 +63,7 @@ class SkiModel extends DB
     {
 
         $res = array();
-        if (array_count_values($resource) != 3) {
+        if (count($resource) != 3) {
             $res['code'] = RESTConstants::HTTP_BAD_REQUEST;
             $res['message'] = "Bad request: There should be exactly 3 values.";
             return $res;
@@ -90,6 +90,6 @@ class SkiModel extends DB
 
     function doesSkiModelExist(string $model_name): bool {
         //TODO: add body...
-        return false;
+        return true;
     }
 }
