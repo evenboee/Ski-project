@@ -82,13 +82,59 @@ class OrderModel extends DB {
         $stmt->execute();
         $this->db->commit();
 
-
-
         return $res;
 
     }
 
-    function verifyOrder(array $resource): array
+    /**
+     * Attempts to delete the order by the specified $order_num.
+     * It will only delete if the $order_num AND the customer_id specified in the $resource match an existing order,
+     * otherwise it will throw an @APIException.
+     *
+     * If there is an order matching the criteria, it will delete both the 'ski_order' AND the corresponding 'ski_type_order'.
+     *
+     * @param string $order_num the order number of the ski_order to delete (and the ski_type_order)
+     * @param array $resource an array that should contain a customer_id
+     * @return array a response that contains the order number of the order that was deleted as well as a clarification that is was deleted.
+     * @throws APIException an exception which is thrown if there are no orders with the specified order number and customer id, or if the given resource is faulty.
+     */
+    public function deleteOrder(string $order_num, array $resource): array {
+        if (!array_key_exists('customer_id', $resource)) {
+            throw new APIException(RESTConstants::HTTP_BAD_REQUEST, RESTConstants::API_URI, 'Missing customer_id attribute!');
+        }
+
+        $query = 'SELECT * FROM `ski_order` WHERE order_number = :order_num AND customer_id = :customer_id';
+
+        $stmt = $this->db->prepare($query);
+        $stmt->bindValue(':customer_id', $resource['customer_id']);
+        $stmt->bindValue(':order_num', $order_num);
+        $stmt->execute();
+
+        $rec = array();
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $rec[] = $row;
+        }
+        if (count($rec) != 1) {
+            throw new APIException(RESTConstants::HTTP_FORBIDDEN, RESTConstants::API_URI, 'Could not delete the specified order.');
+        }
+
+            $query = 'DELETE FROM `ski_order` WHERE `order_number` = :order_num AND customer_id = :customer_id';
+            $stmt = $this->db->prepare($query);
+            $stmt->bindValue(':order_num', $order_num);
+            $stmt->bindValue(':customer_id', $resource['customer_id']);
+            $stmt->execute();
+
+            $query = "DELETE FROM ski_type_order WHERE order_number = :order_num";
+            $stmt = $this->db->prepare($query);
+            $stmt->bindValue(':order_num', $order_num);
+            $stmt->execute();
+
+            $res['order_number'] = $order_num;
+            $res['deletion'] = 'success';
+            return $res;
+    }
+
+    protected function verifyOrder(array $resource): array
     {
         $res = array();
         if (count($resource) != 5) {

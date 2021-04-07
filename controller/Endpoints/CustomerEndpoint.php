@@ -55,6 +55,11 @@ class CustomerEndpoint extends RequestHandler {
 
             } else if ($requestMethod == RESTConstants::METHOD_DELETE) {
                 //TODO: Delete order
+                //$uri[1] is the order_id to delete
+                $res['result'] = $this->doDeleteOrder($uri[1], $payload);
+                $res['status'] = RESTConstants::HTTP_ACCEPTED; // TODO: another http code perhaps?
+                return $res;
+
             }
 
 
@@ -68,8 +73,14 @@ class CustomerEndpoint extends RequestHandler {
     }
 
 
-    protected function doDeleteOrder(string $id): array {
-        return array('deleted array.. but not really yet :)');
+    /**
+     * @param string $order_id
+     * @param array $payload
+     * @return array
+     * @throws APIException
+     */
+    protected function doDeleteOrder(string $order_id, array $payload): array {
+        return (new OrderModel())-> deleteOrder($order_id, $payload);
     }
 
     /**
