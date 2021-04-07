@@ -175,7 +175,8 @@ CREATE TABLE `ski_type` (
     `size` int(50) NOT NULL,
     `weight_class` varchar(50) NOT NULL,
     `MSRP` int(50) NOT NULL,
-    `model` varchar(50) NOT NULL
+    `model` varchar(50) NOT NULL,
+    PRIMARY KEY (`model`, `size`, `weight_class`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
 -- --------------------------------------------------------
@@ -186,10 +187,11 @@ CREATE TABLE `ski_type` (
 
 CREATE TABLE `ski_type_order` (
     `order_number` int(50) NOT NULL,
+    `model` varchar(50) NOT NULL,
     `size` int(50) NOT NULL,
     `weight` varchar(50) NOT NULL,
     `quantity` int(50) NOT NULL,
-    PRIMARY KEY (`order_number`,`size`,`weight`)
+    PRIMARY KEY (`order_number`, `model`, `size`,`weight`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
 -- --------------------------------------------------------
@@ -201,7 +203,7 @@ CREATE TABLE `ski_type_order` (
 CREATE TABLE `team_skier` (
     `id` int(50) NOT NULL AUTO_INCREMENT,
     `start_date` DATE NOT NULL,
-    `end_date` DATE NOT NULL,
+    `end_date` DATE,
     `name` varchar(50) NOT NULL,
     `dob` DATE NOT NULL,
     `club` varchar(50) NOT NULL,
@@ -247,7 +249,10 @@ ALTER TABLE `ski_model`
 -- Indexes for table `ski_type`
 --
 ALTER TABLE `ski_type`
-    ADD PRIMARY KEY (`model`, `size`, `weight_class`);
+    ADD CONSTRAINT `ski_type_ski_model_fk` FOREIGN KEY (`model`)
+        REFERENCES `Ski_model`(`model`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE;
 
 
 --
@@ -256,7 +261,60 @@ ALTER TABLE `ski_type`
 ALTER TABLE `transporter`
     ADD PRIMARY KEY (`company_name`);
 
+ALTER TABLE `ski`
+    ADD CONSTRAINT `ski_ski_model_fk` FOREIGN KEY (`model`)
+        REFERENCES `Ski_model`(`model`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    ADD CONSTRAINT `ski_ski_type_fk` FOREIGN KEY (`model`, `size`, `weight`)
+        REFERENCES `Ski_type`(`model`, `size`, `weight_class`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE;
 
+ALTER TABLE `corporation`
+    ADD KEY (`name`);
+
+ALTER TABLE `franchise_store`
+    ADD CONSTRAINT `franchise_store_parent_corporation_fk` FOREIGN KEY (`franchise_id`)
+        REFERENCES `corporation`(`id`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    ADD CONSTRAINT `franchise_store_child_corporation_fk` FOREIGN KEY (`store_id`)
+        REFERENCES `corporation`(`id`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE;
+
+ALTER TABLE `ski_order`
+    ADD CONSTRAINT `ski_order_corporation_fk` FOREIGN KEY (`customer_id`)
+        REFERENCES `corporation`(`id`),
+    ADD CONSTRAINT `ski_order_shipment_fk` FOREIGN KEY (`shipment_number`)
+        REFERENCES `shipment`(`number`);
+
+ALTER TABLE `ski_type_order`
+    ADD CONSTRAINT `ski_type_order_Order_fk` FOREIGN KEY (`order_number`)
+        REFERENCES `ski_order`(`order_number`),
+    ADD CONSTRAINT `ski_type_order_Ski_type_fk` FOREIGN KEY (`model`, `size`, `weight`)
+        REFERENCES `Ski_type`(`model`, `size`, `weight_class`);
+
+ALTER TABLE `shipment`
+    ADD CONSTRAINT `shipment_Customer_representative_fk` FOREIGN KEY (`repNo`)
+        REFERENCES `employee`(`number`),
+    ADD CONSTRAINT `shipment_Corporation_fk` FOREIGN KEY (`store_name`)
+        REFERENCES `Corporation`(`name`);
+
+ALTER TABLE `Order_log`
+    ADD CONSTRAINT `Order_log_Employee_fk` FOREIGN KEY (`employee_number`)
+        REFERENCES `Employee`(`number`),
+    ADD CONSTRAINT `Order_log_Order_fk` FOREIGN KEY (`order_number`)
+        REFERENCES `ski_order`(`order_number`);
+
+ALTER TABLE `production_plan`
+    ADD CONSTRAINT `production_plan_Employee_fk` FOREIGN KEY (`plannerNo`)
+        REFERENCES `Employee`(`number`);
+
+ALTER TABLE `production_plan_reference`
+    ADD CONSTRAINT `_Ski_type_fk` FOREIGN KEY (`model` ,`size`, `weight`)
+        REFERENCES `Ski_type`(`model`, `size`, `weight_class`);
 
 -- -----------------------------------------------
 -- Adding data
@@ -289,60 +347,6 @@ INSERT INTO `franchise_store` (`franchise_id`, `store_id`) VALUES
 (1, 2);
 
 --
--- Dumping data for table `logs`
---
-
-INSERT INTO `Order_log` (`employee_number`, `order_number`, `old_state`, `new_state`) VALUES
-(1, 1, 'new', 'open'),
-(1, 2, 'new', 'open'),
-(2, 1, 'open', 'skis-available');
-
---
--- Dumping data for table `production_plan`
---
-
-INSERT INTO `production_plan` (`start_date`, `end_date`, `plannerNo`) VALUES
-('2021-01-01', '2021-01-28', 444),
-('2021-01-29', '2021-02-26', 444),
-('2021-03-26', '2021-04-23', 445);
-
---
--- Dumping data for table `production_plan_reference`
---
-
-INSERT INTO `production_plan_reference` (`plan_id`, `model`, `size`, `weight`, `quantity`) VALUES
-(1, 'Redline', 140, '20-30', 20),
-(1, 'Redline', 165, '40-50', 26),
-(2, 'Frogger', 150, '40-50', 34),
-(3, 'Frogger', 150, '40-50', 11),
-(3, 'Redline', 150, '40-50', 54);
-
---
--- Dumping data for table `ski`
---
-
-INSERT INTO `ski` (`model`, `size`, `weight`) VALUES
-('Redline', 140, '20-30'),
-('Frogger', 140, '20-30'),
-('Redline', 140, '20-30'),
-('Redline', 165, '40-50'),
-('Redline', 165, '40-50'),
-('Frogger', 150, '40-50'),
-('Frogger', 150, '40-50'),
-('Frogger', 150, '40-50'),
-('Frogger', 150, '40-50'),
-('Redline', 150, '40-50');
-
---
--- Dumping data for table `ski_order`
---
-
-INSERT INTO `ski_order` (`total_price`, `customer_id`, `shipment_number`) VALUES
-(8000, 665, 1),
-(8600, 7799, 2),
-(4000, 7799, 2);
-
---
 -- Dumping data for table `ski_model`
 --
 
@@ -364,14 +368,37 @@ INSERT INTO `ski_type` (`size`, `weight_class`, `MSRP`, `model`) VALUES
 (165, '40-50', 2100, 'Fisher');
 
 --
--- Dumping data for table `ski_type_order`
+-- Dumping data for table `ski`
 --
 
-INSERT INTO `ski_type_order` (`order_number`,`size`, `weight`, `quantity`) VALUES
-(1, 140, '20-30', 2),
-(1, 140, '40-50', 1),
-(2, 140, '20-30', 1);
+INSERT INTO `ski` (`model`, `size`, `weight`) VALUES
+('Redline', 140, '20-30'),
+('Redline', 140, '20-30'),
+('Fisher', 165, '40-50'),
+('Fisher', 140, '40-50'),
+('Frogger', 150, '30-40'),
+('Frogger', 150, '30-40'),
+('Redline', 150, '40-50');
 
+--
+-- Dumping data for table `production_plan`
+--
+
+INSERT INTO `production_plan` (`start_date`, `end_date`, `plannerNo`) VALUES
+('2021-01-01', '2021-01-28', 1),
+('2021-01-29', '2021-02-26', 1),
+('2021-03-26', '2021-04-23', 5);
+
+--
+-- Dumping data for table `production_plan_reference`
+--
+
+INSERT INTO `production_plan_reference` (`plan_id`, `model`, `size`, `weight`, `quantity`) VALUES
+(1, 'Redline', 140, '20-30', 20),
+(1, 'Redline', 150, '40-50', 26),
+(2, 'Frogger', 150, '30-40', 34),
+(3, 'Frogger', 150, '30-40', 11),
+(3, 'Redline', 150, '40-50', 54);
 
 --
 -- Dumping data for table `team_skier`
@@ -394,6 +421,34 @@ INSERT INTO `transporter` (`company_name`) VALUES
 INSERT INTO `Shipment` (`store_name`, `shipping_address`, `state`, `pickup_date`, `driver_id`, `repNo`) VALUES
 ('XXL Sport', 'Vegvegen 0 0000By', 'shipped', '2021-05-28', 3, 1),
 ('XXL Sport', 'Vegvegen 0 0000By', 'ready','2021-05-29', 2, 1);
+
+--
+-- Dumping data for table `ski_order`
+--
+
+INSERT INTO `ski_order` (`total_price`, `customer_id`, `shipment_number`) VALUES
+(8000, 1, 1),
+(8600, 1, 2),
+(4000, 2, 2);
+
+--
+-- Dumping data for table `ski_type_order`
+--
+
+INSERT INTO `ski_type_order` (`order_number`, `model`, `size`, `weight`, `quantity`) VALUES
+(1, 'Redline', 140, '20-30', 2),
+(1, 'Redline', 150, '40-50', 1),
+(2, 'Frogger', 150, '30-40', 1);
+
+--
+-- Dumping data for table `logs`
+--
+
+INSERT INTO `Order_log` (`employee_number`, `order_number`, `old_state`, `new_state`) VALUES
+(1, 1, 'new', 'open'),
+(1, 2, 'new', 'open'),
+(2, 1, 'open', 'skis-available');
+
 
 INSERT INTO `Shipment_transition_log` (`shipment_number`) VALUES
 (1);
