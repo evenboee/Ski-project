@@ -57,7 +57,7 @@ class SkiModel extends DB
      * Verifies the given array-resource to make sure it has correct values before it can be added to the database.
      * It checks the size of the array, if it contains correct values and if the given model actually is a model that exists in database.
      * @param array $resource - the given resource to be verified
-     * @return array - an array with a http code and sometimes a message explaining the error, if any.
+     * @return array - an array with a http code and sometimes a message explaining the error, if any. It is solely used for debugging reasons and nothing else.
      */
     function verifySkiResource(array $resource): array
     {
@@ -65,19 +65,19 @@ class SkiModel extends DB
         $res = array();
         if (count($resource) != 3) {
             $res['code'] = RESTConstants::HTTP_BAD_REQUEST;
-            $res['message'] = "Bad request: There should be exactly 3 values.";
+            $res['message'] = "There should be exactly 3 values.";
             return $res;
         }
 
         if (!array_key_exists('size', $resource) || !array_key_exists('weight', $resource) || !array_key_exists('model', $resource)) {
             $res['code'] = RESTConstants::HTTP_BAD_REQUEST;
-            $res['message'] = "Bad request: One or more attributes are missing.";
+            $res['message'] = "One or more attributes are missing.";
             return $res;
         }
 
-        if (!$this->doesSkiModelExist($resource['model'])) {
+        if (!$this->doesSkiTypeExist($resource['model'], $resource['size'], $resource['weight'])) {
             $res['code'] = RESTConstants::HTTP_BAD_REQUEST;
-            $res['message'] = "Bad request: Model does not exist";
+            $res['message'] = "Specified ski does not match any existing ski types!";
             return $res;
         }
 
@@ -86,10 +86,52 @@ class SkiModel extends DB
     }
 
 
+    /**
+     * Checks whether or not the param model_name string is the same as an existing ski model in database.
+     * Returns true if it exists and false if not
+     * @param string $model_name
+     * @return bool
+     */
+    protected function doesSkiModelExist(string $model_name): bool {
+        $query = 'SELECT COUNT(*) FROM ski_model WHERE model = :model ';
 
+        $stmt = $this->db->prepare($query);
+        $stmt->bindValue(':model', $model_name);
+        $stmt->execute();
 
-    function doesSkiModelExist(string $model_name): bool {
-        //TODO: add body...
+        $row = $stmt->fetch(PDO::FETCH_NUM);
+        if ($row[0] == 0) {
+            return false;
+        }
+
         return true;
+    }
+
+
+    /**
+     * Checks whether or not the combination of model_name size and weight corresponds to an existing ski type.
+     * This check is necessary to perform before adding records of a new ski, as a ski can only be an instance of an existing ski type.
+     * @param string $model_name - the ski_model name
+     * @param string $size - the size, should be an integer number
+     * @param string $weight - the weight class, should be a range between two integer numbers (f.ex: "30-40")
+     * @return bool
+     */
+    protected function doesSkiTypeExist(string $model_name, string $size, string $weight): bool {
+        $query = 'SELECT COUNT(*) FROM ski_type WHERE model = :model AND weight_class = :weight AND size = :size';
+
+        $stmt = $this->db->prepare($query);
+        $stmt->bindValue(':model', $model_name);
+        $stmt->bindValue(':weight', $weight);
+        $stmt->bindValue(':size', $size);
+        $stmt->execute();
+
+        $row = $stmt->fetch(PDO::FETCH_NUM);
+        if ($row[0] == 0) {
+            return false;
+        }
+
+        return true;
+
+
     }
 }

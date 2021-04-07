@@ -12,12 +12,19 @@ class StorekeeperEndpoint extends RequestHandler {
         $this->validMethods[''][RESTConstants::METHOD_POST] = RESTConstants::HTTP_OK;
     }
 
+    /**
+     * Handles POST requests to the storekeeper endpoint at http://localhost/storekeeper/ski
+     *
+     * @param array $uri  the link used
+     * @param string $endpointPath  the endpoint that handled this request
+     * @param string $requestMethod the request method; GET, POST, PUT, etc..
+     * @param array $queries
+     * @param array $payload the 'body' of a request, if any.
+     * @return array an array with a response.
+     * @throws APIException if anything goes wrong.
+     */
     public function handleRequest(array $uri, string $endpointPath, string $requestMethod, array $queries, array $payload): array
     {
-
-
-        // TODO: ...
-        // http://localhost/storekeeper/ski
 
         if ($this->isValidMethod('', $requestMethod) == RESTConstants::HTTP_METHOD_NOT_ALLOWED) {
             throw new APIException(RESTConstants::HTTP_METHOD_NOT_ALLOWED, $endpointPath,
@@ -41,9 +48,11 @@ class StorekeeperEndpoint extends RequestHandler {
     }
 
     /**
-     * @param array $payload
-     * @return array
-     * @throws APIException
+     * Attempts to add a new ski to database
+     * @param array $payload - the resources and attributes for the new ski
+     * @return array - an array of the resulting ski with all its registered attributes,
+     * including its product number, which is automatically assigned.
+     * @throws APIException - if the param payload cannot be added as a ski, it throws an APIException
      */
     protected function doAddSkiToDB(array $payload): array{
 
