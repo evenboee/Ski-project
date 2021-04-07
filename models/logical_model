@@ -17,7 +17,7 @@ PK id
 
 Corporation(id, start_date, end_date, name, shipping_address, buying_price)
 PK id
-AK name (alternate key)
+K name (key)
 
 Franchise_stores(franchise_id, store_id)
 PK franchise_id, store_id
@@ -43,6 +43,10 @@ PK company_name
 Shipment(number, store_name, shipping_address, pickup_date, state, driver_id, repNo)
 PK number
 FK repNo REFERENCES Customer_representative(number)
+FK store_name REFERENCES Corporation(name)
+
+Shipment_transition_log(shipment_number, time)
+PK shipment_number
 
 // Employees:
 // Department being 'customer rep', 'storekeeper' or 'production planner'
