@@ -18,8 +18,6 @@ class SkiModel extends DB
      */
     public function addSkiToDB(array $resource): array {
 
-        //TODO: Make a check to make sure input parameter is ok
-
         $this->db->beginTransaction();
         $rec = $this->verifySkiResource($resource);
         if ($rec['code'] != RESTConstants::HTTP_OK) {
@@ -30,9 +28,6 @@ class SkiModel extends DB
                 throw new APIException($rec['code'], RESTConstants::API_URI, "");
             }
         }
-
-
-
 
         $res = array();
         $query = 'INSERT INTO ski (size, weight, model) VALUES (:size, :weight, :model)';
@@ -116,7 +111,7 @@ class SkiModel extends DB
      * @param string $weight - the weight class, should be a range between two integer numbers (f.ex: "30-40")
      * @return bool
      */
-    protected function doesSkiTypeExist(string $model_name, string $size, string $weight): bool {
+    public function doesSkiTypeExist(string $model_name, string $size, string $weight): bool {
         $query = 'SELECT COUNT(*) FROM ski_type WHERE model = :model AND weight_class = :weight AND size = :size';
 
         $stmt = $this->db->prepare($query);

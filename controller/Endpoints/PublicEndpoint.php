@@ -9,12 +9,16 @@ class PublicEndpoint extends RequestHandler {
     {
         parent::__construct();
 
+        //$this->validRequests[] = RESTConstants::ENDPOINT_PUBLIC;
+        //$this->validMethods[RESTConstants::ENDPOINT_PUBLIC] = array();
         $this->validMethods[''][RESTConstants::METHOD_GET] = RESTConstants::HTTP_OK;
     }
     public function handleRequest(array $uri, string $endpointPath, string $requestMethod, array $queries, array $payload): array
     {
         //echo '"message": "test"';
         // return array("dei","hei");
+
+
 
         if ($this->isValidMethod('', $requestMethod) == RESTConstants::HTTP_METHOD_NOT_ALLOWED) {
             throw new APIException(RESTConstants::HTTP_METHOD_NOT_ALLOWED, $endpointPath,

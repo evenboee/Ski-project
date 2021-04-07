@@ -9,6 +9,8 @@ class StorekeeperEndpoint extends RequestHandler {
     {
         parent::__construct();
 
+        //$this->validRequests[] = RESTConstants::ENDPOINT_STOREKEEPER;
+        //$this->validMethods[RESTConstants::ENDPOINT_STOREKEEPER] = array();
         $this->validMethods[''][RESTConstants::METHOD_POST] = RESTConstants::HTTP_OK;
     }
 
