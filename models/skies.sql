@@ -143,23 +143,24 @@ INSERT INTO `production_plan` (`start_date`, `end_date`, `plannerNo`) VALUES
 --
 
 CREATE TABLE `production_plan_reference` (
-  `plan_id` int(50) NOT NULL AUTO_INCREMENT,
+  `plan_id` int(50) NOT NULL,
+  `model` varchar(50) NOT NULL,
   `size` int(50) NOT NULL,
   `weight` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
   `quantity` int(50) NOT NULL,
-  PRIMARY KEY (`plan_id`, `size`,`weight`)
+  PRIMARY KEY (`plan_id`, `model`, `size`,`weight`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
 --
 -- Dumping data for table `production_plan_reference`
 --
 
-INSERT INTO `production_plan_reference` (`size`, `weight`, `quantity`) VALUES
-(145, '20-30', 2000),
-(165, '40-50', 2600),
-(150, '30-40', 3400),
-(150, '30-50', 1100),
-(165, '40-50', 5400);
+INSERT INTO `production_plan_reference` (`plan_id`, `model`, `size`, `weight`, `quantity`) VALUES
+(1, 'Redline', 140, '20-30', 20),
+(1, 'Redline', 165, '40-50', 26),
+(2, 'Frogger', 150, '40-50', 34),
+(3, 'Frogger', 150, '40-50', 11),
+(3, 'Redline', 150, '40-50', 54);
 
 
 -- --------------------------------------------------------
@@ -247,11 +248,9 @@ CREATE TABLE `ski_order` (
   `state` varchar(50) NOT NULL DEFAULT 'new',
   `ref_larger_order` int(50) DEFAULT NULL,
   `customer_id` int(50) NOT NULL,
-  `shipment_number` int(50) NOT NULL,
+  `shipment_number` int(50) DEFAULT NULL,
   PRIMARY KEY (`order_number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
-
-ALTER TABLE `ski_order` CHANGE `shipment_number` `shipment_number` INT(50) NULL DEFAULT NULL;
 
 --
 -- Dumping data for table `ski_order`
@@ -271,7 +270,7 @@ INSERT INTO `ski_order` (`total_price`, `customer_id`, `shipment_number`) VALUES
 CREATE TABLE `ski_type` (
   `size` int(50) NOT NULL,
   `weight_class` varchar(50) NOT NULL,
-  `MSRPP` int(50) NOT NULL,
+  `MSRP` int(50) NOT NULL,
   `model` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
@@ -279,7 +278,7 @@ CREATE TABLE `ski_type` (
 -- Dumping data for table `ski_type`
 --
 
-INSERT INTO `ski_type` (`size`, `weight_class`, `MSRPP`, `model`) VALUES
+INSERT INTO `ski_type` (`size`, `weight_class`, `MSRP`, `model`) VALUES
 (140, '20-30', 4000, 'Redline'),
 (140, '40-50', 4600, 'Fisher'),
 (145, '20-30', 4300, 'Fisher'),

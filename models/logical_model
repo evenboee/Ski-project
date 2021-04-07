@@ -2,14 +2,14 @@
 Ski_model(model, skiing_type, description, grip_system, historical, temperature, url)
 PK model
 
-Ski_type(size, weight_class, MSRP, model)
-PK size, weight_class
+Ski_type(model, size, weight_class, MSRP)
+PK model, size, weight_class
 FK model REFERENCES Ski_model(model)
 
 Ski(product_number, production_date, model, size, weight)
 PK product_number
 FK model REFERENCES Ski_model(model)
-FK size, weight REFERENCES Ski_type(size, weight)
+FK size, weight REFERENCES Ski_type(model, size, weight)
 
 // Customer
 Team_skier(id, start_date, end_date, name, dob, club, num_skies)
@@ -59,7 +59,6 @@ Production_plan(id, start_date, end_date, plannerNo)
 PK id
 FK plannerNo REFERENCES Employee(number)
 
-Production_plan_reference(plan_id, size, weight, quantity)
-PK plan_id, size, weight
-FK size REFERENCES Ski_type(size)
-FK weight REFERENCES Ski_type(weight_class)
+Production_plan_reference(plan_id, model, size, weight, quantity)
+PK plan_id, model, size, weight
+FK size, weight REFERENCES Ski_type(model, size, weight)
