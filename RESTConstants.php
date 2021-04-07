@@ -32,11 +32,14 @@ class RESTConstants
 
     //ENDPOINTS:
     // Sub
+    const ENDPOINT_PLAN = 'production-plan';
     const ENDPOINT_ORDER = 'order';
     const ENDPOINT_SKI = 'ski';
+    const ENDPOINT_NEW = 'new';
     // Base
     const ENDPOINT_ORDERS = 'orders';
     const ENDPOINT_CUSTOMER_REP = 'rep';
     const ENDPOINT_PUBLIC = 'public';
     const ENDPOINT_STOREKEEPER = 'storekeeper';
+    const ENDPOINT_CUSTOMER = 'customer';
 }

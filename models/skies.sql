@@ -251,6 +251,8 @@ CREATE TABLE `ski_order` (
   PRIMARY KEY (`order_number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
+ALTER TABLE `ski_order` CHANGE `shipment_number` `shipment_number` INT(50) NULL DEFAULT NULL;
+
 --
 -- Dumping data for table `ski_order`
 --
