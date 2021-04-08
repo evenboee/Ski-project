@@ -47,7 +47,7 @@ class CustomerRepEndpointTest extends \Codeception\Test\Unit
         $this->tester->assertEquals($res[1]['order_number'], 3);
     }
 
-    public function testHandleBadRequest() {
+        public function testHandleBadRequest() {
         $uri = ['orde']; // 'orde' is not an endpoint
         $endpointPath = '/orders';
         $requestMethod = RESTConstants::METHOD_GET;
@@ -57,6 +57,6 @@ class CustomerRepEndpointTest extends \Codeception\Test\Unit
         try {
             $res = $endpoint->handleRequest($uri, $endpointPath, $requestMethod, $queries, $payload);
             $this->tester->fail('Customer rep endpoint failed to throw exception');
-        } catch (APIException) {}
+        } catch (APIException $e) {}
     }
 }
