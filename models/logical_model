@@ -53,8 +53,9 @@ PK number
 FK repNo REFERENCES Employee(number)
 FK store_name REFERENCES Customer(name)
 
-Shipment_transition_log(shipment_number, time)
-PK shipment_number
+Shipment_transition_log(log_number, shipment_number, time)
+PK log_number
+FK shipment_number REFERENCES Shipment(number)
 
 // Employees:
 // Department being 'customer rep', 'storekeeper' or 'production planner'

@@ -250,9 +250,10 @@ CREATE TABLE `transporter` (
 --
 
 CREATE TABLE `Shipment_transition_log` (
+    `log_number` INT(50) NOT NULL AUTO_INCREMENT,
     `shipment_number` int(50) NOT NULL,
     `time` timestamp default (CURRENT_TIMESTAMP),
-    PRIMARY KEY (`shipment_number`)
+    PRIMARY KEY (`log_number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
 -- --------------------------------------------------------
@@ -357,6 +358,12 @@ ALTER TABLE `production_plan_reference`
         REFERENCES `Ski_type`(`model`, `size`, `weight_class`),
     ADD CONSTRAINT `production_plan_reference_production_plan_fk` FOREIGN KEY (`plan_id`)
         REFERENCES `production_plan`(`id`);
+
+ALTER TABLE `Shipment_transition_log`
+    ADD CONSTRAINT `shipment_transition_log_shipment_fk` FOREIGN KEY (`shipment_number`)
+        REFERENCES `shipment`(`number`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE;
 
 -- -----------------------------------------------
 -- Adding data
