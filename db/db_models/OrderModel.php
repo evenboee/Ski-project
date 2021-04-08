@@ -84,15 +84,15 @@ class OrderModel extends DB {
             throw new APIException($rec['code'], RESTConstants::API_URI, "");
         }
 
-        $res = array();
-        $query = 'INSERT INTO ski_order (total_price, state, ref_larger_order, customer_id, shipment_number) VALUES (:total_price, :state, :ref, :id, :shipment)';
-
-
         if (!array_key_exists('price', $rec)) {
             throw new APIException(RESTConstants::HTTP_INTERNAL_SERVER_ERROR, RESTConstants::API_URI, 'Error determining price');
         }
+
         $price_total = $rec['price']*$resource['quantity'];
 
+
+        $res = array();
+        $query = 'INSERT INTO ski_order (total_price, state, ref_larger_order, customer_id, shipment_number) VALUES (:total_price, :state, :ref, :id, :shipment)';
 
         $stmt = $this->db->prepare($query);
         $stmt->bindValue(':total_price', $price_total);
@@ -106,14 +106,17 @@ class OrderModel extends DB {
         $res['total_price'] = $price_total;
         $res['customer_id'] = $resource['customer_id'];
 
-        $query = 'INSERT INTO ski_type_order (order_number, size, weight, quantity) VALUES (:order_number, :size, :weight, :quantity)';
+
+        $query = 'INSERT INTO ski_type_order (order_number, size, weight, model, quantity) VALUES (:order_number, :size, :weight, :model,:quantity)';
         $stmt = $this->db->prepare($query);
         $stmt->bindValue(':order_number', $res['order_number']);
         $stmt->bindValue(':size', $resource['size']);
         $stmt->bindValue(':weight', $resource['weight']);
         $stmt->bindValue(':quantity', $resource['quantity']);
+        $stmt->bindValue(':model', $resource['model']);
         $stmt->execute();
         $this->db->commit();
+
 
         return $res;
 
@@ -170,27 +173,35 @@ class OrderModel extends DB {
     protected function verifyOrder(array $resource): array
     {
         $res = array();
+
         if (count($resource) != 5) {
             $res['code'] = RESTConstants::HTTP_BAD_REQUEST;
-            $res['message'] = "There should be exactly 5 values.";
+            $res['message'] = 'There should be exactly 5 values.';
             return $res;
         }
+
         // Just check if all necessary keys are there...
         if (!array_key_exists('customer_id', $resource) || !array_key_exists('weight', $resource) || !array_key_exists('quantity', $resource) ||
             !array_key_exists('size', $resource)        || !array_key_exists('model', $resource)) {
 
             $res['code'] = RESTConstants::HTTP_BAD_REQUEST;
-            $res['message'] = "One or more attributes are missing.";
+            $res['message'] = 'One or more attributes are missing.';
+            return $res;
+        }
+
+        if (!is_int($resource['quantity'])) {
+            $res['code'] = RESTConstants::HTTP_BAD_REQUEST;
+            $res['message'] = "Attribute 'quantity' must be an int!";
             return $res;
         }
 
         if (!(new SkiModel)->doesSkiTypeExist($resource['model'], $resource['size'], $resource['weight'])) {
             $res['code'] = RESTConstants::HTTP_BAD_REQUEST;
-            $res['message'] = "Specified ski does not match any existing ski types!";
+            $res['message'] = 'Specified ski does not match any existing ski types!';
             return $res;
         }
 
-        $query = 'SELECT MSRPP FROM `ski_type` WHERE model = :model AND weight_class = :weight AND size = :size';
+        $query = 'SELECT MSRP FROM `ski_type` WHERE model = :model AND weight_class = :weight AND size = :size';
 
         $stmt = $this->db->prepare($query);
         $stmt->bindValue(':model', $resource['model']);
@@ -199,7 +210,7 @@ class OrderModel extends DB {
         $stmt->execute();
 
         $res['code'] = RESTConstants::HTTP_OK;
-        $res['price'] = $stmt->fetch(PDO::FETCH_ASSOC)['MSRPP'];
+        $res['price'] = $stmt->fetch(PDO::FETCH_ASSOC)['MSRP'];
         return $res;
     }
 
