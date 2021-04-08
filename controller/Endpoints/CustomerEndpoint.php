@@ -89,6 +89,11 @@ class CustomerEndpoint extends RequestHandler {
         return (new OrderModel())-> createOrder($payload);
     }
 
+    /**
+     * @param string $plan_id
+     * @return array
+     * @throws APIException
+     */
     protected function doRetrieveProductionPlanSummary(string $plan_id): array{
 
         return (new ProductionPlanModel())->retrieveProductionPlan($plan_id);

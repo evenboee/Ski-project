@@ -43,4 +43,5 @@ class RESTConstants
     const ENDPOINT_PUBLIC = 'public';
     const ENDPOINT_STOREKEEPER = 'storekeeper';
     const ENDPOINT_CUSTOMER = 'customer';
+    const ENDPOINT_PLANNER = 'production-planner';
 }

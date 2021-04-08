@@ -6,7 +6,8 @@ require_once 'APIException.php';
 require_once 'RESTConstants.php';
 require_once 'Endpoints/PublicEndpoint.php';
 require_once 'Endpoints/StorekeeperEndpoint.php';
-require_once  'Endpoints/CustomerEndpoint.php';
+require_once 'Endpoints/CustomerEndpoint.php';
+require_once 'Endpoints/ProductionPlannerEndpoint.php';
 
 class APIController extends RequestHandler {
 
@@ -31,6 +32,9 @@ class APIController extends RequestHandler {
                 break;
             case RESTConstants::ENDPOINT_CUSTOMER:
                 $endpoint = new CustomerEndpoint();
+                break;
+            case RESTConstants::ENDPOINT_PLANNER:
+                $endpoint = new ProductionPlannerEndpoint();
                 break;
 
             default:
