@@ -24,13 +24,46 @@ class OrderModel extends DB {
         return $res;
     }
 
-    public function setStateOfOrder($id, string $state): void { // TODO: Return if something was changed
-        $query = 'UPDATE ski_order SET state = :state WHERE order_number = :id';
+    public function setStateOfOrder($id, string $state, int $employee_number=1): array { // TODO: Return if something was changed
+        $updateQuery = 'UPDATE `ski_order` SET state = :state WHERE order_number = :id';
+        $getQuery = 'SELECT `state` FROM `ski_order` WHERE `order_number` = :id';
+        $logQuery = 'INSERT INTO `order_log` (`employee_number`, `order_number`, `old_state`, `new_state`) VALUES (:employee_number, :order_number, :old_state, :new_state)';
 
-        $stmt = $this->db->prepare($query);
-        $stmt->bindValue(':state', $state);
-        $stmt->bindValue(':id', $id);
-        $stmt->execute();
+        $this->db->beginTransaction();
+
+        $oldOrder = array();
+        $newOrder = array();
+
+        $getStmt = $this->db->prepare($getQuery);
+        $getStmt->bindValue(':id', $id);
+        $getStmt->execute();
+        if ($row = $getStmt->fetch(PDO::FETCH_ASSOC)) {
+            $oldOrder = $row;
+        }
+
+        if (count($oldOrder) > 0 && isset($oldOrder['state'])) {
+            $updateStmt = $this->db->prepare($updateQuery);
+            $updateStmt->bindValue(':state', $state);
+            $updateStmt->bindValue(':id', $id);
+            $updateStmt->execute();
+
+            $getStmt->execute();
+            if ($row = $getStmt->fetch(PDO::FETCH_ASSOC)) {
+                $newOrder[] = $row;
+            }
+            if (count($newOrder) > 0) {
+                $logStmt = $this->db->prepare($logQuery);
+                $logStmt->bindValue(':employee_number', $employee_number);
+                $logStmt->bindValue(':order_number', $id);
+                $logStmt->bindValue(':old_state', $oldOrder['state']);
+                $logStmt->bindValue(':new_state', $state);
+                $logStmt->execute();
+            }
+        }
+
+        $this->db->commit();
+
+        return $newOrder;
     }
 
 

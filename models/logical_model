@@ -65,4 +65,5 @@ FK plannerNo REFERENCES Employee(number)
 
 Production_plan_reference(plan_id, model, size, weight, quantity)
 PK plan_id, model, size, weight
+FK plan_id REFERENCES Production_plan(id)
 FK model, size, weight REFERENCES Ski_type(model, size, weight)

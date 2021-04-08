@@ -45,7 +45,7 @@ try {
 } catch (Throwable $e) {
     http_response_code(RESTConstants::HTTP_INTERNAL_SERVER_ERROR);
     // echo json_encode(RESTConstants::HTTP_INTERNAL_SERVER_ERROR, '/', -1);
-    echo '{"error": "error"}';
+    echo json_encode(["message" => $e->getMessage()]);
 }
 
 function generateErrorResponseContent(APIException $e): array {

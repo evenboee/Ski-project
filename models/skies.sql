@@ -313,8 +313,10 @@ ALTER TABLE `production_plan`
         REFERENCES `Employee`(`number`);
 
 ALTER TABLE `production_plan_reference`
-    ADD CONSTRAINT `_Ski_type_fk` FOREIGN KEY (`model` ,`size`, `weight`)
-        REFERENCES `Ski_type`(`model`, `size`, `weight_class`);
+    ADD CONSTRAINT `production_plan_reference_Ski_type_fk` FOREIGN KEY (`model` ,`size`, `weight`)
+        REFERENCES `Ski_type`(`model`, `size`, `weight_class`),
+    ADD CONSTRAINT `production_plan_reference_production_plan_fk` FOREIGN KEY (`plan_id`)
+        REFERENCES `production_plan`(`id`);
 
 -- -----------------------------------------------
 -- Adding data
