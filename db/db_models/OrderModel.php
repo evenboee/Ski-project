@@ -49,11 +49,17 @@ class OrderModel extends DB {
         return $res;
     }
 
-    public function setStateOfOrder($id, string $state, int $employee_number=1): array {
+    /**
+     * @param $id
+     * @param string $state
+     * @param int $employee_number
+     * @return array
+     */
+    public function setStateOfOrder($id, string $state, int $employee_number): array {
         $updateQuery = 'UPDATE `ski_order` SET state = :state WHERE order_number = :id';
         $getQuery = 'SELECT `state` FROM `ski_order` WHERE `order_number` = :id';
         $logQuery = 'INSERT INTO `order_log` (`employee_number`, `order_number`, `old_state`, `new_state`) VALUES (:employee_number, :order_number, :old_state, :new_state)';
-
+        // TODO: Check that employee exists and is customer rep
         $this->db->beginTransaction();
 
         $oldOrder = array();

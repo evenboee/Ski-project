@@ -4,6 +4,14 @@ require_once 'controller/RequestHandler.php';
 require_once 'db/db_models/OrderModel.php';
 require_once 'controller/APIException.php';
 
+/**
+ * Class CustomerRepEndpoint
+ *
+ * Based on https://git.gvk.idi.ntnu.no/runehj/sample-rest-api-project/-/blob/master/db/DealerModel.php
+ *  By Rune Hjelsvold
+ *
+ * @author Even B. Bøe
+ */
 class CustomerRepEndpoint extends RequestHandler {
 
     public function __construct() {
@@ -61,7 +69,12 @@ class CustomerRepEndpoint extends RequestHandler {
             if (count($uri) == 3) {
                 $state = $uri[1];
                 $id = $uri[2];
-                return $this->doSetStateOfOrder($id, $state);
+                $employee_number = $this->getEmoloyeeNumberFromPayload($payload);
+                if ($employee_number <= 0) {
+                    throw new APIException(RESTConstants::HTTP_BAD_REQUEST, $endpointPath.'/'.implode('/', $uri),
+                    "employee_number has to be set and >0");
+                }
+                return $this->doSetStateOfOrder($id, $state, $employee_number);
             } else {
                 throw new APIException(RESTConstants::HTTP_BAD_REQUEST, $endpointPath . '/' . $uri[0], 'Wrong number of parts');
             }
@@ -75,8 +88,15 @@ class CustomerRepEndpoint extends RequestHandler {
         return $model->getOrdersWithState($state);
     }
 
-    protected function doSetStateOfOrder(string $id, string $state): array {
+    protected function doSetStateOfOrder(string $id, string $state, int $employee_number): array {
         $model = new OrderModel();
-        return $model->setStateOfOrder($id, $state);
+        return $model->setStateOfOrder($id, $state, $employee_number);
+    }
+
+    protected function getEmoloyeeNumberFromPayload($payload): int {
+        if (!isset($payload['employee_number'])) {
+            return 0;
+        }
+        return intval($payload['employee_number']);
     }
 }
