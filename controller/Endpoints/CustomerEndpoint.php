@@ -2,6 +2,7 @@
 
 require_once 'RESTConstants.php';
 require_once 'db/db_models/OrderModel.php';
+require_once 'db/db_models/ProductionPlanModel.php';
 
 class CustomerEndpoint extends RequestHandler {
 
@@ -46,27 +47,25 @@ class CustomerEndpoint extends RequestHandler {
             if ($requestMethod == RESTConstants::METHOD_POST) {
                 if ($uri[1]==RESTConstants::ENDPOINT_NEW) {
                     // Create order
+
                     $res['result'] = $this->doCreateOrder($payload);
                     $res['status'] = RESTConstants::HTTP_CREATED;
                     return $res;
                 }
 
             } else if ($requestMethod == RESTConstants::METHOD_DELETE) {
-                //TODO: Delete order
-                //$uri[1] is the order_id to delete
+
                 $res['result'] = $this->doDeleteOrder($uri[1], $payload);
-                $res['status'] = RESTConstants::HTTP_ACCEPTED; // TODO: another http code perhaps?
+                $res['status'] = RESTConstants::HTTP_OK; // TODO: another http code perhaps?
                 return $res;
             }
         } else if ($uri[0]==RESTConstants::ENDPOINT_PLAN){
-            if (count($uri) != 1) {throw new APIException(RESTConstants::HTTP_BAD_REQUEST, $endpointPath, 'Wrong number of parts');}
+            if (count($uri) != 2) {throw new APIException(RESTConstants::HTTP_BAD_REQUEST, $endpointPath, 'Wrong number of parts');}
 
-            $res['plan'] = array("date"=>"2020-2021"); // TODO: retrieve production plan
+            $res['result'] = $this->doRetrieveProductionPlanSummary($uri[1]); // TODO: retrieve production plan
             $res['status'] = RESTConstants::HTTP_OK;
             return $res;
         }
-
-
         throw new APIException(RESTConstants::HTTP_NOT_FOUND, $endpointPath, 'Endpoint of type customer not found');
     }
 
@@ -88,8 +87,10 @@ class CustomerEndpoint extends RequestHandler {
      */
     protected function doCreateOrder(array $payload): array{
         return (new OrderModel())-> createOrder($payload);
+    }
 
+    protected function doRetrieveProductionPlanSummary(string $plan_id): array{
 
-
+        return (new ProductionPlanModel())->retrieveProductionPlan($plan_id);
     }
 }
