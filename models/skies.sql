@@ -256,6 +256,12 @@ CREATE TABLE `Shipment_transition_log` (
     PRIMARY KEY (`log_number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
+CREATE TABLE `auth_token` (
+    `token` VARCHAR(50) NOT NULL,
+    `role` VARCHAR(50) NOT NULL,
+    PRIMARY KEY(`token`)
+);
+
 -- --------------------------------------------------------
 
 --
@@ -511,6 +517,15 @@ INSERT INTO `Order_log` (`employee_number`, `order_number`, `old_state`, `new_st
 
 INSERT INTO `Shipment_transition_log` (`shipment_number`) VALUES
 (1);
+
+INSERT INTO `auth_token` (`role`, `token`) VALUES
+('rep', sha1('rep')),
+('storekeeper', sha1('storekeeper')),
+('customer', sha1('customer')),
+('shipper', sha1('shipper')),
+('production-planner', sha1('production-planner')),
+('public', sha1('public'));
+
 
 COMMIT;
 

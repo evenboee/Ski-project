@@ -1,5 +1,7 @@
 <?php
 
+require_once 'db/DB.php';
+
 class ShipmentModel extends DB {
 
     public function __construct() {

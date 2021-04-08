@@ -28,6 +28,7 @@ if (strlen($content) > 0) {
 }
 
 $token = isset($_COOKIE['auth_token']) ? $_COOKIE['auth_token'] : '';
+$queries['token'] = $token;
 
 // Handle the request
 $controller = new APIController();
