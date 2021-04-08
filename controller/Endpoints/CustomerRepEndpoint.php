@@ -75,9 +75,8 @@ class CustomerRepEndpoint extends RequestHandler {
         return $model->getOrdersWithState($state);
     }
 
-    protected function doSetStateOfOrder(string $id, string $state) {
+    protected function doSetStateOfOrder(string $id, string $state): array {
         $model = new OrderModel();
-        $model->setStateOfOrder($id, $state);
-        return array(); // TODO: Consider changing - maybe return object?
+        return $model->setStateOfOrder($id, $state);
     }
 }
