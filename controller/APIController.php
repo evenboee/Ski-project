@@ -6,14 +6,13 @@ require_once 'APIException.php';
 require_once 'RESTConstants.php';
 require_once 'Endpoints/PublicEndpoint.php';
 require_once 'Endpoints/StorekeeperEndpoint.php';
-<<<<<<< HEAD
-require_once  'Endpoints/CustomerEndpoint.php';
+
 require_once 'Endpoints/ShipperEndpoint.php';
 require_once 'db/db_models/AuthorizationModel.php';
-=======
+
 require_once 'Endpoints/CustomerEndpoint.php';
 require_once 'Endpoints/ProductionPlannerEndpoint.php';
->>>>>>> amund
+
 
 class APIController extends RequestHandler {
 
@@ -47,16 +46,12 @@ class APIController extends RequestHandler {
             case RESTConstants::ENDPOINT_CUSTOMER:
                 $endpoint = new CustomerEndpoint();
                 break;
-<<<<<<< HEAD
             case RESTConstants::ENDPOINT_SHIPPER:
                 $endpoint = new ShipperEndpoint();
                 break;
-=======
             case RESTConstants::ENDPOINT_PLANNER:
                 $endpoint = new ProductionPlannerEndpoint();
                 break;
-
->>>>>>> amund
             default:
                 throw new APIException(RESTConstants::HTTP_NOT_FOUND, $endpointPath, 'Endpoint not found');
         }
