@@ -262,6 +262,13 @@ CREATE TABLE `auth_token` (
                               PRIMARY KEY(`token`)
 );
 
+CREATE VIEW `ski_model_type_view` AS
+SELECT `ski_model`.*, `ski_type`.`size`, `ski_type`.`weight_class`, `ski_type`.`MSRP`
+FROM `ski_type`
+         INNER JOIN `ski_model`
+                    ON `ski_type`.`model` = `ski_model`.`model`;
+
+
 -- --------------------------------------------------------
 
 --
@@ -529,6 +536,16 @@ INSERT INTO `auth_token` (`role`, `token`) VALUES
 ('shipper', 'shipper'),
 ('production-planner', 'production-planner'),
 ('public', 'public');
+
+--
+-- Setting up users
+--
+CREATE USER IF NOT EXISTS 'rep'@'%' IDENTIFIED BY '8c8b8f2042878ab21f68e256841e3dc71d48ff36';
+GRANT SELECT, UPDATE, INSERT, DELETE ON `ski_order` TO 'rep'@'%';
+GRANT INSERT ON `order_log` TO 'rep'@'%';
+GRANT INSERT, DELETE ON `ski_type_order` TO 'rep'@'%';
+GRANT SELECT ON `ski_type` TO 'rep'@'%';
+
 
 COMMIT;
 

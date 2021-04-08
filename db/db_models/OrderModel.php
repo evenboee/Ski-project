@@ -1,6 +1,7 @@
 <?php
 
 require_once 'db/DB.php';
+require_once 'db/dbCredentials.php';
 
 
 /**
@@ -11,7 +12,7 @@ require_once 'db/DB.php';
 class OrderModel extends DB {
 
     public function __construct() {
-        parent::__construct();
+        parent::__construct(REP_USER, REP_PWD);
     }
 
     public function getOrdersWithState($state): array {
