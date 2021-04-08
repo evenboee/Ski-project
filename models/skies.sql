@@ -552,7 +552,7 @@ INSERT INTO `auth_token` (`role`, `token`) VALUES
 CREATE USER IF NOT EXISTS 'rep'@'%' IDENTIFIED BY '8c8b8f2042878ab21f68e256841e3dc71d48ff36';
 GRANT SELECT, UPDATE, INSERT, DELETE ON `ski_order` TO 'rep'@'%';
 GRANT INSERT ON `order_log` TO 'rep'@'%';
-GRANT INSERT, DELETE ON `ski_type_order` TO 'rep'@'%';
+GRANT SELECT, INSERT, DELETE ON `ski_type_order` TO 'rep'@'%';
 GRANT SELECT ON `ski_type` TO 'rep'@'%';
 
 

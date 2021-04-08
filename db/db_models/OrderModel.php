@@ -15,10 +15,16 @@ class OrderModel extends DB {
         parent::__construct(REP_USER, REP_PWD);
     }
 
+    /**
+     * getOrdersWithState is used to retrieve a list of information about all orders with a given state
+     * @param $state => the state of the orders to get
+     * @return array => an array of orders as specified in API design
+     */
     public function getOrdersWithState($state): array {
         $res = array();
 
-        $query = 'SELECT order_number FROM `ski_order` WHERE state = :state';
+        $this->db->beginTransaction();
+        $query = 'SELECT order_number, total_price, state, ref_larger_order, customer_id, shipment_number FROM `ski_order` WHERE state = :state';
 
         $stmt = $this->db->prepare($query);
         $stmt->bindValue(':state', $state);
@@ -28,6 +34,18 @@ class OrderModel extends DB {
             $res[] = $row;
         }
 
+        // model, size, weight, quantity
+        for ($i = 0; $i < count($res); $i++) {
+            $typeQuery = 'SElECT model, size, weight, quantity FROM `ski_type_order` WHERE order_number = :order_number';
+            $typeStmt = $this->db->prepare($typeQuery);
+            $typeStmt->bindValue(':order_number', $res[$i]['order_number']);
+            $typeStmt->execute();
+            $res[$i]['content'] = array();
+            while ($row = $typeStmt->fetch(PDO::FETCH_ASSOC)) {
+                $res[$i]['ski_types'][] = $row;
+            }
+        }
+        $this->db->commit();
         return $res;
     }
 
