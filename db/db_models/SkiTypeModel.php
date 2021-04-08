@@ -1,7 +1,12 @@
 <?php
-
-
 require_once 'db/DB.php';
+
+/**
+ * Class SkiTypeModel
+ *
+ * @author Amund Helgestad
+ */
+
 
 class SkiTypeModel extends DB
 {
@@ -10,6 +15,12 @@ class SkiTypeModel extends DB
         parent::__construct();
     }
 
+    /**
+     * Retrieves a list with all ski types by the given model that exists in database.
+     *
+     * @param string $model the model
+     * @return array response with all the information of each of the ski types that matched the search.
+     */
     public function getSkiTypesWithModelFilter(string $model): array
     {
         $res = array();
@@ -27,6 +38,12 @@ class SkiTypeModel extends DB
         return $res;
     }
 
+    /**
+     * Retrieves a list with all ski types by the given grip system that exists in database.
+     *
+     * @param string $grip_system the grip system
+     * @return array response with all the information of each of the ski types that matched the search.
+     */
     public function getSkiTypesWithGripFilter(string $grip_system): array {
         $res = array();
 
@@ -43,6 +60,14 @@ class SkiTypeModel extends DB
         return $res;
     }
 
+    /**
+     * Retrieves a list with all ski types by the given grip system and model that exists in database.
+     * In other words: the result must be a ski type that has BOTH the specified model AND grip system.
+     *
+     * @param string $model the model to filter for
+     * @param string $grip_system the grip system to filter for
+     * @return array response with all the information of each of the ski types that matched the search.
+     */
     public function getSkiTypesWithModelGripFilter(string $model, string $grip_system): array{
         $res = array();
 
@@ -61,8 +86,11 @@ class SkiTypeModel extends DB
     }
 
 
-
-
+    /**
+     * Retrieves a list with all ski types in database
+     *
+     * @return array response with all the information about all of the skies in the database.
+     */
     public function getAllSkiTypes(): array {
         $res = array();
         $query = 'SELECT size, weight_class FROM `ski_type`';

@@ -3,6 +3,11 @@
 
 require_once 'db/DB.php';
 
+/**
+ * Class SkiModel
+ *
+ * @author Amund Helgestad
+ */
 class SkiModel extends DB
 {
     public function __construct()
@@ -12,6 +17,10 @@ class SkiModel extends DB
 
     /**
      * Attempts to add a ski to database with attributes corresponding to the given $resource
+     *
+     * Most of the error handling is based on https://git.gvk.idi.ntnu.no/runehj/sample-rest-api-project/-/blob/master/db/DealerModel.php#L86
+     * @author Rune Hjelsvold
+     *
      * @param array $resource - the resource to be added to db if it is ok.
      * @return array - an array containing a response for if the adding was successfull
      * @throws APIException - if something is not correct, it throws such an exception which may contain http error code and a message.
@@ -50,13 +59,16 @@ class SkiModel extends DB
 
     /**
      * Verifies the given array-resource to make sure it has correct values before it can be added to the database.
+     *
      * It checks the size of the array, if it contains correct values and if the given model actually is a model that exists in database.
+     * Based on https://git.gvk.idi.ntnu.no/runehj/sample-rest-api-project/-/blob/master/db/DealerModel.php#L150
+     * @author Rune Hjelsvold
+     *
      * @param array $resource - the given resource to be verified
      * @return array - an array with a http code and sometimes a message explaining the error, if any. It is solely used for debugging reasons and nothing else.
      */
     function verifySkiResource(array $resource): array
     {
-
         $res = array();
         if (count($resource) != 3) {
             $res['code'] = RESTConstants::HTTP_BAD_REQUEST;
@@ -106,10 +118,11 @@ class SkiModel extends DB
     /**
      * Checks whether or not the combination of model_name size and weight corresponds to an existing ski type.
      * This check is necessary to perform before adding records of a new ski, as a ski can only be an instance of an existing ski type.
+     *
      * @param string $model_name - the ski_model name
      * @param string $size - the size, should be an integer number
      * @param string $weight - the weight class, should be a range between two integer numbers (f.ex: "30-40")
-     * @return bool
+     * @return bool true if there is an existing ski type with the given parameters, or false if not.
      */
     public function doesSkiTypeExist(string $model_name, string $size, string $weight): bool {
         $query = 'SELECT COUNT(*) FROM ski_type WHERE model = :model AND weight_class = :weight AND size = :size';

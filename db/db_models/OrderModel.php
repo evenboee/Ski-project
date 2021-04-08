@@ -2,6 +2,12 @@
 
 require_once 'db/DB.php';
 
+
+/**
+ * Class OrderModel
+ *
+ * @author Amund Helgestad and Even Bøe
+ */
 class OrderModel extends DB {
 
     public function __construct() {
@@ -68,9 +74,14 @@ class OrderModel extends DB {
 
 
     /**
-     * @param array $resource
-     * @return array
-     * @throws APIException
+     * Creates a new order if given resource is on the correct format.
+     *
+     * Based on https://git.gvk.idi.ntnu.no/runehj/sample-rest-api-project/-/blob/master/db/DealerModel.php#L86
+     * @author Rune Hjelsvold
+     *
+     * @param array $resource the resource to create a new order from
+     * @return array a response including some important details about the order.
+     * @throws APIException is thrown if the specified resource is faulty.
      */
     public function createOrder(array $resource): array {
 
@@ -170,6 +181,16 @@ class OrderModel extends DB {
             return $res;
     }
 
+    /**
+     * Verifies that the given resource is on the correct format to be considered an order.
+     *
+     * Based on https://git.gvk.idi.ntnu.no/runehj/sample-rest-api-project/-/blob/master/db/DealerModel.php#L150
+     * @author Rune Hjelsvold
+     *
+     * @param array $resource to verify
+     * @return array response including an http error code and, if an error is encountered, a message.
+     *
+     */
     protected function verifyOrder(array $resource): array
     {
         $res = array();

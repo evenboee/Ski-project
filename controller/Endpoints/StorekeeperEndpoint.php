@@ -3,6 +3,11 @@
 require_once 'RESTConstants.php';
 require_once 'db/db_models/SkiModel.php';
 
+/**
+ * Class StorekeeperEndpoint
+ *
+ * @author Amund Helgestad
+ */
 class StorekeeperEndpoint extends RequestHandler {
 
     public function __construct()

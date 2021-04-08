@@ -4,6 +4,11 @@
 require_once 'RESTConstants.php';
 require_once 'db/db_models/ProductionPlanModel.php';
 
+/**
+ * Class ProductionPlannerEndpoint
+ *
+ * @author Amund Helgestad
+ */
 class ProductionPlannerEndpoint extends RequestHandler
 {
 

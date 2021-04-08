@@ -4,6 +4,12 @@ require_once 'RESTConstants.php';
 require_once 'db/db_models/OrderModel.php';
 require_once 'db/db_models/ProductionPlanModel.php';
 
+
+/**
+ * Class CustomerEndpoint
+ *
+ * @author Amund Helgestad
+ */
 class CustomerEndpoint extends RequestHandler {
 
     public function __construct()
@@ -71,28 +77,35 @@ class CustomerEndpoint extends RequestHandler {
 
 
     /**
-     * @param string $order_id
-     * @param array $payload
-     * @return array
-     * @throws APIException
+     * Attempts to perform the request to delete the given order.
+     *
+     * @param string $order_id is the unique order id of the requested order
+     * @param array $payload is the raw payload that accompanied the request body.
+     *                       It should include the customer_id registered with the requested order.
+     * @return array response with information about the order that was deleted.
+     * @throws APIException if it could not delete the requested order.
      */
     protected function doDeleteOrder(string $order_id, array $payload): array {
         return (new OrderModel())-> deleteOrder($order_id, $payload);
     }
 
     /**
-     * @param array $payload
-     * @return array
-     * @throws APIException
+     * Attempts to perform the request to create the specified order.
+     *
+     * @param array $payload is the raw payload that accompanied the request, the body.
+     * @return array response with some useful information about the newly created order, if successful.
+     * @throws APIException if the specified payload cannot be added as an order.
      */
     protected function doCreateOrder(array $payload): array{
         return (new OrderModel())-> createOrder($payload);
     }
 
     /**
-     * @param string $plan_id
-     * @return array
-     * @throws APIException
+     * Attempts to retrieve the specified production plan summary from database
+     *
+     * @param string $plan_id the unique id to the production plan
+     * @return array response with the information about the production plan
+     * @throws APIException if the given parameter is faulty, mostly if the given id do not match any in database.
      */
     protected function doRetrieveProductionPlanSummary(string $plan_id): array{
 

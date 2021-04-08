@@ -1,6 +1,11 @@
 <?php
 require_once 'db/DB.php';
 
+/**
+ * Class ProductionPlanModel
+ *
+ * @author Amund Helgestad
+ */
 class ProductionPlanModel extends DB
 {
     public function __construct()
@@ -56,10 +61,15 @@ class ProductionPlanModel extends DB
 
 
     /**
+     * Creates a new production plan and adds it to database if the given resource is on the correct format.
+     *
+     * Based on https://git.gvk.idi.ntnu.no/runehj/sample-rest-api-project/-/blob/master/db/DealerModel.php#L86
+     * @author Rune Hjelsvold
+     *
      * Creates a new production plan and adds it to the database
-     * @param array $resource
-     * @return string[]
-     * @throws APIException
+     * @param array $resource the resource to add as a production plan to database
+     * @return array response with useful information of the newly created order.
+     * @throws APIException if given resource is not up to standards.
      */
     public function createProductionPlan(array $resource): array{
         $rec = $this->verifyNewPlan($resource);
@@ -146,6 +156,9 @@ class ProductionPlanModel extends DB
     /**
      * Verifies that the specified resource array is on the correct format for it to be used as a new production plan.
      *
+     * Based on https://git.gvk.idi.ntnu.no/runehj/sample-rest-api-project/-/blob/master/db/DealerModel.php#L150
+     * @author Rune Hjelsvold
+     *
      * @param array $resource the production plan to be verified.
      * @return array return a new array with array['code'] = {http_error_code}. If something unexpected happens it also includes array['message'] = {string}.
      */
@@ -194,6 +207,7 @@ class ProductionPlanModel extends DB
 
     /**
      * Simple method that checks that the given plan_id exists in database
+     *
      * @param string $plan_id the production_plan(id) to check for in database
      * @return bool returns true if the specified id exists, and false if not
      */
