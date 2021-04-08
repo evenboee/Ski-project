@@ -15,24 +15,25 @@ class PublicEndpoint extends RequestHandler {
     }
     public function handleRequest(array $uri, string $endpointPath, string $requestMethod, array $queries, array $payload): array
     {
-        //echo '"message": "test"';
-        // return array("dei","hei");
-
-
 
         if ($this->isValidMethod('', $requestMethod) == RESTConstants::HTTP_METHOD_NOT_ALLOWED) {
             throw new APIException(RESTConstants::HTTP_METHOD_NOT_ALLOWED, $endpointPath,
                 'Method '.$requestMethod.' not allowed');
         }
-
-        // TODO: Add check for method
-        // if $this->validMethods[$uri[0]][$requestMethod] isset?
         if (count($uri) == 0) {
-            if (!isset($queries['model'])) {
-                return $this->doGetAllSkiTypes();
-            } else {
+
+            if (isset($queries['model']) && isset($queries['grip'])) {
+                $ski_model = $queries['model'];
+                $grip_system = $queries['grip'];
+                return $this->doGetSkiTypeByModelAndGrip($ski_model, $grip_system);
+            } else if (isset($queries['model'])) {
                 $ski_model = $queries['model'];
                 return $this->doGetSkiTypeByModel($ski_model);
+            } else if (isset($queries['grip'])) {
+                $grip_system = $queries['grip'];
+                return $this->doGetSkiTypeByGrip($grip_system);
+            } else {
+                return $this->doGetAllSkiTypes();
             }
         } else {
             throw new APIException(RESTConstants::HTTP_BAD_REQUEST, $endpointPath, 'Wrong number of parts');
@@ -44,6 +45,14 @@ class PublicEndpoint extends RequestHandler {
     protected function doGetSkiTypeByModel(string $ski_model): array {
         $model = new SkiTypeModel();
         return $model->getSkiTypesWithModelFilter($ski_model);
+    }
+
+    protected function doGetSkiTypeByGrip(string $grip_system): array {
+        return (new SkiTypeModel())->getSkiTypesWithGripFilter($grip_system);
+    }
+
+    protected function doGetSkiTypeByModelAndGrip(string $ski_model, string $grip_system): array {
+        return (new SkiTypeModel())->getSkiTypesWithModelGripFilter($ski_model, $grip_system);
     }
 
     protected function doGetAllSkiTypes(): array {
