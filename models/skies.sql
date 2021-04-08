@@ -530,8 +530,7 @@ INSERT INTO `auth_token` (`role`, `token`) VALUES
 ('storekeeper', sha1('storekeeper')),
 ('customer', sha1('customer')),
 ('shipper', sha1('shipper')),
-('production-planner', sha1('production-planner')),
-('public', sha1('public'));
+('production-planner', sha1('production-planner'));
 
 
 --

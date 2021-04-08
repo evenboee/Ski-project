@@ -534,8 +534,7 @@ INSERT INTO `auth_token` (`role`, `token`) VALUES
 ('storekeeper', 'storekeeper'),
 ('customer', 'customer'),
 ('shipper', 'shipper'),
-('production-planner', 'production-planner'),
-('public', 'public');
+('production-planner', 'production-planner');
 
 --
 -- Setting up users

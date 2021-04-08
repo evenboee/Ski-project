@@ -24,13 +24,15 @@ class APIController extends RequestHandler {
     public function handleRequest(array $uri, string $endpointPath, string $requestMethod, array $queries, array $payload): array {
         $endpointUri = $uri[0];
         $endpointPath .= '/' . $endpointUri;
-        $notAuthorizedException = new APIException(RESTConstants::HTTP_FORBIDDEN, $endpointPath, 'Client is not authorized for this endpoint');
-        $role = '';
-        if (isset($queries['token'])) {
-            $role = (new AuthorizationModel())->getRole($queries['token']);
-        }
-        if ($role != $endpointUri) {
-            throw $notAuthorizedException;
+        if ($endpointUri != RESTConstants::ENDPOINT_PUBLIC) {
+            $notAuthorizedException = new APIException(RESTConstants::HTTP_FORBIDDEN, $endpointPath, 'Client is not authorized for this endpoint');
+            $role = '';
+            if (isset($queries['token'])) {
+                $role = (new AuthorizationModel())->getRole($queries['token']);
+            }
+            if ($role != $endpointUri) {
+                throw $notAuthorizedException;
+            }
         }
 
         switch ($endpointUri) {
