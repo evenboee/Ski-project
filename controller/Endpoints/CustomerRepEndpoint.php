@@ -45,8 +45,6 @@ class CustomerRepEndpoint extends RequestHandler {
                 throw new APIException(RESTConstants::HTTP_BAD_REQUEST, $endpointPath . '/' . $uri[0],
                     'state not given as one of ' . implode(', ', RESTConstants::ORDER_STATES));
             }
-            // TODO: Add check for method
-            // if $this->validMethods[$uri[0]][$requestMethod] isset?
             if (count($uri) == 1) {
                 $state = $queries['state'];
                 return $this->doGetOrdersWithState($state);
