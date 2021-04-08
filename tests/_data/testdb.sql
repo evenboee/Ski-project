@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 23, 2021 at 12:35 PM
+-- Generation Time: Mar 22, 2021 at 12:23 PM
 -- Server version: 10.4.17-MariaDB
 -- PHP Version: 7.2.34
 
@@ -22,25 +22,27 @@ SET time_zone = "+00:00";
 --
 
 -- --------------------------------------------------------
-
---
--- Table structure for table `customer_representative`
---
-
-CREATE TABLE `customer_representative` (
-                                           `number` int(50) NOT NULL,
-                                           `name` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
-                                           `department` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL
+CREATE TABLE `employee` (
+                            `number` INT(50) NOT NULL AUTO_INCREMENT,
+                            `name` VARCHAR(50) NOT NULL,
+                            `department` VARCHAR(50) NOT NULL,
+                            PRIMARY KEY (`number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
+-- --------------------------------------------------------
+
 --
--- Dumping data for table `customer_representative`
+-- Table structure for table `franchise_store`
 --
 
-INSERT INTO `customer_representative` (`number`, `name`, `department`) VALUES
-(1, 'Jane Smith', 'Customer Service'),
-(2, 'Matt Karensson', 'Customer Service'),
-(3, 'Hannibal Barcka', 'Department of Information');
+CREATE TABLE `Customer` (
+                            `id` int(50) NOT NULL AUTO_INCREMENT,
+                            `name` varchar(50) NOT NULL,
+                            `start_date` DATE NOT NULL,
+                            `end_date` DATE,
+                            PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
+
 
 -- --------------------------------------------------------
 
@@ -48,100 +50,51 @@ INSERT INTO `customer_representative` (`number`, `name`, `department`) VALUES
 -- Table structure for table `franchise`
 --
 
-CREATE TABLE `franchise` (
+CREATE TABLE `Franchise` (
                              `id` int(50) NOT NULL,
-                             `start_date` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
-                             `end_date` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
-                             `name` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
-                             `shipping_address` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
-                             `buing_price` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
-                             `store_info` text COLLATE utf8mb4_danish_ci NOT NULL
+                             `shipping_address` varchar(50) NOT NULL,
+                             `price_multiplier` DECIMAL(3, 2) UNSIGNED NOT NULL, -- range from 0.00 to 9.99
+                             PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
-
---
--- Dumping data for table `franchise`
---
-
-INSERT INTO `franchise` (`id`, `start_date`, `end_date`, `name`, `shipping_address`, `buing_price`, `store_info`) VALUES
-(111, '2020-01-02', '2026-01-01', 'XXL Sport', 'Jernbanegata 5, Gjøvik 2821', '50% of MSRPP', 'XXL Sport og Villmark er Nordens største sportskjede. Vi tilbyr et bredt sortiment av kjente merkevarer på nett og i våre mange varehus.'),
-(123, '2021-01-01', '2026-01-01', 'Amundsen Sport', 'Sentrumsvegen 7, Oslo 3187', '75% of MSRPP', 'Amundsen Sport ble startet allerede i 1918 av Albert Amundsen – bestefaren til dagens driver.'),
-(321, '2018-01-01', '2025-01-01', 'Sportsgutta', 'Tordenskjoldsgate 16, Oslo 3187', '75% of MSRPP', 'Sportsgutta er en av Norges beste sportsbutikker og tilbyr alt innenfor extremsport.');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `general_public`
+-- Table structure for table `team_skier`
 --
 
-CREATE TABLE `general_public` (
-    `account_id` int(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
-
---
--- Dumping data for table `general_public`
---
-
-INSERT INTO `general_public` (`account_id`) VALUES
-(1),
-(2),
-(5),
-(8),
-(65),
-(69);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `individual_store`
---
-
-CREATE TABLE `individual_store` (
+CREATE TABLE `Individual_store` (
                                     `id` int(50) NOT NULL,
-                                    `start_date` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
-                                    `end_date` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
-                                    `name` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
-                                    `shipping_address` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
-                                    `buying_price` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
-
---
--- Dumping data for table `individual_store`
---
-
-INSERT INTO `individual_store` (`id`, `start_date`, `end_date`, `name`, `shipping_address`, `buying_price`) VALUES
-(665, '2020-01-02', '2026-01-01', 'Oslo Sportslager', 'Karl Johansgate 10, Oslo 3176', '76% of MSRPP'),
-(676, '2018-01-01', '2025-01-01', 'Telemarks Helter', 'Mo-Byrtevegen 201b, Dalen 3880', '20% of MSRPP'),
-(998, '2021-01-01', '2024-01-01', 'Trondheim Sport', 'Tordenskjoldgate 87, Trondheim 7634', '55% of MSRPP');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `keeper_check_order`
---
-
-CREATE TABLE `keeper_check_order` (
-                                      `keeperNo` int(50) NOT NULL,
-                                      `orderNo` int(50) NOT NULL
+                                    `shipping_address` varchar(50) NOT NULL,
+                                    `price_multiplier` DECIMAL(3, 2) UNSIGNED NOT NULL, -- range from 0.00 to 9.99
+                                    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `keeper_log`
+-- Table structure for table `franchise_store`
 --
 
-CREATE TABLE `keeper_log` (
-                              `keeperNo` int(50) NOT NULL,
-                              `logNo` int(50) NOT NULL
+CREATE TABLE `franchise_store` (
+                                   `franchise_id` int(50) NOT NULL,
+                                   `store_id` int(50) NOT NULL,
+                                   PRIMARY KEY (`franchise_id`, `store_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
+-- --------------------------------------------------------
+
 --
--- Dumping data for table `keeper_log`
+-- Table structure for table `team_skier`
 --
 
-INSERT INTO `keeper_log` (`keeperNo`, `logNo`) VALUES
-(1098764, 1),
-(1098764, 2);
+CREATE TABLE `team_skier` (
+                              `id` int(50) NOT NULL AUTO_INCREMENT,
+                              `dob` DATE NOT NULL,
+                              `club` varchar(50) NOT NULL,
+                              `num_skies` int(50) NOT NULL DEFAULT 0,
+                              PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
 -- --------------------------------------------------------
 
@@ -149,22 +102,15 @@ INSERT INTO `keeper_log` (`keeperNo`, `logNo`) VALUES
 -- Table structure for table `logs`
 --
 
-CREATE TABLE `logs` (
-                        `logNo` int(50) NOT NULL,
-                        `comment` text COLLATE utf8mb4_danish_ci NOT NULL
+CREATE TABLE `Order_log` (
+                             `log_number` int(50) NOT NULL AUTO_INCREMENT,
+                             `employee_number` int(50) NOT NULL,
+                             `order_number` int(50) NOT NULL,
+                             `old_state` varchar(40) NOT NULL,
+                             `new_state` varchar(40) NOT NULL,
+                             `time` timestamp default (CURRENT_TIMESTAMP),
+                             PRIMARY KEY (`log_number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
-
---
--- Dumping data for table `logs`
---
-
-INSERT INTO `logs` (`logNo`, `comment`) VALUES
-(1, 'dummy'),
-(2, 'dummy'),
-(4, 'dummy'),
-(5, 'dummy'),
-(6, 'dummy'),
-(7, 'dummy');
 
 -- --------------------------------------------------------
 
@@ -173,40 +119,12 @@ INSERT INTO `logs` (`logNo`, `comment`) VALUES
 --
 
 CREATE TABLE `production_plan` (
-                                   `id` int(50) NOT NULL,
-                                   `start_date` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
-                                   `end_date` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
-                                   `plannerNo` int(50) NOT NULL
+                                   `id` int(50) NOT NULL AUTO_INCREMENT,
+                                   `start_date` DATE NOT NULL,
+                                   `end_date` DATE NOT NULL,
+                                   `plannerNo` int(50) NOT NULL,
+                                   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
-
---
--- Dumping data for table `production_plan`
---
-
-INSERT INTO `production_plan` (`id`, `start_date`, `end_date`, `plannerNo`) VALUES
-(777, '2021-01-01', '2021-01-28', 444),
-(778, '2021-01-29', '2021-02-26', 444),
-(779, '2021-03-26', '2021-04-23', 445);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `production_planner`
---
-
-CREATE TABLE `production_planner` (
-                                      `number` int(50) NOT NULL,
-                                      `name` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
-                                      `department` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
-
---
--- Dumping data for table `production_planner`
---
-
-INSERT INTO `production_planner` (`number`, `name`, `department`) VALUES
-(444, 'Amund Amundsson', 'Department of Leaders'),
-(445, 'Even Bryns Boe ', 'Department of Information');
 
 -- --------------------------------------------------------
 
@@ -216,77 +134,11 @@ INSERT INTO `production_planner` (`number`, `name`, `department`) VALUES
 
 CREATE TABLE `production_plan_reference` (
                                              `plan_id` int(50) NOT NULL,
+                                             `model` varchar(50) NOT NULL,
                                              `size` int(50) NOT NULL,
                                              `weight` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
-                                             `quantity` int(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
-
---
--- Dumping data for table `production_plan_reference`
---
-
-INSERT INTO `production_plan_reference` (`plan_id`, `size`, `weight`, `quantity`) VALUES
-(777, 145, '20-30', 2000),
-(777, 165, '40-50', 2600),
-(778, 150, '30-40', 3400),
-(778, 150, '30-50', 1100),
-(779, 165, '40-50', 5400);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `public_view_ski`
---
-
-CREATE TABLE `public_view_ski` (
-                                   `account_id` int(50) NOT NULL,
-                                   `size` int(50) NOT NULL,
-                                   `weight` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
-
---
--- Dumping data for table `public_view_ski`
---
-
-INSERT INTO `public_view_ski` (`account_id`, `size`, `weight`) VALUES
-(1, 140, '20-30'),
-(2, 150, '40-50'),
-(5, 140, '40-50'),
-(8, 165, '40-50'),
-(65, 150, '30-40'),
-(69, 145, '20-30'),
-(69, 150, '30-40');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `rep_log`
---
-
-CREATE TABLE `rep_log` (
-                           `repNo` int(50) NOT NULL,
-                           `logNo` int(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
-
---
--- Dumping data for table `rep_log`
---
-
-INSERT INTO `rep_log` (`repNo`, `logNo`) VALUES
-(1, 4),
-(2, 5),
-(2, 6),
-(3, 7);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `rep_review_order`
---
-
-CREATE TABLE `rep_review_order` (
-                                    `repNo` int(50) NOT NULL,
-                                    `orderNo` int(50) NOT NULL
+                                             `quantity` int(50) NOT NULL,
+                                             PRIMARY KEY (`plan_id`, `model`, `size`,`weight`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
 -- --------------------------------------------------------
@@ -296,13 +148,14 @@ CREATE TABLE `rep_review_order` (
 --
 
 CREATE TABLE `shipment` (
-                            `number` int(50) NOT NULL,
+                            `number` int(50) NOT NULL AUTO_INCREMENT,
                             `store_name` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
                             `shipping_address` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
-                            `pickup_date` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
-                            `state` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
+                            `pickup_date` DATE COLLATE utf8mb4_danish_ci NOT NULL,
+                            `state` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL DEFAULT 'ready',
                             `driver_id` int(50) NOT NULL,
-                            `repNo` int(50) NOT NULL
+                            `repNo` int(50) NOT NULL,
+                            PRIMARY KEY (`number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
 -- --------------------------------------------------------
@@ -312,26 +165,12 @@ CREATE TABLE `shipment` (
 --
 
 CREATE TABLE `ski` (
-                       `product_number` int(50) NOT NULL,
+                       `product_number` int(50) NOT NULL AUTO_INCREMENT,
+                       `model` VARCHAR(50) NOT NULL,
                        `size` int(50) NOT NULL,
-                       `weight` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL
+                       `weight` varchar(50) NOT NULL,
+                       PRIMARY KEY (`product_number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
-
---
--- Dumping data for table `ski`
---
-
-INSERT INTO `ski` (`product_number`, `size`, `weight`) VALUES
-(111, 140, '20-30'),
-(222, 140, '20-30'),
-(333, 140, '20-30'),
-(444, 165, '40-50'),
-(555, 165, '40-50'),
-(667, 150, '40-50'),
-(777, 150, '40-50'),
-(888, 150, '40-50'),
-(889, 150, '40-50'),
-(999, 150, '40-50');
 
 -- --------------------------------------------------------
 
@@ -340,23 +179,14 @@ INSERT INTO `ski` (`product_number`, `size`, `weight`) VALUES
 --
 
 CREATE TABLE `ski_model` (
-                             `model` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
-                             `skiing_type` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
-                             `description` text COLLATE utf8mb4_danish_ci NOT NULL,
-                             `grip_system` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
-                             `historical` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
-                             `temperature` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
-                             `url` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL
+                             `model` varchar(50) NOT NULL,
+                             `skiing_type` varchar(50) NOT NULL,
+                             `description` text NOT NULL,
+                             `grip_system` varchar(50) NOT NULL,
+                             `historical` BOOLEAN NOT NULL DEFAULT 0,
+                             `temperature` varchar(50) NOT NULL,
+                             `url` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
-
---
--- Dumping data for table `ski_model`
---
-
-INSERT INTO `ski_model` (`model`, `skiing_type`, `description`, `grip_system`, `historical`, `temperature`, `url`) VALUES
-('Fisher', 'classic', 'Fisher is the latest model of the Fish ski series, made for casual as well as veteran skiiers. ', 'IntelliGrip', 'no', 'mild', 'http:/coolskiis.com/marketplace/Fisher'),
-('Frogger', 'double pole', 'Frogger was the ultimate trickster skiis from the K-9000 series.', 'wax', 'yes', 'cold', 'http:/betterskiis.com/marketplace/Frogger'),
-('Redline', 'skate', 'The redline model from the T-series of pro-skiing.', 'wax', 'no', 'cold', 'http:/coolskiis.com/marketplace/Redline');
 
 -- --------------------------------------------------------
 
@@ -365,23 +195,14 @@ INSERT INTO `ski_model` (`model`, `skiing_type`, `description`, `grip_system`, `
 --
 
 CREATE TABLE `ski_order` (
-                             `order_number` int(50) NOT NULL,
+                             `order_number` int(50) NOT NULL AUTO_INCREMENT,
                              `total_price` int(50) NOT NULL,
-                             `state` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
-                             `ref_larger_order` int(50) NOT NULL,
+                             `state` varchar(50) NOT NULL DEFAULT 'new',
+                             `ref_larger_order` int(50) DEFAULT NULL,
                              `customer_id` int(50) NOT NULL,
-                             `shipment_number` int(50) DEFAULT NULL
+                             `shipment_number` int(50) DEFAULT NULL,
+                             PRIMARY KEY (`order_number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
-
---
--- Dumping data for table `ski_order`
---
-
-INSERT INTO `ski_order` (`order_number`, `total_price`, `state`, `ref_larger_order`, `customer_id`, `shipment_number`) VALUES
-(1, 8000, 'new', 1, 665, NULL),
-(2, 8600, 'new', 2, 7799, NULL),
-(3, 4000, 'new', 2, 7799, NULL),
-(545, 4000, 'new', 545, 887766, NULL);
 
 -- --------------------------------------------------------
 
@@ -391,22 +212,11 @@ INSERT INTO `ski_order` (`order_number`, `total_price`, `state`, `ref_larger_ord
 
 CREATE TABLE `ski_type` (
                             `size` int(50) NOT NULL,
-                            `weight_class` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
-                            `MSRPP` int(50) NOT NULL,
-                            `model` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL
+                            `weight_class` varchar(50) NOT NULL,
+                            `MSRP` int(50) NOT NULL,
+                            `model` varchar(50) NOT NULL,
+                            PRIMARY KEY (`model`, `size`, `weight_class`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
-
---
--- Dumping data for table `ski_type`
---
-
-INSERT INTO `ski_type` (`size`, `weight_class`, `MSRPP`, `model`) VALUES
-(140, '20-30', 4000, 'Redline'),
-(140, '40-50', 4600, 'Fisher'),
-(145, '20-30', 4300, 'Fisher'),
-(150, '30-40', 5500, 'Frogger'),
-(150, '40-50', 3500, 'Redline'),
-(165, '40-50', 2100, 'Fisher');
 
 -- --------------------------------------------------------
 
@@ -416,64 +226,12 @@ INSERT INTO `ski_type` (`size`, `weight_class`, `MSRPP`, `model`) VALUES
 
 CREATE TABLE `ski_type_order` (
                                   `order_number` int(50) NOT NULL,
+                                  `model` varchar(50) NOT NULL,
                                   `size` int(50) NOT NULL,
-                                  `weight` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
-                                  `quantity` int(50) NOT NULL
+                                  `weight` varchar(50) NOT NULL,
+                                  `quantity` int(50) NOT NULL,
+                                  PRIMARY KEY (`order_number`, `model`, `size`,`weight`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
-
---
--- Dumping data for table `ski_type_order`
---
-
-INSERT INTO `ski_type_order` (`order_number`, `size`, `weight`, `quantity`) VALUES
-(1, 140, '20-30', 2),
-(2, 140, '40-50', 1),
-(3, 140, '20-30', 1);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `storekeeper`
---
-
-CREATE TABLE `storekeeper` (
-                               `number` int(50) NOT NULL,
-                               `name` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
-                               `department` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
-
---
--- Dumping data for table `storekeeper`
---
-
-INSERT INTO `storekeeper` (`number`, `name`, `department`) VALUES
-(1098764, 'Kryz Dresden', 'Store and stuff'),
-(76324141, 'Ulf Utireir', 'Store and stuff');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `team_skier`
---
-
-CREATE TABLE `team_skier` (
-                              `id` int(50) NOT NULL,
-                              `start_date` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
-                              `end_date` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
-                              `name` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
-                              `dob` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
-                              `club` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
-                              `num_skies` int(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
-
---
--- Dumping data for table `team_skier`
---
-
-INSERT INTO `team_skier` (`id`, `start_date`, `end_date`, `name`, `dob`, `club`, `num_skies`) VALUES
-(7799, '2021-01-01', '2024-01-01', 'Even Jegermann', '1996-02-11', 'Club Penguin', 2),
-(9911, '2020-01-02', '2021-01-28', 'Carol Xavier', '1991-02-12', 'Club Penguin', 4),
-(887766, '2021-03-26', '2025-01-01', 'Olav Krokmyr', '1967-04-04', 'The heroes of the skies', 6);
 
 -- --------------------------------------------------------
 
@@ -482,8 +240,240 @@ INSERT INTO `team_skier` (`id`, `start_date`, `end_date`, `name`, `dob`, `club`,
 --
 
 CREATE TABLE `transporter` (
-    `company_name` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL
+    `company_name` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `Shipment_transition_log`
+--
+
+CREATE TABLE `Shipment_transition_log` (
+                                           `log_number` INT(50) NOT NULL AUTO_INCREMENT,
+                                           `shipment_number` int(50) NOT NULL,
+                                           `time` timestamp default (CURRENT_TIMESTAMP),
+                                           PRIMARY KEY (`log_number`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
+
+CREATE TABLE `auth_token` (
+                              `token` VARCHAR(50) NOT NULL,
+                              `role` VARCHAR(50) NOT NULL,
+                              PRIMARY KEY(`token`)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `ski_model`
+--
+ALTER TABLE `ski_model`
+    ADD PRIMARY KEY (`model`);
+
+--
+-- Indexes for table `ski_type`
+--
+ALTER TABLE `ski_type`
+    ADD CONSTRAINT `ski_type_ski_model_fk` FOREIGN KEY (`model`)
+        REFERENCES `Ski_model`(`model`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE;
+
+
+--
+-- Indexes for table `transporter`
+--
+ALTER TABLE `transporter`
+    ADD PRIMARY KEY (`company_name`);
+
+ALTER TABLE `ski`
+    ADD CONSTRAINT `ski_ski_model_fk` FOREIGN KEY (`model`)
+        REFERENCES `Ski_model`(`model`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    ADD CONSTRAINT `ski_ski_type_fk` FOREIGN KEY (`model`, `size`, `weight`)
+        REFERENCES `Ski_type`(`model`, `size`, `weight_class`)
+        ON UPDATE CASCADE
+           ON DELETE CASCADE;
+
+ALTER TABLE `Customer`
+    ADD KEY (`name`);
+
+ALTER TABLE `franchise_store`
+    ADD CONSTRAINT `franchise_store_franchise_fk` FOREIGN KEY (`franchise_id`)
+        REFERENCES `Franchise`(`id`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    ADD CONSTRAINT `franchise_store_individual_store_fk` FOREIGN KEY (`store_id`)
+        REFERENCES `Individual_store`(`id`)
+        ON UPDATE CASCADE
+           ON DELETE CASCADE;
+
+ALTER TABLE `team_skier`
+    ADD CONSTRAINT `team_skier_customer_fk` FOREIGN KEY (`id`)
+        REFERENCES `Customer`(`id`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE;
+
+ALTER TABLE `Franchise`
+    ADD CONSTRAINT `franchise_customer_fk` FOREIGN KEY (`id`)
+        REFERENCES `Customer`(`id`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE;
+
+ALTER TABLE `Individual_store`
+    ADD CONSTRAINT `individual_store_customer_fk` FOREIGN KEY (`id`)
+        REFERENCES `Customer`(`id`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE;
+
+ALTER TABLE `ski_order`
+    ADD CONSTRAINT `ski_order_corporation_fk` FOREIGN KEY (`customer_id`)
+        REFERENCES `customer`(`id`),
+    ADD CONSTRAINT `ski_order_shipment_fk` FOREIGN KEY (`shipment_number`)
+        REFERENCES `shipment`(`number`);
+
+ALTER TABLE `ski_type_order`
+    ADD CONSTRAINT `ski_type_order_Order_fk` FOREIGN KEY (`order_number`)
+        REFERENCES `ski_order`(`order_number`),
+    ADD CONSTRAINT `ski_type_order_Ski_type_fk` FOREIGN KEY (`model`, `size`, `weight`)
+        REFERENCES `Ski_type`(`model`, `size`, `weight_class`);
+
+ALTER TABLE `shipment`
+    ADD CONSTRAINT `shipment_Customer_representative_fk` FOREIGN KEY (`repNo`)
+        REFERENCES `employee`(`number`),
+    ADD CONSTRAINT `shipment_Corporation_fk` FOREIGN KEY (`store_name`)
+        REFERENCES `Customer`(`name`);
+
+ALTER TABLE `Order_log`
+    ADD CONSTRAINT `Order_log_Employee_fk` FOREIGN KEY (`employee_number`)
+        REFERENCES `Employee`(`number`),
+    ADD CONSTRAINT `Order_log_Order_fk` FOREIGN KEY (`order_number`)
+        REFERENCES `ski_order`(`order_number`);
+
+ALTER TABLE `production_plan`
+    ADD CONSTRAINT `production_plan_Employee_fk` FOREIGN KEY (`plannerNo`)
+        REFERENCES `Employee`(`number`);
+
+ALTER TABLE `production_plan_reference`
+    ADD CONSTRAINT `production_plan_reference_Ski_type_fk` FOREIGN KEY (`model` ,`size`, `weight`)
+        REFERENCES `Ski_type`(`model`, `size`, `weight_class`),
+    ADD CONSTRAINT `production_plan_reference_production_plan_fk` FOREIGN KEY (`plan_id`)
+        REFERENCES `production_plan`(`id`);
+
+ALTER TABLE `Shipment_transition_log`
+    ADD CONSTRAINT `shipment_transition_log_shipment_fk` FOREIGN KEY (`shipment_number`)
+        REFERENCES `shipment`(`number`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE;
+
+-- -----------------------------------------------
+-- Adding data
+
+--
+-- Dumping data for table `customer_representative`
+--
+
+INSERT INTO `employee` (`name`, `department`) VALUES
+('Jane Smith', 'customer rep'),
+('Matt Karensson', 'storekeeper'),
+('Hannibal Barcka', 'production planner'),
+('Amund Amundsson', 'storekeeper'),
+('Even Bryns Boe ', 'customer rep');
+
+--
+-- Dumping data for table `franchise`
+--
+
+INSERT INTO `customer` (`start_date`, `end_date`, `name`) VALUES
+('2020-01-02', '2026-01-01', 'XXL Sport'),
+('2021-01-01', '2026-01-01', 'Amundsen Sport'),
+('2018-01-01', '2025-01-01', 'Sportsgutta'),
+('2021-01-01', '2024-01-01', 'Even Jegermann'),
+('2020-01-02', '2021-01-28', 'Carol Xavier'),
+('2021-03-26', '2025-01-01', 'Olav Krokmyr');
+
+INSERT INTO `Franchise` (`id`, `shipping_address`, `price_multiplier`) VALUES
+(1, 'Oslo', 0.5),
+(2, 'Sentrumsvegen 7, Oslo 3187', 0.75);
+
+INSERT INTO `Individual_store` (`id`, `shipping_address`, `price_multiplier`) VALUES
+(3, 'Lillehammervegen 1, Gjøvik', 0.8);
+
+--
+-- Dumping data for table `franchise_store`
+--
+
+INSERT INTO `franchise_store` (`franchise_id`, `store_id`) VALUES
+(1, 3);
+
+--
+-- Dumping data for table `ski_model`
+--
+
+INSERT INTO `ski_model` (`model`, `skiing_type`, `description`, `grip_system`, `historical`, `temperature`, `url`) VALUES
+('Fisher', 'classic', 'Fisher is the latest model of the Fish ski series, made for casual as well as veteran skiiers. ', 'IntelliGrip', 0, 'mild', 'http:/coolskiis.com/marketplace/Fisher'),
+('Frogger', 'double pole', 'Frogger was the ultimate trickster skiis from the K-9000 series.', 'wax', 1, 'cold', 'http:/betterskiis.com/marketplace/Frogger'),
+('Redline', 'skate', 'The redline model from the T-series of pro-skiing.', 'wax', 0, 'cold', 'http:/coolskiis.com/marketplace/Redline');
+
+--
+-- Dumping data for table `ski_type`
+--
+
+INSERT INTO `ski_type` (`size`, `weight_class`, `MSRP`, `model`) VALUES
+(140, '20-30', 4000, 'Redline'),
+(140, '40-50', 4600, 'Fisher'),
+(145, '20-30', 4300, 'Fisher'),
+(150, '30-40', 5500, 'Frogger'),
+(150, '40-50', 3500, 'Redline'),
+(165, '40-50', 2100, 'Fisher');
+
+--
+-- Dumping data for table `ski`
+--
+
+INSERT INTO `ski` (`model`, `size`, `weight`) VALUES
+('Redline', 140, '20-30'),
+('Redline', 140, '20-30'),
+('Fisher', 165, '40-50'),
+('Fisher', 140, '40-50'),
+('Frogger', 150, '30-40'),
+('Frogger', 150, '30-40'),
+('Redline', 150, '40-50');
+
+--
+-- Dumping data for table `production_plan`
+--
+
+INSERT INTO `production_plan` (`start_date`, `end_date`, `plannerNo`) VALUES
+('2021-01-01', '2021-01-28', 1),
+('2021-01-29', '2021-02-26', 1),
+('2021-03-26', '2021-04-23', 5);
+
+--
+-- Dumping data for table `production_plan_reference`
+--
+
+INSERT INTO `production_plan_reference` (`plan_id`, `model`, `size`, `weight`, `quantity`) VALUES
+(1, 'Redline', 140, '20-30', 20),
+(1, 'Redline', 150, '40-50', 26),
+(2, 'Frogger', 150, '30-40', 34),
+(3, 'Frogger', 150, '30-40', 11),
+(3, 'Redline', 150, '40-50', 54);
+
+--
+-- Dumping data for table `team_skier`
+--
+
+INSERT INTO `team_skier` (`id`, `dob`, `club`, `num_skies`) VALUES
+(4, '1996-02-11', 'Club Penguin', 2),
+(5, '1991-02-12', 'Club Penguin', 4),
+(6, '1967-04-04', 'The heroes of the skies', 6);
+
 
 --
 -- Dumping data for table `transporter`
@@ -493,152 +483,53 @@ INSERT INTO `transporter` (`company_name`) VALUES
 ('Sauland Transport AS'),
 ('Telemark Transport AS');
 
--- --------------------------------------------------------
+INSERT INTO `Shipment` (`store_name`, `shipping_address`, `state`, `pickup_date`, `driver_id`, `repNo`) VALUES
+('XXL Sport', 'Vegvegen 0 0000By', 'shipped', '2021-05-28', 3, 1),
+('XXL Sport', 'Vegvegen 0 0000By', 'ready','2021-05-29', 2, 1);
 
 --
--- Table structure for table `transporter_view_order`
+-- Dumping data for table `ski_order`
 --
 
-CREATE TABLE `transporter_view_order` (
-                                          `order_number` int(50) NOT NULL,
-                                          `company_name` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
+INSERT INTO `ski_order` (`total_price`, `customer_id`, `shipment_number`) VALUES
+(8000, 1, 1),
+(8600, 1, 2),
+(4000, 2, 2);
+
+UPDATE `ski_order`
+    SET `state` = 'open'
+    WHERE `order_number` = 1;
 
 --
--- Indexes for dumped tables
+-- Dumping data for table `ski_type_order`
 --
 
---
--- Indexes for table `customer_representative`
---
-ALTER TABLE `customer_representative`
-    ADD PRIMARY KEY (`number`);
+INSERT INTO `ski_type_order` (`order_number`, `model`, `size`, `weight`, `quantity`) VALUES
+(1, 'Redline', 140, '20-30', 2),
+(1, 'Redline', 150, '40-50', 1),
+(2, 'Frogger', 150, '30-40', 1);
 
 --
--- Indexes for table `franchise`
+-- Dumping data for table `logs`
 --
-ALTER TABLE `franchise`
-    ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `general_public`
---
-ALTER TABLE `general_public`
-    ADD PRIMARY KEY (`account_id`);
+INSERT INTO `Order_log` (`employee_number`, `order_number`, `old_state`, `new_state`) VALUES
+(1, 1, 'new', 'open'),
+(1, 2, 'new', 'open'),
+(2, 1, 'open', 'skis-available');
 
---
--- Indexes for table `individual_store`
---
-ALTER TABLE `individual_store`
-    ADD PRIMARY KEY (`id`);
 
---
--- Indexes for table `keeper_check_order`
---
-ALTER TABLE `keeper_check_order`
-    ADD PRIMARY KEY (`keeperNo`,`orderNo`);
+INSERT INTO `Shipment_transition_log` (`shipment_number`) VALUES
+(1);
 
---
--- Indexes for table `keeper_log`
---
-ALTER TABLE `keeper_log`
-    ADD PRIMARY KEY (`keeperNo`,`logNo`);
+INSERT INTO `auth_token` (`role`, `token`) VALUES
+('rep', 'rep'),
+('storekeeper', 'storekeeper'),
+('customer', 'customer'),
+('shipper', 'shipper'),
+('production-planner', 'production-planner'),
+('public', 'public');
 
---
--- Indexes for table `logs`
---
-ALTER TABLE `logs`
-    ADD PRIMARY KEY (`logNo`);
-
---
--- Indexes for table `production_plan`
---
-ALTER TABLE `production_plan`
-    ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `production_planner`
---
-ALTER TABLE `production_planner`
-    ADD PRIMARY KEY (`number`);
-
---
--- Indexes for table `production_plan_reference`
---
-ALTER TABLE `production_plan_reference`
-    ADD PRIMARY KEY (`plan_id`,`size`,`weight`);
-
---
--- Indexes for table `public_view_ski`
---
-ALTER TABLE `public_view_ski`
-    ADD PRIMARY KEY (`account_id`,`size`,`weight`);
-
---
--- Indexes for table `rep_review_order`
---
-ALTER TABLE `rep_review_order`
-    ADD PRIMARY KEY (`repNo`,`orderNo`);
-
---
--- Indexes for table `shipment`
---
-ALTER TABLE `shipment`
-    ADD PRIMARY KEY (`number`);
-
---
--- Indexes for table `ski`
---
-ALTER TABLE `ski`
-    ADD PRIMARY KEY (`product_number`);
-
---
--- Indexes for table `ski_model`
---
-ALTER TABLE `ski_model`
-    ADD PRIMARY KEY (`model`);
-
---
--- Indexes for table `ski_order`
---
-ALTER TABLE `ski_order`
-    ADD PRIMARY KEY (`order_number`);
-
---
--- Indexes for table `ski_type`
---
-ALTER TABLE `ski_type`
-    ADD PRIMARY KEY (`size`,`weight_class`);
-
---
--- Indexes for table `ski_type_order`
---
-ALTER TABLE `ski_type_order`
-    ADD PRIMARY KEY (`order_number`,`size`,`weight`);
-
---
--- Indexes for table `storekeeper`
---
-ALTER TABLE `storekeeper`
-    ADD PRIMARY KEY (`number`);
-
---
--- Indexes for table `team_skier`
---
-ALTER TABLE `team_skier`
-    ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `transporter`
---
-ALTER TABLE `transporter`
-    ADD PRIMARY KEY (`company_name`);
-
---
--- Indexes for table `transporter_view_order`
---
-ALTER TABLE `transporter_view_order`
-    ADD PRIMARY KEY (`order_number`,`company_name`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
