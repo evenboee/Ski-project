@@ -32,14 +32,39 @@ CREATE TABLE `employee` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `franchise_store`
+--
+
+CREATE TABLE `Customer` (
+    `id` int(50) NOT NULL AUTO_INCREMENT,
+    `name` varchar(50) NOT NULL,
+    `start_date` DATE NOT NULL,
+    `end_date` DATE,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
+
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `franchise`
 --
 
-CREATE TABLE `corporation` (
-    `id` int(50) NOT NULL AUTO_INCREMENT,
-    `start_date` DATE NOT NULL,
-    `end_date` DATE,
-    `name` varchar(50) NOT NULL,
+CREATE TABLE `Franchise` (
+    `id` int(50) NOT NULL,
+    `shipping_address` varchar(50) NOT NULL,
+    `price_multiplier` DECIMAL(3, 2) UNSIGNED NOT NULL, -- range from 0.00 to 9.99
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `team_skier`
+--
+
+CREATE TABLE `Individual_store` (
+    `id` int(50) NOT NULL,
     `shipping_address` varchar(50) NOT NULL,
     `price_multiplier` DECIMAL(3, 2) UNSIGNED NOT NULL, -- range from 0.00 to 9.99
     PRIMARY KEY (`id`)
@@ -55,6 +80,20 @@ CREATE TABLE `franchise_store` (
     `franchise_id` int(50) NOT NULL,
     `store_id` int(50) NOT NULL,
     PRIMARY KEY (`franchise_id`, `store_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `team_skier`
+--
+
+CREATE TABLE `team_skier` (
+    `id` int(50) NOT NULL AUTO_INCREMENT,
+    `dob` DATE NOT NULL,
+    `club` varchar(50) NOT NULL,
+    `num_skies` int(50) NOT NULL DEFAULT 0,
+    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
 -- --------------------------------------------------------
@@ -197,23 +236,6 @@ CREATE TABLE `ski_type_order` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `team_skier`
---
-
-CREATE TABLE `team_skier` (
-    `id` int(50) NOT NULL AUTO_INCREMENT,
-    `start_date` DATE NOT NULL,
-    `end_date` DATE,
-    `name` varchar(50) NOT NULL,
-    `dob` DATE NOT NULL,
-    `club` varchar(50) NOT NULL,
-    `num_skies` int(50) NOT NULL DEFAULT 0,
-    PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `transporter`
 --
 
@@ -271,22 +293,40 @@ ALTER TABLE `ski`
         ON UPDATE CASCADE
         ON DELETE CASCADE;
 
-ALTER TABLE `corporation`
+ALTER TABLE `Customer`
     ADD KEY (`name`);
 
 ALTER TABLE `franchise_store`
-    ADD CONSTRAINT `franchise_store_parent_corporation_fk` FOREIGN KEY (`franchise_id`)
-        REFERENCES `corporation`(`id`)
+    ADD CONSTRAINT `franchise_store_franchise_fk` FOREIGN KEY (`franchise_id`)
+        REFERENCES `Franchise`(`id`)
         ON UPDATE CASCADE
         ON DELETE CASCADE,
-    ADD CONSTRAINT `franchise_store_child_corporation_fk` FOREIGN KEY (`store_id`)
-        REFERENCES `corporation`(`id`)
+    ADD CONSTRAINT `franchise_store_individual_store_fk` FOREIGN KEY (`store_id`)
+        REFERENCES `Individual_store`(`id`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE;
+
+ALTER TABLE `team_skier`
+    ADD CONSTRAINT `team_skier_customer_fk` FOREIGN KEY (`id`)
+        REFERENCES `Customer`(`id`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE;
+
+ALTER TABLE `Franchise`
+    ADD CONSTRAINT `franchise_customer_fk` FOREIGN KEY (`id`)
+        REFERENCES `Customer`(`id`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE;
+
+ALTER TABLE `Individual_store`
+    ADD CONSTRAINT `individual_store_customer_fk` FOREIGN KEY (`id`)
+        REFERENCES `Customer`(`id`)
         ON UPDATE CASCADE
         ON DELETE CASCADE;
 
 ALTER TABLE `ski_order`
     ADD CONSTRAINT `ski_order_corporation_fk` FOREIGN KEY (`customer_id`)
-        REFERENCES `corporation`(`id`),
+        REFERENCES `customer`(`id`),
     ADD CONSTRAINT `ski_order_shipment_fk` FOREIGN KEY (`shipment_number`)
         REFERENCES `shipment`(`number`);
 
@@ -300,7 +340,7 @@ ALTER TABLE `shipment`
     ADD CONSTRAINT `shipment_Customer_representative_fk` FOREIGN KEY (`repNo`)
         REFERENCES `employee`(`number`),
     ADD CONSTRAINT `shipment_Corporation_fk` FOREIGN KEY (`store_name`)
-        REFERENCES `Corporation`(`name`);
+        REFERENCES `Customer`(`name`);
 
 ALTER TABLE `Order_log`
     ADD CONSTRAINT `Order_log_Employee_fk` FOREIGN KEY (`employee_number`)
@@ -336,17 +376,27 @@ INSERT INTO `employee` (`name`, `department`) VALUES
 -- Dumping data for table `franchise`
 --
 
-INSERT INTO `corporation` (`start_date`, `end_date`, `name`, `shipping_address`, `price_multiplier`) VALUES
-('2020-01-02', '2026-01-01', 'XXL Sport', 'Jernbanegata 5, Gjøvik 2821', 0.5),
-('2021-01-01', '2026-01-01', 'Amundsen Sport', 'Sentrumsvegen 7, Oslo 3187', 0.75),
-('2018-01-01', '2025-01-01', 'Sportsgutta', 'Tordenskjoldsgate 16, Oslo 3187', 0.75);
+INSERT INTO `customer` (`start_date`, `end_date`, `name`) VALUES
+('2020-01-02', '2026-01-01', 'XXL Sport'),
+('2021-01-01', '2026-01-01', 'Amundsen Sport'),
+('2018-01-01', '2025-01-01', 'Sportsgutta'),
+('2021-01-01', '2024-01-01', 'Even Jegermann'),
+('2020-01-02', '2021-01-28', 'Carol Xavier'),
+('2021-03-26', '2025-01-01', 'Olav Krokmyr');
+
+INSERT INTO `Franchise` (`id`, `shipping_address`, `price_multiplier`) VALUES
+(1, 'Oslo', 0.5),
+(2, 'Sentrumsvegen 7, Oslo 3187', 0.75);
+
+INSERT INTO `Individual_store` (`id`, `shipping_address`, `price_multiplier`) VALUES
+(3, 'Lillehammervegen 1, Gjøvik', 0.8);
 
 --
 -- Dumping data for table `franchise_store`
 --
 
 INSERT INTO `franchise_store` (`franchise_id`, `store_id`) VALUES
-(1, 2);
+(1, 3);
 
 --
 -- Dumping data for table `ski_model`
@@ -406,10 +456,10 @@ INSERT INTO `production_plan_reference` (`plan_id`, `model`, `size`, `weight`, `
 -- Dumping data for table `team_skier`
 --
 
-INSERT INTO `team_skier` (`start_date`, `end_date`, `name`, `dob`, `club`, `num_skies`) VALUES
-('2021-01-01', '2024-01-01', 'Even Jegermann', '1996-02-11', 'Club Penguin', 2),
-('2020-01-02', '2021-01-28', 'Carol Xavier', '1991-02-12', 'Club Penguin', 4),
-('2021-03-26', '2025-01-01', 'Olav Krokmyr', '1967-04-04', 'The heroes of the skies', 6);
+INSERT INTO `team_skier` (`id`, `dob`, `club`, `num_skies`) VALUES
+(4, '1996-02-11', 'Club Penguin', 2),
+(5, '1991-02-12', 'Club Penguin', 4),
+(6, '1967-04-04', 'The heroes of the skies', 6);
 
 
 --
