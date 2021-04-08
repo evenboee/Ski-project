@@ -19,8 +19,6 @@ class CustomerEndpoint extends RequestHandler {
     }
 
 
-    // TODO::
-
     /**
      * Handles POST, DELETE and GET requests to customer endpoint.
      * POST only works to   ../customer/order/new
@@ -59,13 +57,13 @@ class CustomerEndpoint extends RequestHandler {
                 $res['result'] = $this->doDeleteOrder($uri[1], $payload);
                 $res['status'] = RESTConstants::HTTP_ACCEPTED; // TODO: another http code perhaps?
                 return $res;
-
             }
-
-
         } else if ($uri[0]==RESTConstants::ENDPOINT_PLAN){
             if (count($uri) != 1) {throw new APIException(RESTConstants::HTTP_BAD_REQUEST, $endpointPath, 'Wrong number of parts');}
-            // TODO: View production plan
+
+            $res['plan'] = array("date"=>"2020-2021"); // TODO: retrieve production plan
+            $res['status'] = RESTConstants::HTTP_OK;
+            return $res;
         }
 
 
@@ -90,6 +88,8 @@ class CustomerEndpoint extends RequestHandler {
      */
     protected function doCreateOrder(array $payload): array{
         return (new OrderModel())-> createOrder($payload);
+
+
 
     }
 }
