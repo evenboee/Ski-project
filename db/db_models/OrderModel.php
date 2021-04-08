@@ -24,7 +24,7 @@ class OrderModel extends DB {
         return $res;
     }
 
-    public function setStateOfOrder($id, string $state, int $employee_number=1): array { // TODO: Return if something was changed
+    public function setStateOfOrder($id, string $state, int $employee_number=1): array {
         $updateQuery = 'UPDATE `ski_order` SET state = :state WHERE order_number = :id';
         $getQuery = 'SELECT `state` FROM `ski_order` WHERE `order_number` = :id';
         $logQuery = 'INSERT INTO `order_log` (`employee_number`, `order_number`, `old_state`, `new_state`) VALUES (:employee_number, :order_number, :old_state, :new_state)';
@@ -49,7 +49,7 @@ class OrderModel extends DB {
 
             $getStmt->execute();
             if ($row = $getStmt->fetch(PDO::FETCH_ASSOC)) {
-                $newOrder[] = $row;
+                $newOrder = $row;
             }
             if (count($newOrder) > 0) {
                 $logStmt = $this->db->prepare($logQuery);

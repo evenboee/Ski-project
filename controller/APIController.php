@@ -7,6 +7,7 @@ require_once 'RESTConstants.php';
 require_once 'Endpoints/PublicEndpoint.php';
 require_once 'Endpoints/StorekeeperEndpoint.php';
 require_once  'Endpoints/CustomerEndpoint.php';
+require_once 'Endpoints/ShipperEndpoint.php';
 
 class APIController extends RequestHandler {
 
@@ -32,7 +33,9 @@ class APIController extends RequestHandler {
             case RESTConstants::ENDPOINT_CUSTOMER:
                 $endpoint = new CustomerEndpoint();
                 break;
-
+            case RESTConstants::ENDPOINT_SHIPPER:
+                $endpoint = new ShipperEndpoint();
+                break;
             default:
                 throw new APIException(RESTConstants::HTTP_NOT_FOUND, $endpointPath, 'Endpoint not found');
         }

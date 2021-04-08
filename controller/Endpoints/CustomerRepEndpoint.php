@@ -56,8 +56,10 @@ class CustomerRepEndpoint extends RequestHandler {
         }
         // Expecting uri = ['order', '{state}', {id}]
         else if ($uri[0] == RESTConstants::ENDPOINT_ORDER) {
-            // TODO: Check that state exists
-            // TODO: Add check for valid method
+            if ($this->isValidMethod(RESTConstants::ENDPOINT_ORDER, $requestMethod) == RESTConstants::HTTP_METHOD_NOT_ALLOWED) {
+                throw new APIException(RESTConstants::HTTP_METHOD_NOT_ALLOWED, $endpointPath.'/'.$uri[0],
+                    'Method '.$requestMethod.' not allowed');
+            }
             if (count($uri) == 3) {
                 $state = $uri[1];
                 $id = $uri[2];

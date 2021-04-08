@@ -37,9 +37,11 @@ class RESTConstants
     const ENDPOINT_ORDER = 'order';
     const ENDPOINT_SKI = 'ski';
     const ENDPOINT_NEW = 'new';
+    const ENDPOINT_SHIP = 'ship';
     // Base
     const ENDPOINT_ORDERS = 'orders';
     const ENDPOINT_CUSTOMER_REP = 'rep';
+    const ENDPOINT_SHIPPER = 'shipper';
     const ENDPOINT_PUBLIC = 'public';
     const ENDPOINT_STOREKEEPER = 'storekeeper';
     const ENDPOINT_CUSTOMER = 'customer';
