@@ -262,7 +262,7 @@ CREATE TABLE `auth_token` (
                               PRIMARY KEY(`token`)
 );
 
-CREATE VIEW `ski_model_type_view` AS
+CREATE VIEW IF NOT EXISTS `ski_model_type_view` AS
 SELECT `ski_model`.*, `ski_type`.`size`, `ski_type`.`weight_class`, `ski_type`.`MSRP`
 FROM `ski_type`
          INNER JOIN `ski_model`
