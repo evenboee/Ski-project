@@ -45,6 +45,9 @@ class ShipperTest extends \Codeception\Test\Unit
         }
 
         $this->tester->assertIsArray($res);
+        $this->tester->assertArrayHasKey('result', $res);
+        $res = $res['result'];
+
         $values = array('number' => '2', 'store_name' => 'XXL Sport', 'shipping_address' => 'Vegvegen 0 0000By', 'state' => 'shipped', 'driver_id' => '2', 'repNo' => '1');
         foreach ($values as $k => $val) {
             $this->tester->assertArrayHasKey($k, $res);

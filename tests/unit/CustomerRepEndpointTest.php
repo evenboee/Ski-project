@@ -35,6 +35,8 @@ class CustomerRepEndpointTest extends \Codeception\Test\Unit
 
         $endpoint = new CustomerRepEndpoint();
         $res = $endpoint->handleRequest($uri, $endpointPath, $requestMethod, $queries, $payload);
+        $this->tester->assertArrayHasKey('result', $res);
+        $res = $res['result'];
         $this->tester->assertArrayHasKey('state', $res);
         $this->tester->assertEquals($res['state'], 'open');
 
@@ -67,6 +69,9 @@ class CustomerRepEndpointTest extends \Codeception\Test\Unit
 
         $endpoint = new CustomerRepEndpoint();
         $res = $endpoint->handleRequest($uri, $endpointPath, $requestMethod, $queries, $payload);
+
+        $this->tester->assertArrayHasKey('result', $res);
+        $res = $res['result'];
 
         $this->tester->assertCount(2, $res);
         $this->tester->assertIsArray($res);
