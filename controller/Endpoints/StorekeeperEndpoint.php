@@ -37,6 +37,7 @@ class StorekeeperEndpoint extends RequestHandler {
             throw new APIException(RESTConstants::HTTP_METHOD_NOT_ALLOWED, $endpointPath,
                 'Method '.$requestMethod.' not allowed');
         }
+        if (count($uri) == 0) {throw new APIException(RESTConstants::HTTP_NOT_FOUND, $endpointPath);}
 
         if ($uri[0] == RESTConstants::ENDPOINT_SKI) {
             if (count($uri) == 1) {

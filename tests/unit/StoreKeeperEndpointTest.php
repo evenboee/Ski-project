@@ -58,7 +58,7 @@ class StoreKeeperEndpointTest extends \Codeception\Test\Unit
      */
     public function testRequestToMalformedEndpoint(){
 
-        $uri = array();
+        $uri = array('sk');
         $endpointPath = '/storekeeper';
         $requestMethod = RESTConstants::METHOD_POST;
         $payload['size'] = 150;
