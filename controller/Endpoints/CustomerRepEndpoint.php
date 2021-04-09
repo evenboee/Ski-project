@@ -4,6 +4,14 @@ require_once 'controller/RequestHandler.php';
 require_once 'db/db_models/OrderModel.php';
 require_once 'controller/APIException.php';
 
+/**
+ * Class CustomerRepEndpoint
+ *
+ * Based on https://git.gvk.idi.ntnu.no/runehj/sample-rest-api-project/-/blob/master/db/DealerModel.php
+ *  By Rune Hjelsvold
+ *
+ * @author Even B. Bøe
+ */
 class CustomerRepEndpoint extends RequestHandler {
 
     public function __construct() {
@@ -21,6 +29,17 @@ class CustomerRepEndpoint extends RequestHandler {
 
     }
 
+    /**
+     * handleRequest takes information about request, validates request and routes to propper model to query database and returns result
+     *
+     * @param array $uri => list of parts from the path
+     * @param string $endpointPath => path from request
+     * @param string $requestMethod => method of the request
+     * @param array $queries => queries given by the user
+     * @param array $payload => body of the request
+     * @return array => appropriate array for the request being made
+     * @throws APIException is thrown if anything went wrong
+     */
     public function handleRequest(array $uri, string $endpointPath, string $requestMethod, array $queries, array $payload): array {
 
         if (count($uri) == 0) {
@@ -30,7 +49,7 @@ class CustomerRepEndpoint extends RequestHandler {
         if (!$this->isValidRequest($uri[0])) {
             throw new APIException(RESTConstants::HTTP_NOT_FOUND, $endpointPath.'/'.$uri[0], 'Endpoint not found');
         }
-
+        $res = array();
         // Expecting uri = ['orders'] and query = ['state'= one of RESTConstants::ORDER_STATES]
         if ($uri[0] == RESTConstants::ENDPOINT_ORDERS) {
             if ($this->isValidMethod(RESTConstants::ENDPOINT_ORDERS, $requestMethod) == RESTConstants::HTTP_METHOD_NOT_ALLOWED) {
@@ -47,7 +66,9 @@ class CustomerRepEndpoint extends RequestHandler {
             }
             if (count($uri) == 1) {
                 $state = $queries['state'];
-                return $this->doGetOrdersWithState($state);
+                $res['result'] = $this->doGetOrdersWithState($state);
+                $res['status'] = $this->validMethods[RESTConstants::ENDPOINT_ORDERS][RESTConstants::METHOD_GET];
+                return $res;
             } else {
                 throw new APIException(RESTConstants::HTTP_BAD_REQUEST, $endpointPath . '/' . $uri[0], 'Wrong number of parts');
             }
@@ -61,7 +82,19 @@ class CustomerRepEndpoint extends RequestHandler {
             if (count($uri) == 3) {
                 $state = $uri[1];
                 $id = $uri[2];
-                return $this->doSetStateOfOrder($id, $state);
+                $employee_number = $this->getEmployeeNumberFromPayload($payload);
+                if ($employee_number == 0) {
+                    throw new APIException(RESTConstants::HTTP_BAD_REQUEST, $endpointPath.'/'.implode('/', $uri),
+                    "employee_number has to be set");
+                }
+                if (!(new OrderModel())->customerRepExists($employee_number)) {
+                    throw new APIException(RESTConstants::HTTP_BAD_REQUEST, $endpointPath.'/'.implode('/', $uri),
+                        "given id is not an id of a customer rep in database");
+                }
+                $res['result'] = $this->doSetStateOfOrder($id, $state, $employee_number);
+                $res['result']['id'] = $employee_number;
+                $res['status'] = $this->validMethods[RESTConstants::ENDPOINT_ORDER][RESTConstants::METHOD_PATCH];
+                return $res;
             } else {
                 throw new APIException(RESTConstants::HTTP_BAD_REQUEST, $endpointPath . '/' . $uri[0], 'Wrong number of parts');
             }
@@ -75,8 +108,21 @@ class CustomerRepEndpoint extends RequestHandler {
         return $model->getOrdersWithState($state);
     }
 
-    protected function doSetStateOfOrder(string $id, string $state): array {
+    protected function doSetStateOfOrder(string $id, string $state, int $employee_number): array {
         $model = new OrderModel();
-        return $model->setStateOfOrder($id, $state);
+        return $model->setStateOfOrder($id, $state, $employee_number);
+    }
+
+    /**
+     * Validates employee number payload
+     * @param array $payload => body of request (key value array)
+     * @return int => employee number from payload
+     *                if payload is not set returns 0
+     */
+    protected function getEmployeeNumberFromPayload(array $payload): int {
+        if (!isset($payload['employee_number'])) {
+            return 0;
+        }
+        return intval($payload['employee_number']);
     }
 }

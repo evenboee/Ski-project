@@ -1,6 +1,9 @@
 <?php
 /**
  * Class RequestHandler is the main root class for endpoint handlers
+ *
+ * From https://git.gvk.idi.ntnu.no/runehj/sample-rest-api-project/-/blob/master/controller/RequestHandler.php
+ * @author Rune Hjelsvold
  */
 abstract class RequestHandler
 {

@@ -262,6 +262,13 @@ CREATE TABLE `auth_token` (
                               PRIMARY KEY(`token`)
 );
 
+CREATE VIEW IF NOT EXISTS `ski_model_type_view` AS
+SELECT `ski_model`.*, `ski_type`.`size`, `ski_type`.`weight_class`, `ski_type`.`MSRP`
+FROM `ski_type`
+         INNER JOIN `ski_model`
+                    ON `ski_type`.`model` = `ski_model`.`model`;
+
+
 -- --------------------------------------------------------
 
 --
@@ -298,7 +305,7 @@ ALTER TABLE `ski`
     ADD CONSTRAINT `ski_ski_type_fk` FOREIGN KEY (`model`, `size`, `weight`)
         REFERENCES `Ski_type`(`model`, `size`, `weight_class`)
         ON UPDATE CASCADE
-           ON DELETE CASCADE;
+        ON DELETE CASCADE;
 
 ALTER TABLE `Customer`
     ADD KEY (`name`);
@@ -311,7 +318,7 @@ ALTER TABLE `franchise_store`
     ADD CONSTRAINT `franchise_store_individual_store_fk` FOREIGN KEY (`store_id`)
         REFERENCES `Individual_store`(`id`)
         ON UPDATE CASCADE
-           ON DELETE CASCADE;
+        ON DELETE CASCADE;
 
 ALTER TABLE `team_skier`
     ADD CONSTRAINT `team_skier_customer_fk` FOREIGN KEY (`id`)
@@ -333,9 +340,11 @@ ALTER TABLE `Individual_store`
 
 ALTER TABLE `ski_order`
     ADD CONSTRAINT `ski_order_corporation_fk` FOREIGN KEY (`customer_id`)
-        REFERENCES `customer`(`id`),
+        REFERENCES `customer`(`id`)
+        ON UPDATE CASCADE,
     ADD CONSTRAINT `ski_order_shipment_fk` FOREIGN KEY (`shipment_number`)
-        REFERENCES `shipment`(`number`);
+        REFERENCES `shipment`(`number`)
+        ON UPDATE CASCADE;
 
 ALTER TABLE `ski_type_order`
     ADD CONSTRAINT `ski_type_order_Order_fk` FOREIGN KEY (`order_number`)
@@ -345,25 +354,36 @@ ALTER TABLE `ski_type_order`
 
 ALTER TABLE `shipment`
     ADD CONSTRAINT `shipment_Customer_representative_fk` FOREIGN KEY (`repNo`)
-        REFERENCES `employee`(`number`),
+        REFERENCES `employee`(`number`)
+        ON UPDATE CASCADE,
     ADD CONSTRAINT `shipment_Corporation_fk` FOREIGN KEY (`store_name`)
-        REFERENCES `Customer`(`name`);
+        REFERENCES `Customer`(`name`)
+        ON UPDATE CASCADE;
 
 ALTER TABLE `Order_log`
     ADD CONSTRAINT `Order_log_Employee_fk` FOREIGN KEY (`employee_number`)
-        REFERENCES `Employee`(`number`),
+        REFERENCES `Employee`(`number`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
     ADD CONSTRAINT `Order_log_Order_fk` FOREIGN KEY (`order_number`)
-        REFERENCES `ski_order`(`order_number`);
+        REFERENCES `ski_order`(`order_number`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE;
 
 ALTER TABLE `production_plan`
     ADD CONSTRAINT `production_plan_Employee_fk` FOREIGN KEY (`plannerNo`)
-        REFERENCES `Employee`(`number`);
+        REFERENCES `Employee`(`number`)
+        ON UPDATE CASCADE;
 
 ALTER TABLE `production_plan_reference`
     ADD CONSTRAINT `production_plan_reference_Ski_type_fk` FOREIGN KEY (`model` ,`size`, `weight`)
-        REFERENCES `Ski_type`(`model`, `size`, `weight_class`),
+        REFERENCES `Ski_type`(`model`, `size`, `weight_class`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
     ADD CONSTRAINT `production_plan_reference_production_plan_fk` FOREIGN KEY (`plan_id`)
-        REFERENCES `production_plan`(`id`);
+        REFERENCES `production_plan`(`id`)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE;
 
 ALTER TABLE `Shipment_transition_log`
     ADD CONSTRAINT `shipment_transition_log_shipment_fk` FOREIGN KEY (`shipment_number`)
@@ -527,8 +547,17 @@ INSERT INTO `auth_token` (`role`, `token`) VALUES
 ('storekeeper', 'storekeeper'),
 ('customer', 'customer'),
 ('shipper', 'shipper'),
-('production-planner', 'production-planner'),
-('public', 'public');
+('production-planner', 'production-planner');
+
+--
+-- Setting up users
+--
+CREATE USER IF NOT EXISTS 'rep'@'%' IDENTIFIED BY '8c8b8f2042878ab21f68e256841e3dc71d48ff36';
+GRANT SELECT, UPDATE, INSERT, DELETE ON `ski_order` TO 'rep'@'%';
+GRANT INSERT ON `order_log` TO 'rep'@'%';
+GRANT SELECT, INSERT, DELETE ON `ski_type_order` TO 'rep'@'%';
+GRANT SELECT ON `ski_type` TO 'rep'@'%';
+GRANT SELECT ON `employee` TO 'rep'@'%';
 
 COMMIT;
 

@@ -3,6 +3,14 @@
 require_once 'controller/RequestHandler.php';
 require_once 'db/db_models/ShipmentModel.php';
 
+/**
+ * Class ShipperEndpoint
+ *
+ * Based on https://git.gvk.idi.ntnu.no/runehj/sample-rest-api-project/-/blob/master/db/DealerModel.php
+ *  By Rune Hjelsvold
+ *
+ * @author Even B. Bøe
+ */
 class ShipperEndpoint extends RequestHandler {
 
     public function __construct() {
@@ -13,13 +21,24 @@ class ShipperEndpoint extends RequestHandler {
         $this->validMethods[RESTConstants::ENDPOINT_SHIP][RESTConstants::METHOD_PATCH] = RESTConstants::HTTP_OK;
     }
 
-
+    /**
+     * handleRequest takes information about request, validates request and routes to propper model to query database and returns result
+     *
+     * @param array $uri => list of parts from the path
+     * @param string $endpointPath => path from request
+     * @param string $requestMethod => method of the request
+     * @param array $queries => queries given by the user
+     * @param array $payload => body of the request
+     * @return array => appropriate array for the request being made
+     * @throws APIException is thrown if anything went wrong
+     */
     public function handleRequest(array $uri, string $endpointPath, string $requestMethod, array $queries, array $payload): array {
 
         if (count($uri) == 0) {
             throw new APIException(RESTConstants::HTTP_NOT_FOUND, $endpointPath, 'Endpoint needs another part');
         }
 
+        $res = array();
         // Expecting uri = ['ship', '{id}']
         if (!$this->isValidRequest($uri[0])) {
             throw new APIException(RESTConstants::HTTP_NOT_FOUND, $endpointPath.'/'.$uri[0], 'Endpoint not found');
@@ -35,13 +54,15 @@ class ShipperEndpoint extends RequestHandler {
                     'Not right number of parts. Expected 2, but got '.$cnt);
             }
             $shipment_number = $uri[1];
-            return $this->doSetStateOfShipment($shipment_number);
+            $res['result'] = $this->doSetStateOfShipment($shipment_number);
+            $res['status'] = $this->validMethods[RESTConstants::ENDPOINT_SHIP][RESTConstants::METHOD_PATCH];
+            return $res;
         }
 
         throw new APIException(RESTConstants::HTTP_NOT_FOUND, $endpointPath.'/'.$uri[0], 'Endpoint of shipper rep not found');
     }
 
-    public function doSetStateOfShipment($shipment_number): array {
+    protected function doSetStateOfShipment($shipment_number): array {
         $model = new ShipmentModel();
         return $model->setStateOfShipment($shipment_number);
     }

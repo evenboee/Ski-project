@@ -93,7 +93,7 @@ class SkiTypeModel extends DB
      */
     public function getAllSkiTypes(): array {
         $res = array();
-        $query = 'SELECT size, weight_class FROM `ski_type`';
+        $query = 'SELECT model, skiing_type, description, grip_system, historical, temperature, url, size, weight_class, MSRP FROM `ski_model_type_view`';
         $stmt = $this->db->prepare($query);
         $stmt->execute();
 

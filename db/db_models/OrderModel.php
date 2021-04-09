@@ -1,6 +1,7 @@
 <?php
 
 require_once 'db/DB.php';
+require_once 'db/dbCredentials.php';
 
 
 /**
@@ -11,13 +12,20 @@ require_once 'db/DB.php';
 class OrderModel extends DB {
 
     public function __construct() {
-        parent::__construct();
+        // TODO: Distinguish between customer and customer rep
+        parent::__construct(REP_USER, REP_PWD);
     }
 
+    /**
+     * getOrdersWithState is used to retrieve a list of information about all orders with a given state
+     * @param $state => the state of the orders to get
+     * @return array => an array of orders as specified in API design
+     */
     public function getOrdersWithState($state): array {
         $res = array();
 
-        $query = 'SELECT order_number FROM `ski_order` WHERE state = :state';
+        $this->db->beginTransaction();
+        $query = 'SELECT order_number, total_price, state, ref_larger_order, customer_id, shipment_number FROM `ski_order` WHERE state = :state';
 
         $stmt = $this->db->prepare($query);
         $stmt->bindValue(':state', $state);
@@ -27,14 +35,31 @@ class OrderModel extends DB {
             $res[] = $row;
         }
 
+        // model, size, weight, quantity
+        for ($i = 0; $i < count($res); $i++) {
+            $typeQuery = 'SElECT model, size, weight, quantity FROM `ski_type_order` WHERE order_number = :order_number';
+            $typeStmt = $this->db->prepare($typeQuery);
+            $typeStmt->bindValue(':order_number', $res[$i]['order_number']);
+            $typeStmt->execute();
+            $res[$i]['content'] = array();
+            while ($row = $typeStmt->fetch(PDO::FETCH_ASSOC)) {
+                $res[$i]['content'][] = $row;
+            }
+        }
+        $this->db->commit();
         return $res;
     }
 
-    public function setStateOfOrder($id, string $state, int $employee_number=1): array {
+    /**
+     * @param $id
+     * @param string $state
+     * @param int $employee_number
+     * @return array
+     */
+    public function setStateOfOrder($id, string $state, int $employee_number): array {
         $updateQuery = 'UPDATE `ski_order` SET state = :state WHERE order_number = :id';
         $getQuery = 'SELECT `state` FROM `ski_order` WHERE `order_number` = :id';
         $logQuery = 'INSERT INTO `order_log` (`employee_number`, `order_number`, `old_state`, `new_state`) VALUES (:employee_number, :order_number, :old_state, :new_state)';
-
         $this->db->beginTransaction();
 
         $oldOrder = array();
@@ -72,6 +97,14 @@ class OrderModel extends DB {
         return $newOrder;
     }
 
+    public function customerRepExists($employee_number): bool {
+        $query = "SELECT COUNT(*) FROM `employee` WHERE `department` = 'customer rep' AND `number` = :num";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindValue(':num', $employee_number);
+        $stmt->execute();
+        $res = $stmt->fetch(PDO::FETCH_NUM);
+        return $res[0] > 0;
+    }
 
     /**
      * Creates a new order if given resource is on the correct format.

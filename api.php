@@ -1,4 +1,10 @@
 <?php
+/**
+ * Based on https://git.gvk.idi.ntnu.no/runehj/sample-rest-api-project/-/blob/master/api.php
+ *  By Rune Hjelsvold
+ * @author Even B. Bøe
+ */
+
 
 require_once 'controller/APIController.php';
 require_once 'controller/APIException.php';
@@ -11,7 +17,7 @@ $queries = array();
 parse_str($_SERVER['QUERY_STRING'], $queries);
 if (!isset($queries['request'])) {
     http_response_code(RESTConstants::HTTP_NOT_FOUND);
-    echo '{error: "error"}';// json_encode(generateErrorResponseContent(RESTConstants::HTTP_NOT_FOUND, '/'));
+    echo json_encode(['error' => 'request not set']);
     return;
 }
 
@@ -33,20 +39,19 @@ $queries['token'] = $token;
 // Handle the request
 $controller = new APIController();
 try {
-    // $controller->authorise($token, RESTConstants::API_URI . '/');
     $res = $controller->handleRequest($uri, RESTConstants::API_URI, $requestMethod, $queries, $payload);
-    // http_response_code($res['status']);
-    http_response_code(RESTConstants::HTTP_OK);
-    echo json_encode($res);
-    // if (isset($res['result']))  {echo json_encode($res['result']);}
+    if (isset($res['status'])) { http_response_code($res['status']); }
+    else { http_response_code(RESTConstants::HTTP_OK); }
+
+    if (isset($res['result'])) { echo json_encode($res['result']); }
+    else { echo json_encode($res); }
 // Handle application exceptions
 } catch (APIException $e){
     http_response_code($e->getCode());
     echo json_encode(generateErrorResponseContent($e));
 } catch (Throwable $e) {
     http_response_code(RESTConstants::HTTP_INTERNAL_SERVER_ERROR);
-    // echo json_encode(RESTConstants::HTTP_INTERNAL_SERVER_ERROR, '/', -1);
-    echo json_encode(["message" => $e->getMessage()]);
+    echo json_encode(['error' => $e->getMessage(), 'status' => RESTConstants::HTTP_INTERNAL_SERVER_ERROR]); // Not final solution, but very useful for debugging
 }
 
 function generateErrorResponseContent(APIException $e): array {

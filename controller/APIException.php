@@ -2,6 +2,7 @@
 
 /**
  * Class APIException an exception class thrown whenever the request could not be successfully handled by the API.
+ * https://git.gvk.idi.ntnu.no/runehj/sample-rest-api-project/-/blob/master/controller/APIException.php
  * @author Rune Hjelsvold
  */
 class APIException extends Exception

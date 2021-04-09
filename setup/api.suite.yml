@@ -4,7 +4,7 @@ modules:
         - Asserts
         - \Helper\Api
         - REST:
-              url: http://127.0.0.1/yaAPI/
+              url: http://127.0.0.1/api/v1
               depends: PhpBrowser
               part: Json
         - Db:
