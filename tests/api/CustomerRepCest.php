@@ -30,7 +30,19 @@ class CustomerRepCest
     public function testRepBadAuthToken(ApiTester $I) {
         $I->haveHttpHeader('Content-Type', 'application/json');
 
+        $cookie = new Symfony\Component\BrowserKit\Cookie('auth_token', 'hgkjhgkgjfjhgfgv');
+        $I->getClient()->getCookieJar()->set($cookie);
 
+        $I->sendGet('/shipper/ship/2');
+        $I->seeResponseCodeIs(\Codeception\Util\HttpCode::FORBIDDEN);
+        $I->seeResponseIsJson();
+        $I->seeResponseMatchesJsonType([
+            'Status' => 'integer',
+            'Message' => 'string',
+            'Instance' => 'string'
+        ]);
+
+        $I->seeResponseContainsJson(['Status' => \Codeception\Util\HttpCode::FORBIDDEN]);
     }
 
     public function testBadRequestForOrders(ApiTester $I) {
