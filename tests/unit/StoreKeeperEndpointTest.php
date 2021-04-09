@@ -41,7 +41,7 @@ class StoreKeeperEndpointTest extends \Codeception\Test\Unit
 
         $this->tester->assertEquals(RESTConstants::HTTP_CREATED, $res['status']);
 
-        $this->tester->assertArrayHasKey('production_number', $res['result']);
+        $this->tester->assertArrayHasKey('product_number', $res['result']);
         $this->tester->assertArrayHasKey('size', $res['result']);
         $this->tester->assertArrayHasKey('weight', $res['result']);
         $this->tester->assertArrayHasKey('model', $res['result']);

@@ -222,7 +222,7 @@ class CustomerEndpointTest extends \Codeception\Test\Unit
         $this->tester->assertArrayHasKey('status', $res);
 
         $this->tester->assertEquals(RESTConstants::HTTP_OK, $res['status']);
-        $this->tester->assertEquals("4", $res['result']['order_number']);
+        $this->tester->assertEquals("3", $res['result']['order_number']);
         //$this->tester->assertEquals("success", $res['result']['deletion']); // TODO: This particular message may be changed in the future.
     }
 

@@ -90,7 +90,7 @@ class ProductionPlannerEndpointTest extends \Codeception\Test\Unit
      * Test that sends an invalid uri. Should throw an @APIException; If not, test fails.
      */
     public function testBadRequest(){
-        $uri = array('production-plan');
+        $uri = array('produon-plan'); // Should be 'production-plan', but is now malformed.
         $endpointPath = '/production-planner';
         $requestMethod = RESTConstants::METHOD_POST;
         $payload['start_date'] = '2020-01-01';
