@@ -19,6 +19,11 @@ Developed using **PHP 8.0**
 - API tests
 - Defining test cases
 
+# Assumptions
+- Department of employee in project disctiption is interpereted to be synnonymous with role (i.e. customer representative or storekeeper)
+
+# Notes
+- Physical and logical models for Employees and Customers does not fully reflect conceptual model. The resoning is to keep track of employee and employee numbers to ensure they are unique even across different types of employees.
 
 # Setting up project
 
@@ -43,6 +48,7 @@ Developed using **PHP 8.0**
 - For deployment path add `api\v1`
 - For web path add `/api/v1`
 - Optional: Navigate to excluded paths and add local paths to setup, tests, .gitignore, README.md, runner.php
+- Move `.htacces` in the *setup* folder to `xampp/htdocs`
 
 ## Setting up database
 - In XAMPP under MySQL service, click Admin
