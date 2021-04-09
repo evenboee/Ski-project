@@ -14,7 +14,7 @@ Developed using **PHP 8.0**
 
 # Known to be missing:
 - DB users. Only one implemented partly. Idea is roughly the same for other users as well
-- URI `order/{state}/{id}` does not enforce flow of states (new->open->skis-available)
+- URI `order/{state}/{id}` does not enforce flow of states (new->open->skis-available->ready)
 - Proper return value for uri `rep/order`
 - API tests
 - Defining test cases
@@ -23,7 +23,7 @@ Developed using **PHP 8.0**
 - Department of employee in project disctiption is interpereted to be synnonymous with role (i.e. customer representative or storekeeper)
 
 # Notes
-- Physical and logical models for Employees and Customers does not fully reflect conceptual model. The resoning is to keep track of employee and employee numbers to ensure they are unique even across different types of employees.
+- Physical and logical models for Employees and Customers does not fully reflect conceptual model. The resoning is to keep track of employee and employee numbers to ensure they are unique even across different types of employees and customers.
 
 # Setting up project
 

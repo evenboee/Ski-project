@@ -554,6 +554,7 @@ GRANT SELECT, UPDATE, INSERT, DELETE ON `ski_order` TO 'rep'@'%';
 GRANT INSERT ON `order_log` TO 'rep'@'%';
 GRANT SELECT, INSERT, DELETE ON `ski_type_order` TO 'rep'@'%';
 GRANT SELECT ON `ski_type` TO 'rep'@'%';
+GRANT SELECT ON `employee` TO 'rep'@'%';
 
 
 COMMIT;

@@ -12,6 +12,7 @@ require_once 'db/dbCredentials.php';
 class OrderModel extends DB {
 
     public function __construct() {
+        // TODO: Distinguish between customer and customer rep
         parent::__construct(REP_USER, REP_PWD);
     }
 
@@ -59,7 +60,6 @@ class OrderModel extends DB {
         $updateQuery = 'UPDATE `ski_order` SET state = :state WHERE order_number = :id';
         $getQuery = 'SELECT `state` FROM `ski_order` WHERE `order_number` = :id';
         $logQuery = 'INSERT INTO `order_log` (`employee_number`, `order_number`, `old_state`, `new_state`) VALUES (:employee_number, :order_number, :old_state, :new_state)';
-        // TODO: Check that employee exists and is customer rep
         $this->db->beginTransaction();
 
         $oldOrder = array();
@@ -97,6 +97,14 @@ class OrderModel extends DB {
         return $newOrder;
     }
 
+    public function customerRepExists($employee_number): bool {
+        $query = "SELECT COUNT(*) FROM `employee` WHERE `department` = 'customer rep' AND `number` = :num";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindValue(':num', $employee_number);
+        $stmt->execute();
+        $res = $stmt->fetch(PDO::FETCH_NUM);
+        return $res[0] > 0;
+    }
 
     /**
      * Creates a new order if given resource is on the correct format.

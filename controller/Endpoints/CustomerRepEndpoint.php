@@ -82,12 +82,17 @@ class CustomerRepEndpoint extends RequestHandler {
             if (count($uri) == 3) {
                 $state = $uri[1];
                 $id = $uri[2];
-                $employee_number = $this->getEmoloyeeNumberFromPayload($payload);
-                if ($employee_number <= 0) {
+                $employee_number = $this->getEmployeeNumberFromPayload($payload);
+                if ($employee_number == 0) {
                     throw new APIException(RESTConstants::HTTP_BAD_REQUEST, $endpointPath.'/'.implode('/', $uri),
-                    "employee_number has to be set and >0");
+                    "employee_number has to be set");
+                }
+                if (!(new OrderModel())->customerRepExists($employee_number)) {
+                    throw new APIException(RESTConstants::HTTP_BAD_REQUEST, $endpointPath.'/'.implode('/', $uri),
+                        "given id is not an id of a customer rep in database");
                 }
                 $res['result'] = $this->doSetStateOfOrder($id, $state, $employee_number);
+                $res['result']['id'] = $employee_number;
                 $res['status'] = $this->validMethods[RESTConstants::ENDPOINT_ORDER][RESTConstants::METHOD_PATCH];
                 return $res;
             } else {
@@ -108,7 +113,13 @@ class CustomerRepEndpoint extends RequestHandler {
         return $model->setStateOfOrder($id, $state, $employee_number);
     }
 
-    protected function getEmoloyeeNumberFromPayload($payload): int {
+    /**
+     * Validates employee number payload
+     * @param array $payload => body of request (key value array)
+     * @return int => employee number from payload
+     *                if payload is not set returns 0
+     */
+    protected function getEmployeeNumberFromPayload(array $payload): int {
         if (!isset($payload['employee_number'])) {
             return 0;
         }
