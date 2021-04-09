@@ -40,7 +40,7 @@ class ShipperTest extends \Codeception\Test\Unit
         $res = 0;
         try {
             $res = $model->handleRequest($uri, $endpointPath, $requestMethod, $queries, $payload);
-        } catch (APIException) {
+        } catch (APIException $e) {
             $this->tester->fail('APIException not expected');
         }
 
@@ -53,5 +53,43 @@ class ShipperTest extends \Codeception\Test\Unit
 
         $this->tester->seeNumRecords(2, 'Shipment_transition_log');
         $this->tester->seeInDatabase('Shipment_transition_log', ['log_number' => 2, 'shipment_number' => 2]);
+    }
+
+    /**
+     * Testing that endpoint thows APIException when uri is not correct
+     */
+    public function testInvalidRequestURI() {
+        $uri = ['ship'];
+        $endpointPath = '/ship';
+        $requestMethod = RESTConstants::METHOD_PATCH;
+        $queries = array();
+        $payload = array();
+
+        $model = new ShipperEndpoint();
+        try {
+            $model->handleRequest($uri, $endpointPath, $requestMethod, $queries, $payload);
+            $this->tester->fail('APIException was expected');
+        } catch (APIException $e) {
+            $this->tester->assertEquals($e->getCode(), RESTConstants::HTTP_BAD_REQUEST);
+        }
+    }
+
+    /**
+     * Testing that endpoint throws APIException when method is not correct
+     */
+    public function testInvalidMethod() {
+        $uri = ['ship', '2'];
+        $endpointPath = '/ship';
+        $requestMethod = RESTConstants::METHOD_GET;
+        $queries = array();
+        $payload = array();
+
+        $model = new ShipperEndpoint();
+        try {
+            $model->handleRequest($uri, $endpointPath, $requestMethod, $queries, $payload);
+            $this->tester->fail('APIException was expected');
+        } catch (APIException $e) {
+            $this->tester->assertEquals($e->getCode(), RESTConstants::HTTP_METHOD_NOT_ALLOWED);
+        }
     }
 }

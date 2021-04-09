@@ -86,4 +86,22 @@ class CustomerRepEndpointTest extends \Codeception\Test\Unit
             $this->tester->fail('Customer rep endpoint failed to throw exception');
         } catch (APIException $e) {}
     }
+
+    /**
+     * Test handling of illegal method
+     */
+    public function testHandleInvalidMethod() {
+        $uri = ['orders'];
+        $endpointPath = '/orders';
+        $requestMethod = RESTConstants::METHOD_DELETE;
+        $queries = array('state' => 'new');
+        $payload = array();
+
+        $endpoint = new CustomerRepEndpoint();
+        try {
+            $endpoint->handleRequest($uri, $endpointPath, $requestMethod, $queries, $payload);
+        } catch (APIException $e) {
+            $this->tester->assertEquals($e->getCode(), RESTConstants::HTTP_METHOD_NOT_ALLOWED);
+        }
+    }
 }

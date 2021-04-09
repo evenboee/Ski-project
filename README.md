@@ -10,12 +10,14 @@ Main inspiration for structure: `https://git.gvk.idi.ntnu.no/runehj/sample-rest-
 
 Project case: `https://git.gvk.idi.ntnu.no/course/idatg2204/idatg2204-2021/-/wikis/The-Project-Case`
 
+Developed using **PHP 8.0**
 
-# Missing:
+# Known to be missing:
 - DB users. Only one implemented partly. Idea is roughly the same for other users as well
 - For uri `order/{state}/{id}` does not enforce flow of states (new->open->skis-available)
 - Proper return value for uri `rep/order`
 - API tests
+- Defining test cases
 
 
 # Setting up project
