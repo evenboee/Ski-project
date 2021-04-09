@@ -67,5 +67,5 @@ Developed using **PHP 8.0**
     - Write `y` when the option presents itself
 - Replace file content of `tests/unit.suite.yml` and `tests/api.suite.yml` with contents of `setup/unit.suite.yml` and `setup/api.suite.yml`
 
-## Running unit tests
-- Run command `php vendor/bin/codecept run unit`
+## Running tests
+- Run command `php vendor/bin/codecept run`
