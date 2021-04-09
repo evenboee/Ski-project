@@ -165,20 +165,21 @@ class OrderModel extends DB {
             throw new APIException(RESTConstants::HTTP_FORBIDDEN, RESTConstants::API_URI, 'Could not delete the specified order.');
         }
 
-            $query = 'DELETE FROM `ski_order` WHERE `order_number` = :order_num AND customer_id = :customer_id';
-            $stmt = $this->db->prepare($query);
-            $stmt->bindValue(':order_num', $order_num);
-            $stmt->bindValue(':customer_id', $resource['customer_id']);
-            $stmt->execute();
+        $query = "DELETE FROM ski_type_order WHERE order_number = :order_num";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindValue(':order_num', $order_num);
+        $stmt->execute();
 
-            $query = "DELETE FROM ski_type_order WHERE order_number = :order_num";
-            $stmt = $this->db->prepare($query);
-            $stmt->bindValue(':order_num', $order_num);
-            $stmt->execute();
+        $query = 'DELETE FROM `ski_order` WHERE `order_number` = :order_num AND customer_id = :customer_id';
+        $stmt = $this->db->prepare($query);
+        $stmt->bindValue(':order_num', $order_num);
+        $stmt->bindValue(':customer_id', $resource['customer_id']);
+        $stmt->execute();
 
-            $res['order_number'] = $order_num;
-            $res['deletion'] = 'success';
-            return $res;
+
+        $res['order_number'] = $order_num;
+        $res['deletion'] = 'success';
+        return $res;
     }
 
     /**
@@ -213,6 +214,13 @@ class OrderModel extends DB {
         if (!is_int($resource['quantity'])) {
             $res['code'] = RESTConstants::HTTP_BAD_REQUEST;
             $res['message'] = "Attribute 'quantity' must be an int!";
+            return $res;
+        }
+
+        if ($resource['quantity']<=0) {
+            // Customer should not create orders with 0 or negative quantity.
+            $res['code'] = RESTConstants::HTTP_BAD_REQUEST;
+            $res['message'] = 'Quantity must be greater than 0!';
             return $res;
         }
 

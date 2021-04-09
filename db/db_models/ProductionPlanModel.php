@@ -72,6 +72,8 @@ class ProductionPlanModel extends DB
      * @throws APIException if given resource is not up to standards.
      */
     public function createProductionPlan(array $resource): array{
+
+        $this->db->beginTransaction();
         $rec = $this->verifyNewPlan($resource);
         if ($rec['code'] != RESTConstants::HTTP_OK) {
             $this->db->rollBack();
@@ -87,7 +89,6 @@ class ProductionPlanModel extends DB
 
         $res = array();
         $query = 'INSERT INTO production_plan (start_date, end_date, plannerNo) VALUES (:start_date, :end_date, :planner_no)';
-        $this->db->beginTransaction();
 
         $stmt = $this->db->prepare($query);
         $stmt->bindValue(':start_date', $resource['start_date']);
@@ -188,6 +189,12 @@ class ProductionPlanModel extends DB
                 $rec['message'] = 'Ski type object at index '.$x.' has a quantity as a non-integer value.';
                 return $rec;
             }
+            if ($resource['plan'][$x]['quantity']<=0) {
+                $rec['code'] = RESTConstants::HTTP_BAD_REQUEST;
+                $rec['message'] = 'Quantity must be greater than 0.';
+                return $rec;
+            }
+
             if (!(new SkiModel())->doesSkiTypeExist($resource['plan'][$x]['model'],$resource['plan'][$x]['size'], $resource['plan'][$x]['weight'])) {
 
                 $rec['code'] = RESTConstants::HTTP_BAD_REQUEST;

@@ -62,7 +62,6 @@ class StorekeeperEndpoint extends RequestHandler {
      * @throws APIException - if the param payload cannot be added as a ski, it throws an APIException
      */
     protected function doAddSkiToDB(array $payload): array{
-
         return (new SkiModel())->addSkiToDB($payload);
     }
 
