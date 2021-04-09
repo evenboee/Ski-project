@@ -37,6 +37,7 @@ class ProductionPlannerEndpoint extends RequestHandler
         if (count($uri) != 1) {throw new APIException(RESTConstants::HTTP_BAD_REQUEST, $endpointPath, 'Wrong number of parts.');}
         if ($uri[0] != RESTConstants::ENDPOINT_PLAN) {throw new APIException(RESTConstants::HTTP_NOT_FOUND, $endpointPath, 'Did not find the specified endpoint.');}
 
+
         $res['result'] = $this->doCreateProductionPlan($payload);
         $res['status'] = RESTConstants::HTTP_CREATED;
         return $res;

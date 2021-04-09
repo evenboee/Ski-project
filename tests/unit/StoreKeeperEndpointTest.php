@@ -52,6 +52,7 @@ class StoreKeeperEndpointTest extends \Codeception\Test\Unit
     }
 
     /**
+     * Negative test:
      * Has an empty uri, which should normally be 'ski'. This should not be accepted, and should throw an @APIException.
      * Test fails if no @APIException has been thrown.
      */
@@ -69,9 +70,28 @@ class StoreKeeperEndpointTest extends \Codeception\Test\Unit
         $endpoint = new StorekeeperEndpoint();
         try {
             $res = $endpoint->handleRequest($uri, $endpointPath, $requestMethod, $queries, $payload);
-            $this->tester->fail('Production planner endpoint failed to throw exception when request method GET is invalid/not implemented.');
+            $this->tester->fail('Storekeeper endpoint failed to throw exception when malformed uri was send');
         } catch (APIException $e){}
+    }
+
+    /**
+     * Negative test:
+     * Should throw an @APIException as METHOD_DELETE is not allowed here.
+     */
+    public function testInvalidMethod(){
+        $uri = 'ski';
+        $endpointPath = '/storekeeper';
+        $requestMethod = RESTConstants::METHOD_DELETE;
+        $payload['size'] = 150;
+        $payload['weight'] = "40-50";
+        $payload['model'] = "Redline";
 
 
+        $queries = '';
+        $endpoint = new StorekeeperEndpoint();
+        try {
+            $res = $endpoint->handleRequest($uri, $endpointPath, $requestMethod, $queries, $payload);
+            $this->tester->fail('Storekeeper endpoint failed to throw exception when invalid request method was used.');
+        } catch (APIException $e){}
     }
 }

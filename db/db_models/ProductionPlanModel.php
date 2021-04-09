@@ -105,13 +105,18 @@ class ProductionPlanModel extends DB
 
         $query = 'INSERT INTO production_plan_reference (plan_id, size, weight, model, quantity) VALUES (:plan_id, :size, :weight, :model, :quantity)';
         while ($x < $res['count']) {
-            $stmt = $this->db->prepare($query);
-            $stmt->bindValue(':plan_id', $res['plan_id']);
-            $stmt->bindValue(':size', $resource['plan'][$x]['size']);
-            $stmt->bindValue(':weight', $resource['plan'][$x]['weight']);
-            $stmt->bindValue(':quantity', $resource['plan'][$x]['quantity']);
-            $stmt->bindValue(':model', $resource['plan'][$x]['model']);
-            $stmt->execute();
+            try {
+                $stmt = $this->db->prepare($query);
+                $stmt->bindValue(':plan_id', $res['plan_id']);
+                $stmt->bindValue(':size', $resource['plan'][$x]['size']);
+                $stmt->bindValue(':weight', $resource['plan'][$x]['weight']);
+                $stmt->bindValue(':quantity', $resource['plan'][$x]['quantity']);
+                $stmt->bindValue(':model', $resource['plan'][$x]['model']);
+                $stmt->execute();
+            } catch (PDOException $PDOException) {
+                throw new APIException(RESTConstants::HTTP_BAD_REQUEST, RESTConstants::API_URI,
+                    'duplicate ski type encountered at index '.$x.' Solve conflicts before trying again.');
+            }
             $x++;
         }
         $this->db->commit();
