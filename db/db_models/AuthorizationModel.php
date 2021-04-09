@@ -2,12 +2,26 @@
 
 require_once 'db/DB.php';
 
+/**
+ * Class AuthorizationModel
+ *
+ * Based on https://git.gvk.idi.ntnu.no/runehj/sample-rest-api-project/-/blob/master/db/AuthorisationModel.php
+ *   By Rune Hjelsvold
+ *
+ * @author Even B. Bøe
+ */
 class AuthorizationModel extends DB {
 
     public function __construct() {
         parent::__construct();
     }
 
+    /**
+     * getRole validates a user
+     *
+     * @param $token => a token passed by the user to be checked
+     * @return string the role the token provides. If no role is associated with token: returns ''
+     */
     public function getRole($token): string {
         $role = '';
         $res = array();

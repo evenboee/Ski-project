@@ -1,3 +1,4 @@
+Rem @author Rune Hjelsvold
 call composer require --dev "codeception/codeception"
 call composer require --dev "codeception/module-asserts"
 call composer require --dev "codeception/module-db"

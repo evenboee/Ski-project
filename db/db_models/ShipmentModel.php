@@ -2,6 +2,11 @@
 
 require_once 'db/DB.php';
 
+/**
+ * Class ShipmentModel
+ *
+ * @author Even B. Bøe
+ */
 class ShipmentModel extends DB {
 
     public function __construct() {
@@ -9,13 +14,15 @@ class ShipmentModel extends DB {
     }
 
     /**
+     * setStateOfShipment updates state of shipment to given state
+     *
      * @param $shipment_id => ID of the shipment to be changed
      * @param string $state => new state that the shipments state is set to. Default value is 'shipped'
      * @return array => the updated element. if any
      * @throws PDOException
      */
     public function setStateOfShipment($shipment_id, $state = 'shipped'): array {
-        $getQuery = 'SELECT `number`, `state` FROM `shipment` WHERE `number` = :id';
+        $getQuery = 'SELECT `number`, `store_name`, `shipping_address`, `state`, `driver_id`, `repNo` FROM `shipment` WHERE `number` = :id';
         $updateQuery = 'UPDATE `shipment` SET `state` = :state WHERE `number` = :id';
         $logQuery = 'INSERT INTO `shipment_transition_log` (`shipment_number`) VALUES (:id)';
 

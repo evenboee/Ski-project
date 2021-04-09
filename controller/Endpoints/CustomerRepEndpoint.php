@@ -29,6 +29,17 @@ class CustomerRepEndpoint extends RequestHandler {
 
     }
 
+    /**
+     * handleRequest takes information about request, validates request and routes to propper model to query database and returns result
+     *
+     * @param array $uri => list of parts from the path
+     * @param string $endpointPath => path from request
+     * @param string $requestMethod => method of the request
+     * @param array $queries => queries given by the user
+     * @param array $payload => body of the request
+     * @return array => appropriate array for the request being made
+     * @throws APIException is thrown if anything went wrong
+     */
     public function handleRequest(array $uri, string $endpointPath, string $requestMethod, array $queries, array $payload): array {
 
         if (count($uri) == 0) {
