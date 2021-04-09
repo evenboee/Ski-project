@@ -1,5 +1,6 @@
 <?php
-
+require_once 'RESTConstants.php';
+require_once 'controller/Endpoints/StorekeeperEndpoint.php';
 class StoreKeeperEndpointTest extends \Codeception\Test\Unit
 {
     /**

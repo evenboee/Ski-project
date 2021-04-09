@@ -1,5 +1,7 @@
 <?php
 
+require_once 'RESTConstants.php';
+require_once 'controller/Endpoints/ProductionPlannerEndpoint.php';
 class ProductionPlannerEndpointTest extends \Codeception\Test\Unit
 {
     /**

@@ -1,5 +1,7 @@
 <?php
 
+require_once 'RESTConstants.php';
+require_once 'controller/Endpoints/CustomerEndpoint.php';
 class CustomerEndpointTest extends \Codeception\Test\Unit
 {
     /**
