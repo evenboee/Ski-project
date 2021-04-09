@@ -10,7 +10,6 @@ Main inspiration for structure: `https://git.gvk.idi.ntnu.no/runehj/sample-rest-
 
 Project case: `https://git.gvk.idi.ntnu.no/course/idatg2204/idatg2204-2021/-/wikis/The-Project-Case`
 
-----------
 
 # Missing:
 - DB users. Only one implemented partly. Idea is roughly the same for other users as well
@@ -19,28 +18,26 @@ Project case: `https://git.gvk.idi.ntnu.no/course/idatg2204/idatg2204-2021/-/wik
 - API tests
 
 
-----------
-
 # Setting up project
 
 - Requires XAMPP, PhpStorm, Git, Composer, Windows
 
-## Downloading project
+## Cloning repository
 - Assuming you have git installed
 - Go into the folder you want
 - Run `git clone https://git.gvk.idi.ntnu.no/course/idatg2204/idatg2204-2021-workspace/amundhel/db-project.git`
 - Run `cd db-project`. This folder will be knows as the root folder of the project
 
 ## Setting up deployment path
-- Assuming you allready have XAMPP with php and PhpStorm installed
+- Assuming you already have XAMPP with php and PhpStorm installed
 - Start Apache and MySQL from the XAMPP control panel
 - Open project in PhpStorm
 - Go into File/Settings/Build,Execution,Deployment/Deployement
-- Click pluss sign and click + and select `Local or mounted folder` to create new server
-- In folder add absolute path to xampp/htdocs
+- Click plus sign and click + and select `Local or mounted folder` to create new server
+- In field folder add the absolute path to xampp/htdocs
 - For web server URL add `http://localhost`
 - Navigate to mappings window
-- For localpath select absolute path to root folder of the project
+- For the field local path select absolute path to root folder of the project
 - For deployment path add `api\v1`
 - For web path add `/api/v1`
 - Optional: Navigate to excluded paths and add local paths to setup, tests, .gitignore, README.md, runner.php
