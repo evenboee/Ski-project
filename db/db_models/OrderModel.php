@@ -42,7 +42,7 @@ class OrderModel extends DB {
             $typeStmt->execute();
             $res[$i]['content'] = array();
             while ($row = $typeStmt->fetch(PDO::FETCH_ASSOC)) {
-                $res[$i]['ski_types'][] = $row;
+                $res[$i]['content'][] = $row;
             }
         }
         $this->db->commit();

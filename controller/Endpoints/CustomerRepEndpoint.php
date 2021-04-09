@@ -49,7 +49,7 @@ class CustomerRepEndpoint extends RequestHandler {
         if (!$this->isValidRequest($uri[0])) {
             throw new APIException(RESTConstants::HTTP_NOT_FOUND, $endpointPath.'/'.$uri[0], 'Endpoint not found');
         }
-
+        $res = array();
         // Expecting uri = ['orders'] and query = ['state'= one of RESTConstants::ORDER_STATES]
         if ($uri[0] == RESTConstants::ENDPOINT_ORDERS) {
             if ($this->isValidMethod(RESTConstants::ENDPOINT_ORDERS, $requestMethod) == RESTConstants::HTTP_METHOD_NOT_ALLOWED) {
@@ -66,7 +66,9 @@ class CustomerRepEndpoint extends RequestHandler {
             }
             if (count($uri) == 1) {
                 $state = $queries['state'];
-                return $this->doGetOrdersWithState($state);
+                $res['result'] = $this->doGetOrdersWithState($state);
+                $res['status'] = $this->validMethods[RESTConstants::ENDPOINT_ORDERS][RESTConstants::METHOD_GET];
+                return $res;
             } else {
                 throw new APIException(RESTConstants::HTTP_BAD_REQUEST, $endpointPath . '/' . $uri[0], 'Wrong number of parts');
             }
@@ -85,7 +87,9 @@ class CustomerRepEndpoint extends RequestHandler {
                     throw new APIException(RESTConstants::HTTP_BAD_REQUEST, $endpointPath.'/'.implode('/', $uri),
                     "employee_number has to be set and >0");
                 }
-                return $this->doSetStateOfOrder($id, $state, $employee_number);
+                $res['result'] = $this->doSetStateOfOrder($id, $state, $employee_number);
+                $res['status'] = $this->validMethods[RESTConstants::ENDPOINT_ORDER][RESTConstants::METHOD_PATCH];
+                return $res;
             } else {
                 throw new APIException(RESTConstants::HTTP_BAD_REQUEST, $endpointPath . '/' . $uri[0], 'Wrong number of parts');
             }

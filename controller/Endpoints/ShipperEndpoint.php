@@ -38,6 +38,7 @@ class ShipperEndpoint extends RequestHandler {
             throw new APIException(RESTConstants::HTTP_NOT_FOUND, $endpointPath, 'Endpoint needs another part');
         }
 
+        $res = array();
         // Expecting uri = ['ship', '{id}']
         if (!$this->isValidRequest($uri[0])) {
             throw new APIException(RESTConstants::HTTP_NOT_FOUND, $endpointPath.'/'.$uri[0], 'Endpoint not found');
@@ -53,7 +54,9 @@ class ShipperEndpoint extends RequestHandler {
                     'Not right number of parts. Expected 2, but got '.$cnt);
             }
             $shipment_number = $uri[1];
-            return $this->doSetStateOfShipment($shipment_number);
+            $res['result'] = $this->doSetStateOfShipment($shipment_number);
+            $res['status'] = $this->validMethods[RESTConstants::ENDPOINT_SHIP][RESTConstants::METHOD_PATCH];
+            return $res;
         }
 
         throw new APIException(RESTConstants::HTTP_NOT_FOUND, $endpointPath.'/'.$uri[0], 'Endpoint of shipper rep not found');
