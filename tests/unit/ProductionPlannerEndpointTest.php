@@ -23,7 +23,7 @@ class ProductionPlannerEndpointTest extends \Codeception\Test\Unit
      */
     public function testAddProductionPlan()
     {
-        $uri = 'production-plan';
+        $uri = array('production-plan');
         $endpointPath = '/production-planner';
         $requestMethod = RESTConstants::METHOD_POST;
         $payload['start_date'] = '2020-01-01';
@@ -40,7 +40,7 @@ class ProductionPlannerEndpointTest extends \Codeception\Test\Unit
         $payload['plan'][1]['quantity'] = 4;
 
 
-        $queries = '';
+        $queries = array();
         $endpoint = new ProductionPlannerEndpoint();
         $res = $endpoint->handleRequest($uri, $endpointPath, $requestMethod, $queries, $payload);
         $this->tester->assertArrayHasKey('result', $res);
@@ -64,7 +64,7 @@ class ProductionPlannerEndpointTest extends \Codeception\Test\Unit
      * If no @APIException is thrown, test fails.
      */
     public function testInvalidMethod(){
-        $uri = 'production-plan';
+        $uri = array('production-plan');
         $endpointPath = '/production-planner';
         $requestMethod = RESTConstants::METHOD_GET;
         $payload['start_date'] = '2020-01-01';
@@ -76,7 +76,7 @@ class ProductionPlannerEndpointTest extends \Codeception\Test\Unit
         $payload['plan'][0]['quantity'] = 4;
 
 
-        $queries = '';
+        $queries = array();
         $endpoint = new ProductionPlannerEndpoint();
         try{
             $res = $endpoint->handleRequest($uri, $endpointPath, $requestMethod, $queries, $payload);
@@ -90,7 +90,7 @@ class ProductionPlannerEndpointTest extends \Codeception\Test\Unit
      * Test that sends an invalid uri. Should throw an @APIException; If not, test fails.
      */
     public function testBadRequest(){
-        $uri = 'productionplan';
+        $uri = array('production-plan');
         $endpointPath = '/production-planner';
         $requestMethod = RESTConstants::METHOD_POST;
         $payload['start_date'] = '2020-01-01';
@@ -102,7 +102,7 @@ class ProductionPlannerEndpointTest extends \Codeception\Test\Unit
         $payload['plan'][0]['quantity'] = 4;
 
 
-        $queries = '';
+        $queries = array();
         $endpoint = new ProductionPlannerEndpoint();
         try{
             $res = $endpoint->handleRequest($uri, $endpointPath, $requestMethod, $queries, $payload);
@@ -116,7 +116,7 @@ class ProductionPlannerEndpointTest extends \Codeception\Test\Unit
      * one missing quantity and one missing everything but quantity.
      */
     public function testInvalidBodyOnRequest(){
-        $uri = 'production-plan';
+        $uri = array('production-plan');
         $endpointPath = '/production-planner';
         $requestMethod = RESTConstants::METHOD_POST;
         $payload['start_date'] = '2020-01-01';
@@ -128,7 +128,7 @@ class ProductionPlannerEndpointTest extends \Codeception\Test\Unit
         $payload['plan'][1]['quantity'] = 4;
 
 
-        $queries = '';
+        $queries = array();
         $endpoint = new ProductionPlannerEndpoint();
         try{
             $res = $endpoint->handleRequest($uri, $endpointPath, $requestMethod, $queries, $payload);

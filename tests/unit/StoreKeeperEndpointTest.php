@@ -24,7 +24,7 @@ class StoreKeeperEndpointTest extends \Codeception\Test\Unit
      */
     public function testAddSkiToDB()
     {
-        $uri = 'ski';
+        $uri = array('ski');
         $endpointPath = '/storekeeper';
         $requestMethod = RESTConstants::METHOD_POST;
         $payload['size'] = 150;
@@ -32,7 +32,7 @@ class StoreKeeperEndpointTest extends \Codeception\Test\Unit
         $payload['model'] = "Redline";
 
 
-        $queries = '';
+        $queries = array();
         $endpoint = new StorekeeperEndpoint();
         $res = $endpoint->handleRequest($uri, $endpointPath, $requestMethod, $queries, $payload);
 
@@ -58,7 +58,7 @@ class StoreKeeperEndpointTest extends \Codeception\Test\Unit
      */
     public function testRequestToMalformedEndpoint(){
 
-        $uri = '';
+        $uri = array();
         $endpointPath = '/storekeeper';
         $requestMethod = RESTConstants::METHOD_POST;
         $payload['size'] = 150;
@@ -66,7 +66,7 @@ class StoreKeeperEndpointTest extends \Codeception\Test\Unit
         $payload['model'] = "Redline";
 
 
-        $queries = '';
+        $queries = array();
         $endpoint = new StorekeeperEndpoint();
         try {
             $res = $endpoint->handleRequest($uri, $endpointPath, $requestMethod, $queries, $payload);
@@ -79,7 +79,7 @@ class StoreKeeperEndpointTest extends \Codeception\Test\Unit
      * Should throw an @APIException as METHOD_DELETE is not allowed here.
      */
     public function testInvalidMethod(){
-        $uri = 'ski';
+        $uri = array('ski');
         $endpointPath = '/storekeeper';
         $requestMethod = RESTConstants::METHOD_DELETE;
         $payload['size'] = 150;
@@ -87,7 +87,7 @@ class StoreKeeperEndpointTest extends \Codeception\Test\Unit
         $payload['model'] = "Redline";
 
 
-        $queries = '';
+        $queries = array();
         $endpoint = new StorekeeperEndpoint();
         try {
             $res = $endpoint->handleRequest($uri, $endpointPath, $requestMethod, $queries, $payload);

@@ -23,13 +23,13 @@ class CustomerEndpointTest extends \Codeception\Test\Unit
      */
     public function testValidProductionPlanRequest()
     {
-        $uri = 'production-plan/3';
+        $uri = array('production-plan','3');
         $endpointPath = '/customer';
         $requestMethod = RESTConstants::METHOD_GET;
         $payload = array();
 
 
-        $queries = '';
+        $queries = array();
         $endpoint = new CustomerEndpoint();
         $res = $endpoint->handleRequest($uri, $endpointPath, $requestMethod, $queries, $payload);
         $this->tester->assertArrayHasKey('result', $res);
@@ -51,12 +51,12 @@ class CustomerEndpointTest extends \Codeception\Test\Unit
      * which is caught. If not, the test will fail.
      */
     public function testNonExistingProductionPlanRequest(){
-        $uri = 'production-plan/4';
+        $uri = array('production-plan','4');
         $endpointPath = '/customer';
         $requestMethod = RESTConstants::METHOD_GET;
         $payload = array();
 
-        $queries = '';
+        $queries = array();
         $endpoint = new CustomerEndpoint();
         try{
             $res = $endpoint->handleRequest($uri, $endpointPath, $requestMethod, $queries, $payload);
@@ -69,12 +69,12 @@ class CustomerEndpointTest extends \Codeception\Test\Unit
      * which is caught. If not, the test will fail.
      */
     public function testBadProductionPlanRequest(){
-        $uri = 'production-p/2';
+        $uri = array('production-p','2');
         $endpointPath = '/customer';
         $requestMethod = RESTConstants::METHOD_GET;
         $payload = array();
 
-        $queries = '';
+        $queries = array();
         $endpoint = new CustomerEndpoint();
         try{
             $res = $endpoint->handleRequest($uri, $endpointPath, $requestMethod, $queries, $payload);
@@ -88,13 +88,13 @@ class CustomerEndpointTest extends \Codeception\Test\Unit
      * Test fails, if a @APIException is not thrown.
      */
     public function testInvalidMethod(){
-        $uri = 'production-plan/3';
+        $uri = array('production-plan','3');
         $endpointPath = '/customer';
         $requestMethod = RESTConstants::METHOD_PUT;
         $payload = array();
 
 
-        $queries = '';
+        $queries = array();
         $endpoint = new CustomerEndpoint();
         try {
             $res = $endpoint->handleRequest($uri, $endpointPath, $requestMethod, $queries, $payload);
@@ -110,7 +110,7 @@ class CustomerEndpointTest extends \Codeception\Test\Unit
      * @throws APIException if it fails, but test may fail without throwing this particular exception.
      */
     public function testCreateValidOrder(){
-        $uri = 'order/new';
+        $uri = array('order','new');
         $endpointPath = '/customer/new';
         $requestMethod = RESTConstants::METHOD_POST;
         $payload['customer_id'] = 1;
@@ -121,7 +121,7 @@ class CustomerEndpointTest extends \Codeception\Test\Unit
 
         // 1 of this particular ski type should cost 2100
 
-        $queries = '';
+        $queries = array();
         $endpoint = new CustomerEndpoint();
         $res = $endpoint->handleRequest($uri, $endpointPath, $requestMethod, $queries, $payload);
 
@@ -137,7 +137,7 @@ class CustomerEndpointTest extends \Codeception\Test\Unit
      * If an @APIException is not thrown, the test will fail.
      */
     public function testInvalidMethodToCreateOrder(){
-        $uri = 'order/new';
+        $uri = array('order','new');
         $endpointPath = '/customer/new';
         $requestMethod = RESTConstants::METHOD_GET;
         $payload['customer_id'] = 1;
@@ -147,7 +147,7 @@ class CustomerEndpointTest extends \Codeception\Test\Unit
         $payload['quantity'] = 3;
 
 
-        $queries = '';
+        $queries = array();
         $endpoint = new CustomerEndpoint();
         try {
             $res = $endpoint->handleRequest($uri, $endpointPath, $requestMethod, $queries, $payload);
@@ -160,7 +160,7 @@ class CustomerEndpointTest extends \Codeception\Test\Unit
      * not be accepted and should result in a @APIException being thrown. If not, the test fails.
      */
     public function testInvalidQuantityInCreateOrder(){
-        $uri = 'order/new';
+        $uri = array('order','new');
         $endpointPath = '/customer/new';
         $requestMethod = RESTConstants::METHOD_POST;
         $payload['customer_id'] = 1;
@@ -170,7 +170,7 @@ class CustomerEndpointTest extends \Codeception\Test\Unit
         $payload['quantity'] = 0;
 
 
-        $queries = '';
+        $queries = array();
         $endpoint = new CustomerEndpoint();
         try {
             $res = $endpoint->handleRequest($uri, $endpointPath, $requestMethod, $queries, $payload);
@@ -184,7 +184,7 @@ class CustomerEndpointTest extends \Codeception\Test\Unit
      *
      */
     public function testCreateOrderOfNonExistingSkiType(){
-        $uri = 'order/new';
+        $uri = array('order','new');
         $endpointPath = '/customer/new';
         $requestMethod = RESTConstants::METHOD_POST;
         $payload['customer_id'] = 1;
@@ -194,7 +194,7 @@ class CustomerEndpointTest extends \Codeception\Test\Unit
         $payload['quantity'] = 2;
 
 
-        $queries = '';
+        $queries = array();
         $endpoint = new CustomerEndpoint();
         try {
             $res = $endpoint->handleRequest($uri, $endpointPath, $requestMethod, $queries, $payload);
@@ -208,13 +208,13 @@ class CustomerEndpointTest extends \Codeception\Test\Unit
      * @throws APIException
      */
     public function testDeleteExistingOrder(){
-        $uri = 'order/3';
+        $uri = array('order','3');
         $endpointPath = '/customer/order';
         $requestMethod = RESTConstants::METHOD_DELETE;
         $payload['customer_id'] = 2;
 
 
-        $queries = '';
+        $queries = array();
         $endpoint = new CustomerEndpoint();
         $res = $endpoint->handleRequest($uri, $endpointPath, $requestMethod, $queries, $payload);
 
@@ -233,13 +233,13 @@ class CustomerEndpointTest extends \Codeception\Test\Unit
      * Test fails if no @APIException is thrown.
      */
     public function testDeleteNonExistingOrder(){
-        $uri = 'order/5';
+        $uri = array('order','5');
         $endpointPath = '/customer/order';
         $requestMethod = RESTConstants::METHOD_DELETE;
         $payload['customer_id'] = 2;
 
 
-        $queries = '';
+        $queries = array();
         $endpoint = new CustomerEndpoint();
 
         try{
@@ -253,13 +253,13 @@ class CustomerEndpointTest extends \Codeception\Test\Unit
      * passed for that particular order when trying to delete that order.
      */
     public function testDeleteExistingOrderByInvalidCustomerId(){
-        $uri = 'order/1'; // order with order number 1
+        $uri = $uri = array('order','1');; // order with order number 1
         $endpointPath = '/customer/order';
         $requestMethod = RESTConstants::METHOD_DELETE;
         $payload['customer_id'] = 2; // This customer did not create order 1
 
 
-        $queries = '';
+        $queries = array();
         $endpoint = new CustomerEndpoint();
 
         try{
