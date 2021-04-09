@@ -1,5 +1,15 @@
 <?php
 
+require_once 'db/db_models/AuthorizationModel.php';
+
+/**
+ * Class AuthorizationTest
+ *
+ * Testing functionality of AuthorizationModel - Getting role from token
+ * Note: Test database uses simplified tokens. For physical model (skies.sql) tokens are longer
+ *
+ * @author Even B. Bøe
+ */
 class AuthorizationTest extends \Codeception\Test\Unit
 {
     /**
@@ -15,7 +25,7 @@ class AuthorizationTest extends \Codeception\Test\Unit
     {
     }
 
-    protected function testValidToken() {
+    public function testValidToken() {
         $model = new AuthorizationModel();
         $roles = ['rep', 'storekeeper', 'shipper'];
         foreach ($roles as $role) {
@@ -23,7 +33,7 @@ class AuthorizationTest extends \Codeception\Test\Unit
         }
     }
 
-    protected function testInvalidToken() {
+    public function testInvalidToken() {
         $model = new AuthorizationModel();
         $role = 'dhslkjh';
         $this->tester->assertNotEquals($role, $model->getRole($role));
