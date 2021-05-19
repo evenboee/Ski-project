@@ -15,7 +15,7 @@ FK size, weight REFERENCES Ski_type(model, size, weight)
 Customer(id, name, start_date, end_date)
 PK id
 
-Team_skier(id, dob, club, num_skies)
+Team_skier(id, dob, club, num_skis)
 PK id
 FK id REFERENCES Customer(id)
 
