@@ -92,7 +92,7 @@ CREATE TABLE `team_skier` (
     `id` int(50) NOT NULL AUTO_INCREMENT,
     `dob` DATE NOT NULL,
     `club` varchar(50) NOT NULL,
-    `num_skies` int(50) NOT NULL DEFAULT 0,
+    `num_skis` int(50) NOT NULL DEFAULT 0,
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
@@ -489,10 +489,10 @@ INSERT INTO `production_plan_reference` (`plan_id`, `model`, `size`, `weight`, `
 -- Dumping data for table `team_skier`
 --
 
-INSERT INTO `team_skier` (`id`, `dob`, `club`, `num_skies`) VALUES
+INSERT INTO `team_skier` (`id`, `dob`, `club`, `num_skis`) VALUES
 (4, '1996-02-11', 'Club Penguin', 2),
 (5, '1991-02-12', 'Club Penguin', 4),
-(6, '1967-04-04', 'The heroes of the skies', 6);
+(6, '1967-04-04', 'The heroes of the skis', 6);
 
 
 --
