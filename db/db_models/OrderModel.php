@@ -128,37 +128,43 @@ class OrderModel extends DB {
             throw new APIException($rec['code'], RESTConstants::API_URI, "");
         }
 
+
         if (!array_key_exists('price', $rec)) {
             throw new APIException(RESTConstants::HTTP_INTERNAL_SERVER_ERROR, RESTConstants::API_URI, 'Error determining price');
         }
-
-        $price_total = $rec['price']*$resource['quantity'];
 
 
         $res = array();
         $query = 'INSERT INTO ski_order (total_price, state, ref_larger_order, customer_id, shipment_number) VALUES (:total_price, :state, :ref, :id, :shipment)';
 
         $stmt = $this->db->prepare($query);
-        $stmt->bindValue(':total_price', $price_total);
+        $stmt->bindValue(':total_price', $rec['price']);
         $stmt->bindValue(':state', "new");
-        $stmt->bindValue(':ref', NULL);
-        $stmt->bindValue(":id", $resource['customer_id']);
-        $stmt->bindValue(":shipment", NULL);
+        $stmt->bindValue(':ref',   NULL);  //TODO: Ref larger order option?
+        $stmt->bindValue(":id",         $resource['customer_id']);
+        $stmt->bindValue(":shipment",NULL);
         $stmt->execute();
 
         $res['order_number'] = intval($this->db->lastInsertId());
-        $res['total_price'] = $price_total;
+        $res['total_price'] = $rec['price'];
         $res['customer_id'] = $resource['customer_id'];
 
 
-        $query = 'INSERT INTO ski_type_order (order_number, size, weight, model, quantity) VALUES (:order_number, :size, :weight, :model,:quantity)';
-        $stmt = $this->db->prepare($query);
-        $stmt->bindValue(':order_number', $res['order_number']);
-        $stmt->bindValue(':size', $resource['size']);
-        $stmt->bindValue(':weight', $resource['weight']);
-        $stmt->bindValue(':quantity', $resource['quantity']);
-        $stmt->bindValue(':model', $resource['model']);
-        $stmt->execute();
+        $x = 0;
+        while ($x<count($resource['types'])){
+            // If there are duplicate ski types in the order,
+            // then this query will be aborted and cancelled automatically by PhpMyAdmin, which is fine.
+            $query = 'INSERT INTO ski_type_order (order_number, size, weight, model, quantity) VALUES (:order_number, :size, :weight, :model,:quantity)';
+            $stmt = $this->db->prepare($query);
+            $stmt->bindValue(':order_number', $res['order_number']);
+            $stmt->bindValue(':size',         $resource['types'][$x]['size']);
+            $stmt->bindValue(':weight',       $resource['types'][$x]['weight']);
+            $stmt->bindValue(':quantity',     $resource['types'][$x]['quantity']);
+            $stmt->bindValue(':model',        $resource['types'][$x]['model']);
+            $stmt->execute();
+            $x++; // Move to next ski type
+        }
+
         $this->db->commit();
 
 
@@ -215,64 +221,95 @@ class OrderModel extends DB {
         return $res;
     }
 
+
     /**
      * Verifies that the given resource is on the correct format to be considered an order.
+     * This order format supports multiple ski types in same order, but it does not check for duplicate ski_types.
+     * This should, however, not be a problem with our current implementation of the database, as trying to add
+     * duplicate entries will violate the primary key constraints for the affected tables and the operation will be
+     * aborted automatically.
      *
      * Based on https://git.gvk.idi.ntnu.no/runehj/sample-rest-api-project/-/blob/master/db/DealerModel.php#L150
      * @author Rune Hjelsvold
      *
      * @param array $resource to verify
      * @return array response including an http error code and, if an error is encountered, a message.
-     *
+     * @return array response with http code ok if it is as expected and also the total price of the order.
      */
     protected function verifyOrder(array $resource): array
     {
         $res = array();
 
-        if (count($resource) != 5) {
+        if (!array_key_exists('customer_id', $resource)) {
             $res['code'] = RESTConstants::HTTP_BAD_REQUEST;
-            $res['message'] = 'There should be exactly 5 values.';
+            $res['message'] = 'Missing customer_id attribute.';
+            return $res;
+        }
+        if (!is_int($resource["customer_id"])){
+            $res['code'] = RESTConstants::HTTP_BAD_REQUEST;
+            $res['message'] = 'Wrong variable type. customer_id should be an integer!';
+            return $res;
+        }
+        if (!array_key_exists('types', $resource)) {
+            $res['code'] = RESTConstants::HTTP_BAD_REQUEST;
+            $res['message'] = 'Missing types attribute.';
             return $res;
         }
 
-        // Just check if all necessary keys are there...
-        if (!array_key_exists('customer_id', $resource) || !array_key_exists('weight', $resource) || !array_key_exists('quantity', $resource) ||
-            !array_key_exists('size', $resource)        || !array_key_exists('model', $resource)) {
+        $x = 0;
+        while ($x<count($resource['types'])) {
 
-            $res['code'] = RESTConstants::HTTP_BAD_REQUEST;
-            $res['message'] = 'One or more attributes are missing.';
-            return $res;
+            if (count($resource["types"][$x]) != 4) {
+                $res['code'] = RESTConstants::HTTP_BAD_REQUEST;
+                $res['message'] = 'There should be exactly 4 values.';
+                return $res;
+            }
+
+            // Just check if all necessary keys are there...
+            if (!array_key_exists('weight', $resource["types"][$x]) || !array_key_exists('quantity', $resource["types"][$x]) ||
+                !array_key_exists('size', $resource["types"][$x]) || !array_key_exists('model', $resource["types"][$x])) {
+
+                $res['code'] = RESTConstants::HTTP_BAD_REQUEST;
+                $res['message'] = 'One or more attributes are missing.';
+                return $res;
+            }
+
+            if (!is_int($resource["types"][$x]['quantity'])) {
+                $res['code'] = RESTConstants::HTTP_BAD_REQUEST;
+                $res['message'] = "Attribute 'quantity' must be an int!";
+                return $res;
+            }
+
+            if ($resource["types"][$x]['quantity']<=0) {
+                // Customer should not create orders with 0 or negative quantity.
+                $res['code'] = RESTConstants::HTTP_BAD_REQUEST;
+                $res['message'] = 'Quantity must be greater than 0!';
+                return $res;
+            }
+
+            if (!(new SkiModel)->doesSkiTypeExist($resource["types"][$x]['model'], $resource["types"][$x]['size'], $resource["types"][$x]['weight'])) {
+                $res['code'] = RESTConstants::HTTP_BAD_REQUEST;
+                $res['message'] = 'Specified ski does not match any existing ski types!';
+                return $res;
+            }
+
+            $query = 'SELECT MSRP FROM `ski_type` WHERE model = :model AND weight_class = :weight AND size = :size';
+
+            $stmt = $this->db->prepare($query);
+            $stmt->bindValue(':model', $resource["types"][$x]['model']);
+            $stmt->bindValue(':weight', $resource["types"][$x]['weight']);
+            $stmt->bindValue(':size', $resource["types"][$x]['size']);
+            $stmt->execute();
+
+            $res['code'] = RESTConstants::HTTP_OK;
+            if (!array_key_exists('price', $res)){
+                $res['price'] = $stmt->fetch(PDO::FETCH_ASSOC)['MSRP'] * $resource["types"][$x]['quantity'];
+            } else {
+                $res['price'] += $stmt->fetch(PDO::FETCH_ASSOC)['MSRP'] * $resource["types"][$x]['quantity'];
+            }
+            $x++;
         }
 
-        if (!is_int($resource['quantity'])) {
-            $res['code'] = RESTConstants::HTTP_BAD_REQUEST;
-            $res['message'] = "Attribute 'quantity' must be an int!";
-            return $res;
-        }
-
-        if ($resource['quantity']<=0) {
-            // Customer should not create orders with 0 or negative quantity.
-            $res['code'] = RESTConstants::HTTP_BAD_REQUEST;
-            $res['message'] = 'Quantity must be greater than 0!';
-            return $res;
-        }
-
-        if (!(new SkiModel)->doesSkiTypeExist($resource['model'], $resource['size'], $resource['weight'])) {
-            $res['code'] = RESTConstants::HTTP_BAD_REQUEST;
-            $res['message'] = 'Specified ski does not match any existing ski types!';
-            return $res;
-        }
-
-        $query = 'SELECT MSRP FROM `ski_type` WHERE model = :model AND weight_class = :weight AND size = :size';
-
-        $stmt = $this->db->prepare($query);
-        $stmt->bindValue(':model', $resource['model']);
-        $stmt->bindValue(':weight', $resource['weight']);
-        $stmt->bindValue(':size', $resource['size']);
-        $stmt->execute();
-
-        $res['code'] = RESTConstants::HTTP_OK;
-        $res['price'] = $stmt->fetch(PDO::FETCH_ASSOC)['MSRP'];
         return $res;
     }
 
