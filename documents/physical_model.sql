@@ -27,7 +27,7 @@ USE project_test;
 
 -- --------------------------------------------------------
 CREATE TABLE `employee` (
-    `number` INT(50) NOT NULL AUTO_INCREMENT,
+    `number` INT NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(50) NOT NULL,
     `department` VARCHAR(50) NOT NULL,
     PRIMARY KEY (`number`)
@@ -40,8 +40,8 @@ CREATE TABLE `employee` (
 --
 
 CREATE TABLE `Customer` (
-    `id` int(50) NOT NULL AUTO_INCREMENT,
-    `name` varchar(50) NOT NULL,
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(50) NOT NULL,
     `start_date` DATE NOT NULL,
     `end_date` DATE,
     PRIMARY KEY (`id`)
@@ -55,8 +55,8 @@ CREATE TABLE `Customer` (
 --
 
 CREATE TABLE `Franchise` (
-    `id` int(50) NOT NULL,
-    `shipping_address` varchar(50) NOT NULL,
+    `id` INT NOT NULL,
+    `shipping_address` VARCHAR(50) NOT NULL,
     `price_multiplier` DECIMAL(3, 2) UNSIGNED NOT NULL, -- range from 0.00 to 9.99
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
@@ -68,8 +68,8 @@ CREATE TABLE `Franchise` (
 --
 
 CREATE TABLE `Individual_store` (
-    `id` int(50) NOT NULL,
-    `shipping_address` varchar(50) NOT NULL,
+    `id` INT NOT NULL,
+    `shipping_address` VARCHAR(50) NOT NULL,
     `price_multiplier` DECIMAL(3, 2) UNSIGNED NOT NULL, -- range from 0.00 to 9.99
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
@@ -81,8 +81,8 @@ CREATE TABLE `Individual_store` (
 --
 
 CREATE TABLE `franchise_store` (
-    `franchise_id` int(50) NOT NULL,
-    `store_id` int(50) NOT NULL,
+    `franchise_id` INT NOT NULL,
+    `store_id` INT NOT NULL,
     PRIMARY KEY (`franchise_id`, `store_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
@@ -93,10 +93,10 @@ CREATE TABLE `franchise_store` (
 --
 
 CREATE TABLE `team_skier` (
-    `id` int(50) NOT NULL AUTO_INCREMENT,
+    `id` INT NOT NULL AUTO_INCREMENT,
     `dob` DATE NOT NULL,
-    `club` varchar(50) NOT NULL,
-    `num_skis` int(50) NOT NULL DEFAULT 0,
+    `club` VARCHAR(50) NOT NULL,
+    `num_skis` INT NOT NULL DEFAULT 0,
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
@@ -107,11 +107,11 @@ CREATE TABLE `team_skier` (
 --
 
 CREATE TABLE `Order_log` (
-    `log_number` int(50) NOT NULL AUTO_INCREMENT,
-    `employee_number` int(50) NOT NULL,
-    `order_number` int(50) NOT NULL,
-    `old_state` varchar(40) NOT NULL,
-    `new_state` varchar(40) NOT NULL,
+    `log_number` INT NOT NULL AUTO_INCREMENT,
+    `employee_number` INT NOT NULL,
+    `order_number` INT NOT NULL,
+    `old_state` VARCHAR(40) NOT NULL,
+    `new_state` VARCHAR(40) NOT NULL,
     `time` timestamp default (CURRENT_TIMESTAMP),
     PRIMARY KEY (`log_number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
@@ -123,10 +123,10 @@ CREATE TABLE `Order_log` (
 --
 
 CREATE TABLE `production_plan` (
-    `id` int(50) NOT NULL AUTO_INCREMENT,
-    `start_date` DATE NOT NULL,
-    `end_date` DATE NOT NULL,
-    `plannerNo` int(50) NOT NULL,
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `start_date` DATE(20) NOT NULL,
+    `end_date` DATE(20) NOT NULL,
+    `plannerNo`INT NOT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
@@ -137,11 +137,11 @@ CREATE TABLE `production_plan` (
 --
 
 CREATE TABLE `production_plan_reference` (
-    `plan_id` int(50) NOT NULL,
-    `model` varchar(50) NOT NULL,
-    `size` int(50) NOT NULL,
-    `weight` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
-    `quantity` int(50) NOT NULL,
+    `plan_id` INT NOT NULL,
+    `model` VARCHAR(50) NOT NULL,
+    `size` INT NOT NULL,
+    `weight` VARCHAR(50) COLLATE utf8mb4_danish_ci NOT NULL,
+    `quantity` INT NOT NULL,
     PRIMARY KEY (`plan_id`, `model`, `size`,`weight`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
@@ -152,13 +152,13 @@ CREATE TABLE `production_plan_reference` (
 --
 
 CREATE TABLE `shipment` (
-    `number` int(50) NOT NULL AUTO_INCREMENT,
-    `store_name` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
-    `shipping_address` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL,
+    `number` INT NOT NULL AUTO_INCREMENT,
+    `store_name` VARCHAR(50) COLLATE utf8mb4_danish_ci NOT NULL,
+    `shipping_address` VARCHAR(50) COLLATE utf8mb4_danish_ci NOT NULL,
     `pickup_date` DATE COLLATE utf8mb4_danish_ci NOT NULL,
-    `state` varchar(50) COLLATE utf8mb4_danish_ci NOT NULL DEFAULT 'ready',
-    `driver_id` int(50) NOT NULL,
-    `repNo` int(50) NOT NULL,
+    `state` VARCHAR(20) COLLATE utf8mb4_danish_ci NOT NULL DEFAULT 'ready',
+    `driver_id` INT NOT NULL,
+    `repNo` INT NOT NULL,
     PRIMARY KEY (`number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
@@ -169,10 +169,10 @@ CREATE TABLE `shipment` (
 --
 
 CREATE TABLE `ski` (
-    `product_number` int(50) NOT NULL AUTO_INCREMENT,
+    `product_number` INT NOT NULL AUTO_INCREMENT,
     `model` VARCHAR(50) NOT NULL,
-    `size` int(50) NOT NULL,
-    `weight` varchar(50) NOT NULL,
+    `size` INT NOT NULL,
+    `weight` VARCHAR(10) NOT NULL,
     PRIMARY KEY (`product_number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
@@ -183,13 +183,13 @@ CREATE TABLE `ski` (
 --
 
 CREATE TABLE `ski_model` (
-    `model` varchar(50) NOT NULL,
-    `skiing_type` varchar(50) NOT NULL,
+    `model` VARCHAR(50) NOT NULL,
+    `skiing_type` VARCHAR(50) NOT NULL,
     `description` text NOT NULL,
-    `grip_system` varchar(50) NOT NULL,
+    `grip_system` VARCHAR(50) NOT NULL,
     `historical` BOOLEAN NOT NULL DEFAULT 0,
-    `temperature` varchar(50) NOT NULL,
-    `url` varchar(100) NOT NULL
+    `temperature` VARCHAR(50) NOT NULL,
+    `url` VARCHAR(200) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
 -- --------------------------------------------------------
@@ -199,12 +199,12 @@ CREATE TABLE `ski_model` (
 --
 
 CREATE TABLE `ski_order` (
-    `order_number` int(50) NOT NULL AUTO_INCREMENT,
-    `total_price` int(50) NOT NULL,
-    `state` varchar(50) NOT NULL DEFAULT 'new',
-    `ref_larger_order` int(50) DEFAULT NULL,
-    `customer_id` int(50) NOT NULL,
-    `shipment_number` int(50) DEFAULT NULL,
+    `order_number` INT NOT NULL AUTO_INCREMENT,
+    `total_price` INT NOT NULL,
+    `state` VARCHAR(20) NOT NULL DEFAULT 'new',
+    `ref_larger_order` INT DEFAULT NULL,
+    `customer_id` INT NOT NULL,
+    `shipment_number` INT DEFAULT NULL,
     PRIMARY KEY (`order_number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
@@ -215,10 +215,10 @@ CREATE TABLE `ski_order` (
 --
 
 CREATE TABLE `ski_type` (
-    `size` int(50) NOT NULL,
-    `weight_class` varchar(50) NOT NULL,
-    `MSRP` int(50) NOT NULL,
-    `model` varchar(50) NOT NULL,
+    `size` INT NOT NULL,
+    `weight_class` VARCHAR(10) NOT NULL,
+    `MSRP` INT NOT NULL,
+    `model` VARCHAR(50) NOT NULL,
     PRIMARY KEY (`model`, `size`, `weight_class`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
@@ -229,11 +229,11 @@ CREATE TABLE `ski_type` (
 --
 
 CREATE TABLE `ski_type_order` (
-    `order_number` int(50) NOT NULL,
-    `model` varchar(50) NOT NULL,
-    `size` int(50) NOT NULL,
-    `weight` varchar(50) NOT NULL,
-    `quantity` int(50) NOT NULL,
+    `order_number` INT NOT NULL,
+    `model` VARCHAR(50) NOT NULL,
+    `size` INT NOT NULL,
+    `weight` VARCHAR(10) NOT NULL,
+    `quantity` INT NOT NULL,
     PRIMARY KEY (`order_number`, `model`, `size`,`weight`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
@@ -244,7 +244,7 @@ CREATE TABLE `ski_type_order` (
 --
 
 CREATE TABLE `transporter` (
-    `company_name` varchar(50) NOT NULL
+    `company_name` VARCHAR(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
 
 -- --------------------------------------------------------
@@ -254,8 +254,8 @@ CREATE TABLE `transporter` (
 --
 
 CREATE TABLE `Shipment_transition_log` (
-    `log_number` INT(50) NOT NULL AUTO_INCREMENT,
-    `shipment_number` int(50) NOT NULL,
+    `log_number` INT NOT NULL AUTO_INCREMENT,
+    `shipment_number` INT NOT NULL,
     `time` timestamp default (CURRENT_TIMESTAMP),
     PRIMARY KEY (`log_number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
@@ -440,7 +440,7 @@ INSERT INTO `franchise_store` (`franchise_id`, `store_id`) VALUES
 --
 
 INSERT INTO `ski_model` (`model`, `skiing_type`, `description`, `grip_system`, `historical`, `temperature`, `url`) VALUES
-('Fisher', 'classic', 'Fisher is the latest model of the Fish ski series, made for casual as well as veteran skiiers. ', 'IntelliGrip', 0, 'mild', 'http:/coolskiis.com/marketplace/Fisher'),
+('Fisher', 'classic', 'Fisher is the latest model of the Fish ski series, made for casual as well as veteran skiiers. ', 'INTelliGrip', 0, 'mild', 'http:/coolskiis.com/marketplace/Fisher'),
 ('Frogger', 'double pole', 'Frogger was the ultimate trickster skiis from the K-9000 series.', 'wax', 1, 'cold', 'http:/betterskiis.com/marketplace/Frogger'),
 ('Redline', 'skate', 'The redline model from the T-series of pro-skiing.', 'wax', 0, 'cold', 'http:/coolskiis.com/marketplace/Redline');
 
