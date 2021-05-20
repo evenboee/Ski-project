@@ -124,8 +124,8 @@ CREATE TABLE `Order_log` (
 
 CREATE TABLE `production_plan` (
     `id` INT NOT NULL AUTO_INCREMENT,
-    `start_date` DATE(20) NOT NULL,
-    `end_date` DATE(20) NOT NULL,
+    `start_date` DATE NOT NULL,
+    `end_date` DATE NOT NULL,
     `plannerNo`INT NOT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_danish_ci;
