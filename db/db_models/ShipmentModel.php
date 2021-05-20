@@ -22,7 +22,7 @@ class ShipmentModel extends DB {
      * @throws PDOException
      */
     public function setStateOfShipment($shipment_id, $state = 'shipped'): array {
-        $getQuery = 'SELECT `number`, `store_name`, `shipping_address`, `state`, `driver_id`, `repNo` FROM `shipment` WHERE `number` = :id';
+        $getQuery = 'SELECT `number`, `order_number`, `store_name`, `shipping_address`, `state`, `driver_id`, `repNo` FROM `shipment` WHERE `number` = :id';
         $updateQuery = 'UPDATE `shipment` SET `state` = :state WHERE `number` = :id';
         $logQuery = 'INSERT INTO `shipment_transition_log` (`shipment_number`) VALUES (:id)';
 

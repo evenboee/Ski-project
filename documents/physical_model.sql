@@ -153,6 +153,7 @@ CREATE TABLE `production_plan_reference` (
 
 CREATE TABLE `shipment` (
     `number` INT NOT NULL AUTO_INCREMENT,
+    `order_number` INT NOT NULL,
     `store_name` VARCHAR(50) COLLATE utf8mb4_danish_ci NOT NULL,
     `shipping_address` VARCHAR(50) COLLATE utf8mb4_danish_ci NOT NULL,
     `pickup_date` DATE COLLATE utf8mb4_danish_ci NOT NULL,
@@ -356,13 +357,6 @@ ALTER TABLE `ski_type_order`
     ADD CONSTRAINT `ski_type_order_Ski_type_fk` FOREIGN KEY (`model`, `size`, `weight`)
         REFERENCES `Ski_type`(`model`, `size`, `weight_class`);
 
-ALTER TABLE `shipment`
-    ADD CONSTRAINT `shipment_Customer_representative_fk` FOREIGN KEY (`repNo`)
-        REFERENCES `employee`(`number`)
-        ON UPDATE CASCADE,
-    ADD CONSTRAINT `shipment_Corporation_fk` FOREIGN KEY (`store_name`)
-        REFERENCES `Customer`(`name`)
-        ON UPDATE CASCADE;
 
 ALTER TABLE `Order_log`
     ADD CONSTRAINT `Order_log_Employee_fk` FOREIGN KEY (`employee_number`)
@@ -499,26 +493,25 @@ INSERT INTO `team_skier` (`id`, `dob`, `club`, `num_skis`) VALUES
 (6, '1967-04-04', 'The heroes of the skis', 6);
 
 
---
--- Dumping data for table `transporter`
---
 
-INSERT INTO `transporter` (`company_name`) VALUES
-('Sauland Transport AS'),
-('Telemark Transport AS');
-
-INSERT INTO `Shipment` (`store_name`, `shipping_address`, `state`, `pickup_date`, `driver_id`, `repNo`) VALUES
-('XXL Sport', 'Vegvegen 0 0000By', 'shipped', '2021-05-28', 3, 1),
-('XXL Sport', 'Vegvegen 0 0000By', 'ready','2021-05-29', 2, 1);
+INSERT INTO `Shipment` (`store_name`, `order_number`, `shipping_address`, `state`, `pickup_date`, `driver_id`, `repNo`) VALUES
+('XXL Sport', 1, 'Vegvegen 0 0000By', 'shipped', '2021-05-28', 3, 1),
+('XXL Sport', 2, 'Vegvegen 0 0000By', 'ready','2021-05-29', 2, 1);
 
 --
 -- Dumping data for table `ski_order`
 --
-
 INSERT INTO `ski_order` (`total_price`, `customer_id`, `shipment_number`) VALUES
 (8000, 1, 1),
 (8600, 1, 2),
 (4000, 2, 2);
+
+--
+-- Dumping data for table `transporter`
+--
+INSERT INTO `transporter` (`company_name`) VALUES
+('Sauland Transport AS'),
+('Telemark Transport AS');
 
 --
 -- Dumping data for table `ski_type_order`
@@ -549,6 +542,17 @@ INSERT INTO `auth_token` (`role`, `token`) VALUES
 ('shipper', sha1('shipper')),
 ('production-planner', sha1('production-planner'));
 
+
+ALTER TABLE `shipment`
+    ADD CONSTRAINT `shipment_Customer_representative_fk` FOREIGN KEY (`repNo`)
+        REFERENCES `employee`(`number`)
+        ON UPDATE CASCADE,
+    ADD CONSTRAINT `shipment_Corporation_fk` FOREIGN KEY (`store_name`)
+        REFERENCES `Customer`(`name`)
+        ON UPDATE CASCADE,
+    ADD CONSTRAINT `shipment_Order_fk` FOREIGN KEY (`order_number`)
+        REFERENCES `ski_order`(`order_number`)
+        ON UPDATE CASCADE;
 
 --
 -- Setting up users
