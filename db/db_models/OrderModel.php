@@ -291,19 +291,36 @@ class OrderModel extends DB {
                 return $res;
             }
 
-            $query = 'SELECT MSRP FROM `ski_type` WHERE model = :model AND weight_class = :weight AND size = :size';
+            //$query = 'SELECT MSRP FROM `ski_type` WHERE model = :model AND weight_class = :weight AND size = :size';
 
+            $query = 'SELECT MSRP * (SELECT franchise.price_multiplier FROM franchise WHERE id = :id 
+                                     UNION 
+                                     SELECT individual_store.price_multiplier FROM individual_store WHERE id = :id
+                                     UNION 
+                                     SELECT 0 FROM team_skier WHERE id = :id) AS MSRP
+                      FROM `ski_type`
+                      WHERE model = :model 
+                      AND weight_class = :weight
+                      AND size = :size';
             $stmt = $this->db->prepare($query);
+            $stmt->bindValue(':id', $resource['customer_id']);
             $stmt->bindValue(':model', $resource["types"][$x]['model']);
             $stmt->bindValue(':weight', $resource["types"][$x]['weight']);
             $stmt->bindValue(':size', $resource["types"][$x]['size']);
-            $stmt->execute();
 
+            $success = $stmt->execute();
+            $result =  $stmt->fetch(PDO::FETCH_ASSOC)['MSRP'];
+            if (!$success || $result == NULL) {
+                $res['code'] = RESTConstants::HTTP_NOT_FOUND;
+                $res['message'] = "Cannot create order for non-existent customer.";
+                return $res;
+            }
+            
             $res['code'] = RESTConstants::HTTP_OK;
             if (!array_key_exists('price', $res)){
-                $res['price'] = $stmt->fetch(PDO::FETCH_ASSOC)['MSRP'] * $resource["types"][$x]['quantity'];
+                $res['price'] = $result * $resource["types"][$x]['quantity'];
             } else {
-                $res['price'] += $stmt->fetch(PDO::FETCH_ASSOC)['MSRP'] * $resource["types"][$x]['quantity'];
+                $res['price'] += $result * $resource["types"][$x]['quantity'];
             }
         }
 
