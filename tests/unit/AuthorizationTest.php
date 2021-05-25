@@ -27,9 +27,9 @@ class AuthorizationTest extends \Codeception\Test\Unit
 
     public function testValidToken() {
         $model = new AuthorizationModel();
-        $roles = ['rep', 'storekeeper', 'shipper'];
+        $roles = [['rep', '97a134dbbcbecefa823f6ca3cfb68d3c84899cd8'], ['storekeeper', '5627b0ea56d96c8d0a1da0bf7816ae6df9e0277d'], ['shipper', '99211ca0bba8148f1800715fd959fe64931da9df'], ['', '']];
         foreach ($roles as $role) {
-            $this->tester->assertEquals($role, $model->getRole($role)); // Tokens in test database are simplified
+            $this->tester->assertEquals($role[0], $model->getRole($role[1]));
         }
     }
 

@@ -17,14 +17,14 @@ class CustomerRepCest
         $I->haveHttpHeader('Content-Type', 'application/json');
 
         // https://stackoverflow.com/questions/36334244/rest-module-get-set-cookies/36335651
-        $cookie = new Symfony\Component\BrowserKit\Cookie('auth_token', 'rep');
+        $cookie = new Symfony\Component\BrowserKit\Cookie('auth_token', '97a134dbbcbecefa823f6ca3cfb68d3c84899cd8');
         $I->getClient()->getCookieJar()->set($cookie);
 
         $I->sendGet('/rep/orders?state=new');
         $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK);
         $I->seeResponseIsJson();
 
-        $I->assertEquals(2, count(json_decode($I->grabResponse())));
+        $I->assertEquals(3, count(json_decode($I->grabResponse())));
     }
 
     public function testRepBadAuthToken(ApiTester $I) {
@@ -48,7 +48,7 @@ class CustomerRepCest
     public function testBadRequestForOrders(ApiTester $I) {
         $I->haveHttpHeader('Content-Type', 'application/json');
 
-        $cookie = new Symfony\Component\BrowserKit\Cookie('auth_token', 'rep');
+        $cookie = new Symfony\Component\BrowserKit\Cookie('auth_token', '97a134dbbcbecefa823f6ca3cfb68d3c84899cd8');
         $I->getClient()->getCookieJar()->set($cookie);
 
         $I->sendGet('/rep/orders?state=ne'); // ne instead of new

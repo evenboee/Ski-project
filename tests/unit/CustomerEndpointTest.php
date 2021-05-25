@@ -115,17 +115,28 @@ class CustomerEndpointTest extends \Codeception\Test\Unit
         $uri = array('order','new');
         $endpointPath = '/customer/new';
         $requestMethod = RESTConstants::METHOD_POST;
+        $payload = array();
         $payload['customer_id'] = 1;
-        $payload['weight'] = "40-50";
-        $payload['size'] = 165;
-        $payload['model'] = "Fisher";
-        $payload['quantity'] = 3;
 
-        // 1 of this particular ski type should cost 2100
+        $types = array();
+        $type = array();
+        $type['weight'] = "40-50";
+        $type['size'] = 165;
+        $type['model'] = "Fisher";
+        $type['quantity'] = 3;
+        $types[] = $type;
+        $payload['types'] = $types;
+
+            // 1 of this particular ski type should cost 2100
 
         $queries = array();
         $endpoint = new CustomerEndpoint();
-        $res = $endpoint->handleRequest($uri, $endpointPath, $requestMethod, $queries, $payload);
+        $res = array();
+        try {
+            $res = $endpoint->handleRequest($uri, $endpointPath, $requestMethod, $queries, $payload);
+        } catch (APIException $e) {
+            $this->tester->fail('Did not expect APIException');
+        }
 
         $this->tester->assertArrayHasKey('result', $res);
         $this->tester->assertArrayHasKey('status', $res);
@@ -255,7 +266,7 @@ class CustomerEndpointTest extends \Codeception\Test\Unit
      * passed for that particular order when trying to delete that order.
      */
     public function testDeleteExistingOrderByInvalidCustomerId(){
-        $uri = $uri = array('order','1');; // order with order number 1
+        $uri = array('order','1'); // order with order number 1
         $endpointPath = '/customer/order';
         $requestMethod = RESTConstants::METHOD_DELETE;
         $payload['customer_id'] = 2; // This customer did not create order 1

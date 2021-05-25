@@ -73,10 +73,10 @@ class CustomerRepEndpointTest extends \Codeception\Test\Unit
         $this->tester->assertArrayHasKey('result', $res);
         $res = $res['result'];
 
-        $this->tester->assertCount(2, $res);
+        $this->tester->assertCount(3, $res);
         $this->tester->assertIsArray($res);
-        $this->tester->assertEquals($res[0]['order_number'], 2);
-        $this->tester->assertEquals($res[1]['order_number'], 3);
+        $this->tester->assertEquals($res[0]['order_number'], 1);
+        $this->tester->assertEquals($res[1]['order_number'], 2);
     }
 
     public function testHandleBadRequest() {

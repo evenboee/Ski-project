@@ -11,7 +11,7 @@ require_once 'db/dbCredentials.php';
  */
 class OrderModel extends DB {
 
-    public function __construct(string $dbUser=DB_USER, string $dbPass=DB_PWD) {
+    public function __construct(string $dbUser=DB_USER, string $dbPass=DB_PWD) { // When all users are implemented the default user should not have all access
         parent::__construct($dbUser, $dbPass);
     }
 
@@ -255,10 +255,9 @@ class OrderModel extends DB {
             return $res;
         }
 
-        $x = 0;
-        while ($x<count($resource['types'])) {
+        for ($x = 0; $x < count($resource['types']); $x++) {
 
-            if (count($resource["types"][$x]) != 4) {
+            if (count($resource['types'][$x]) != 4) {
                 $res['code'] = RESTConstants::HTTP_BAD_REQUEST;
                 $res['message'] = 'There should be exactly 4 values.';
                 return $res;
@@ -306,7 +305,6 @@ class OrderModel extends DB {
             } else {
                 $res['price'] += $stmt->fetch(PDO::FETCH_ASSOC)['MSRP'] * $resource["types"][$x]['quantity'];
             }
-            $x++;
         }
 
         return $res;
