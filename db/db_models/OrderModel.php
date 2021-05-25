@@ -11,9 +11,8 @@ require_once 'db/dbCredentials.php';
  */
 class OrderModel extends DB {
 
-    public function __construct() {
-        // TODO: Distinguish between customer and customer rep
-        parent::__construct(REP_USER, REP_PWD);
+    public function __construct(string $dbUser=DB_USER, string $dbPass=DB_PWD) {
+        parent::__construct($dbUser, $dbPass);
     }
 
     /**

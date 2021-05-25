@@ -29,7 +29,7 @@ class RESTConstants
 
 
 
-    const ORDER_STATES = ['new', 'open', 'skis-available', 'ready'];
+    const ORDER_STATES = ['new', 'open', 'skis-available', 'ready', 'shipped'];
 
     //ENDPOINTS:
     // Sub

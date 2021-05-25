@@ -62,7 +62,7 @@ class CustomerEndpoint extends RequestHandler {
             } else if ($requestMethod == RESTConstants::METHOD_DELETE) {
 
                 $res['result'] = $this->doDeleteOrder($uri[1], $payload);
-                $res['status'] = RESTConstants::HTTP_OK; // TODO: another http code perhaps?
+                $res['status'] = RESTConstants::HTTP_OK;
                 return $res;
             }
         } else if ($uri[0]==RESTConstants::ENDPOINT_PLAN){

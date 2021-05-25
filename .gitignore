@@ -3,5 +3,4 @@ composer.*
 codeception.yml
 tests/_output
 tests/*.yml
-db/dbCredentials.php
 vendor/*

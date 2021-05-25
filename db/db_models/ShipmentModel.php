@@ -62,9 +62,9 @@ class ShipmentModel extends DB {
     public function shipmentExists($shipment_id): bool {
         $shipmentCountQuery = 'SELECT COUNT(*) FROM `shipment` WHERE `number` = :id';
         $stmt = $this->db->prepare($shipmentCountQuery);
-        $stmt->bindValue('id', $shipment_id);
+        $stmt->bindValue(':id', $shipment_id);
         $stmt->execute();
         $res = $stmt->fetch(PDO::FETCH_NUM);
-        return $res > 0;
+        return $res[0] > 0;
     }
 }

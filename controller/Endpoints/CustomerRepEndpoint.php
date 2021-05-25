@@ -3,6 +3,7 @@
 require_once 'controller/RequestHandler.php';
 require_once 'db/db_models/OrderModel.php';
 require_once 'controller/APIException.php';
+require_once 'db/dbCredentials.php';
 
 /**
  * Class CustomerRepEndpoint
@@ -104,12 +105,12 @@ class CustomerRepEndpoint extends RequestHandler {
     }
 
     protected function doGetOrdersWithState(string $state): array {
-        $model = new OrderModel();
+        $model = new OrderModel(REP_USER, REP_PWD);
         return $model->getOrdersWithState($state);
     }
 
     protected function doSetStateOfOrder(string $id, string $state, int $employee_number): array {
-        $model = new OrderModel();
+        $model = new OrderModel(REP_USER, REP_PWD);
         return $model->setStateOfOrder($id, $state, $employee_number);
     }
 

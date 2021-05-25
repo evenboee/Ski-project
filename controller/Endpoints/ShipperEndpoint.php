@@ -55,7 +55,11 @@ class ShipperEndpoint extends RequestHandler {
             }
             $shipment_number = $uri[1];
             $res['result'] = $this->doSetStateOfShipment($shipment_number);
-            $res['status'] = $this->validMethods[RESTConstants::ENDPOINT_SHIP][RESTConstants::METHOD_PATCH];
+            if (count($res['result']) == 0) {
+                throw new APIException(RESTConstants::HTTP_NOT_FOUND, $endpointPath, "Shipment not found. Check ID");
+            } else {
+                $res['status'] = $this->validMethods[RESTConstants::ENDPOINT_SHIP][RESTConstants::METHOD_PATCH];
+            }
             return $res;
         }
 

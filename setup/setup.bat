@@ -12,6 +12,7 @@ call mysql -u %MYSQL_USER% --password=%MYSQL_PASS% < %ORIGINAL_PATH%\..\document
 call cd %ORIGINAL_PATH%
 call cd ..
 
+REM Setting up codeception
 call composer -n require --dev "codeception/codeception"
 call composer -n require --dev "codeception/module-asserts"
 call composer -n require --dev "codeception/module-db"
@@ -22,10 +23,25 @@ call composer update
 call copy /Y setup\api.suite.yml tests
 call copy /Y setup\unit.suite.yml tests
 
+REM Copying settings files for PhpStorm
 call mkdir .idea
 call copy /Y setup\webServers.xml .idea
 call copy /Y setup\deployment.xml .idea
 
+REM Copying files to htdocs
 call copy setup\.htaccess %XAMPP_PATH%\htdocs
+
+call mkdir %XAMPP_PATH%\htdocs\api\v1
+call mkdir %XAMPP_PATH%\htdocs\api\v1\controller
+call mkdir %XAMPP_PATH%\htdocs\api\v1\controller\Endpoints
+call mkdir %XAMPP_PATH%\htdocs\api\v1\db
+call mkdir %XAMPP_PATH%\htdocs\api\v1\db\db_models
+
+call copy api.php %XAMPP_PATH%\htdocs\api\v1
+call copy RESTConstants.php %XAMPP_PATH%\htdocs\api\v1
+call copy db\* %XAMPP_PATH%\htdocs\api\v1\db
+call copy db\db_models\* %XAMPP_PATH%\htdocs\api\v1\db\db_models
+call copy controller\* %XAMPP_PATH%\htdocs\api\v1\controller
+call copy controller\Endpoints\* %XAMPP_PATH%\htdocs\api\v1\controller\Endpoints
 
 call cd setup
