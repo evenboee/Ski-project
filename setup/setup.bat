@@ -29,7 +29,7 @@ call copy /Y setup\webServers.xml .idea
 call copy /Y setup\deployment.xml .idea
 
 REM Copying files to htdocs
-call copy setup\.htaccess %XAMPP_PATH%\htdocs
+call copy /Y setup\.htaccess %XAMPP_PATH%\htdocs
 
 call mkdir %XAMPP_PATH%\htdocs\api\v1
 call mkdir %XAMPP_PATH%\htdocs\api\v1\controller
@@ -37,11 +37,11 @@ call mkdir %XAMPP_PATH%\htdocs\api\v1\controller\Endpoints
 call mkdir %XAMPP_PATH%\htdocs\api\v1\db
 call mkdir %XAMPP_PATH%\htdocs\api\v1\db\db_models
 
-call copy api.php %XAMPP_PATH%\htdocs\api\v1
-call copy RESTConstants.php %XAMPP_PATH%\htdocs\api\v1
-call copy db\* %XAMPP_PATH%\htdocs\api\v1\db
-call copy db\db_models\* %XAMPP_PATH%\htdocs\api\v1\db\db_models
-call copy controller\* %XAMPP_PATH%\htdocs\api\v1\controller
-call copy controller\Endpoints\* %XAMPP_PATH%\htdocs\api\v1\controller\Endpoints
+call copy /Y api.php %XAMPP_PATH%\htdocs\api\v1
+call copy /Y RESTConstants.php %XAMPP_PATH%\htdocs\api\v1
+call copy /Y db\* %XAMPP_PATH%\htdocs\api\v1\db
+call copy /Y db\db_models\* %XAMPP_PATH%\htdocs\api\v1\db\db_models
+call copy /Y controller\* %XAMPP_PATH%\htdocs\api\v1\controller
+call copy /Y controller\Endpoints\* %XAMPP_PATH%\htdocs\api\v1\controller\Endpoints
 
 call cd setup
