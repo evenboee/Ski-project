@@ -29,6 +29,8 @@ Developed using **PHP 8.0**
 
 **IMPORTANT NOTE: Running this script will overwrite the .htaccess, any files in the xampp folder htdocs\api\v1 and any database named db_project5276.**
 
+The setup script **setup.bat** can be found in */setup*.
+
 After running the script the API should be working.
 
 ### Before running setup.bat
