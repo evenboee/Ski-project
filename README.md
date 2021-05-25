@@ -24,11 +24,10 @@ Developed using **PHP 8.0**
 - Assuming you have git installed
 - Go into the folder you want
 - Run `git clone https://git.gvk.idi.ntnu.no/course/idatg2204/idatg2204-2021-workspace/amundhel/db-project.git`
-- Run `cd db-project`. This folder will be knows as the root folder of the project
 
 ## Running deployment script
 
-IMPORTANT NOTE: Running this script will overwrite the .htaccess, any files in the xampp folder htdocs\api\v1 and any database named db_project5276.
+**IMPORTANT NOTE: Running this script will overwrite the .htaccess, any files in the xampp folder htdocs\api\v1 and any database named db_project5276.**
 
 After running the script the API should be working.
 
